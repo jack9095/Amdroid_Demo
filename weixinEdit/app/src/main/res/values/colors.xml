@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimary">#1bc593</color>
+    <color name="colorPrimaryDark">#1bc593</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="color_8290AF">#8290AF</color>
+    <color name="color_232323">#232323</color>
+    <color name="transparent">#00000000</color>
+    <color name="default_clickable_color">#cccccc</color>
+    <color name="name_selector_color">#cccccc</color>
+    <color name="cd8d8d8">#d8d8d8</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="cd7d7d7">#d7d7d7</color>
+    <color name="c697A9F">#697A9F</color>
+    <color name="c666666">#666666</color>
+    <color name="cdcdcdc">#DCDCDC</color>
+    <color name="cf2f2f2">#f2f2f2</color>
+    <color name="color_grey_cccccc">#f7f7f7</color>
+    <color name="praise_item_selector_default">#cccccc</color>
+    <color name="praise_item">#8290AF</color>
+    <color name="c222222">#222222</color>
+    <color name="cffffff">#ffffff</color>
 </resources>
