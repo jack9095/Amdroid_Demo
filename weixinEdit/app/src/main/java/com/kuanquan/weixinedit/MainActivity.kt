@@ -6,9 +6,9 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewTreeObserver
+import androidx.lifecycle.Observer
 import com.kuanquan.weixinedit.adapter.CircleAdapter
 import com.kuanquan.weixinedit.model.EventModel
-import com.kuanquan.weixinedit.model.ProviderMultiEntity
 import com.kuanquan.weixinedit.util.CommonUtils
 import com.kuanquan.weixinedit.util.KeyboardUtil
 import com.kuanquan.weixinedit.util.Utils
@@ -28,52 +28,19 @@ class MainActivity: BaseViewModelActivity<MainViewModel>() {
     private var isLike = 0
     private var layoutManger: ScrollSpeedLinearLayoutManger? = null
     private var circleAdapter: CircleAdapter? = null
-    private var lists = mutableListOf<ProviderMultiEntity>()
-    private var images = mutableListOf<String>()
 
     override fun isBindEventBusHere(): Boolean = true
 
     override fun getLayoutId(): Int = R.layout.activity_main
 
     override fun initData() {
-        images.add("http://pic2.52pk.com/files/allimg/150324/104923F49-12.jpg")
-        images.add("http://pic.3h3.com/up/2014-3/20143314140858312456.gif")
-        images.add("https://f12.baidu.com/it/u=3294379970,949120920&fm=72")
-        images.add("http://pic2.52pk.com/files/allimg/150324/104923F49-12.jpg")
-        images.add("http://img.my.csdn.net/uploads/201701/06/1483664741_1378.jpg")
-        images.add("http://img.my.csdn.net/uploads/201701/17/1484647897_1978.jpg")
-        images.add("http://pic2.52pk.com/files/allimg/150324/104923F49-12.jpg")
-        images.add("http://pic.3h3.com/up/2014-3/20143314140858312456.gif")
-        images.add("https://f12.baidu.com/it/u=3294379970,949120920&fm=72")
-
-        for (i in 0 .. 5){
-            val model = ProviderMultiEntity()
-            model.type = 0
-            model.createon = "昨天$i"
-            model.name = "韦一笑$i"
-            model.content = "茫茫的长白大山瀚的草原，浩始森林，大山脚下，原始森林环抱中散落着几十户人家的，" +
-                    "一个小山村，茅草房，对面炕，烟筒立在屋后边。在村东头有一个独立的房子，那就是青年点，窗前有一道小溪流过。" +
-                    "学子在这里吃饭，由这里出发每天随社员去地里干活。干的活要么上山伐，树，抬树，要么砍柳树毛子开荒种地。" +
-                    "在山里，可听那吆呵声：“顺山倒了！”放树谨防回头棒！，树上的枯枝打到别的树上再蹦回来，这回头棒打人最厉害。"
-
-            lists.add(model)
-        }
-
-        for (i in 0 .. 5){
-            val model = ProviderMultiEntity()
-            model.type = 1
-            model.createon = "前天$i"
-            model.name = "寒冰绵掌$i"
-            model.content = "树上的枯枝打到别的树上再蹦回来，这回头棒打人最厉害。"
-            model.images = images
-            lists.add(model)
-        }
-
-        circleAdapter?.setNewData(lists)
+        viewModel.setResult()
     }
 
     override fun dataObserver() {
-
+        viewModel.resultLiveData.observe(this, Observer {
+            circleAdapter?.setNewData(it)
+        })
     }
 
     override fun providerVMClass(): Class<MainViewModel> = MainViewModel::class.java
@@ -138,7 +105,6 @@ class MainActivity: BaseViewModelActivity<MainViewModel>() {
                 ll_comment.visibility = View.VISIBLE
                 etComment.requestFocus()
                 etComment.hint = "说点什么"
-//                to_user_id = null
                 KeyboardUtil.showSoftInput(this@MainActivity)
                 likePopupWindow?.dismiss()
                 etComment.setText("")
@@ -189,7 +155,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel>() {
         }
     }
 
-    fun updateEditTextBodyVisible(visibility: Int) {
+    private fun updateEditTextBodyVisible(visibility: Int) {
         ll_comment.visibility = visibility
         if (View.VISIBLE == visibility) {
             ll_comment.requestFocus()
