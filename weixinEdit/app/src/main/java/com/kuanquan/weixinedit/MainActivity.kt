@@ -101,6 +101,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel>() {
                 likePopupWindow?.dismiss()
             }
 
+            // 评论的点击事件
             override fun onCommentClick(position: Int) {
                 ll_comment.visibility = View.VISIBLE
                 etComment.requestFocus()
@@ -112,7 +113,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel>() {
                     val y: Int = getCoordinateY(ll_comment) - 20
                     //评论时滑动到对应item底部和输入框顶部对齐
                     recyclerView.smoothScrollBy(0, mBottomY - y)
-                }, 300)
+                }, 100)
             }
 
             override fun onClickFrendCircleTopBg() {}
@@ -128,14 +129,14 @@ class MainActivity: BaseViewModelActivity<MainViewModel>() {
     private var currentKeyboardH = 0
     private var editTextBodyHeight = 0
     private fun setViewTreeObserver() {
-        val swipeRefreshLayoutVTO: ViewTreeObserver = ll_scroll.getViewTreeObserver()
+        val swipeRefreshLayoutVTO: ViewTreeObserver = ll_scroll.viewTreeObserver
         swipeRefreshLayoutVTO.addOnGlobalLayoutListener {
             val r = Rect()
             ll_scroll.getWindowVisibleDisplayFrame(r)
-            val statusBarH = Utils.getStatusBarHeight() //状态栏高度
-            val screenH: Int = ll_scroll.getRootView().getHeight()
+            val statusBarH = Utils.getStatusBarHeight() // 状态栏高度
+            val screenH: Int = ll_scroll.rootView.height
             if (r.top != statusBarH) {
-                //r.top代表的是状态栏高度，在沉浸式状态栏时r.top＝0，通过getStatusBarHeight获取状态栏高度
+                // r.top代表的是状态栏高度，在沉浸式状态栏时r.top＝0，通过 getStatusBarHeight 获取状态栏高度
                 r.top = statusBarH
             }
             val keyboardH = screenH - (r.bottom - r.top)
@@ -143,7 +144,7 @@ class MainActivity: BaseViewModelActivity<MainViewModel>() {
                 "TAG",
                 "screenH＝ " + screenH + " &keyboardH = " + keyboardH + " &r.bottom=" + r.bottom + " &top=" + r.top + " &statusBarH=" + statusBarH
             )
-            if (keyboardH == currentKeyboardH) { //有变化时才处理，否则会陷入死循环
+            if (keyboardH == currentKeyboardH) { // 有变化时才处理，否则会陷入死循环
                 return@addOnGlobalLayoutListener
             }
             currentKeyboardH = keyboardH

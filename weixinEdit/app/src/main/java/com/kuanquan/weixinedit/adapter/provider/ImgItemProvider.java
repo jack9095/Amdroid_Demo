@@ -11,7 +11,6 @@ import com.kuanquan.weixinedit.R;
 import com.kuanquan.weixinedit.adapter.NineImageAdapter;
 import com.kuanquan.weixinedit.model.EventModel;
 import com.kuanquan.weixinedit.model.ProviderMultiEntity;
-import com.kuanquan.weixinedit.util.ToastUtils;
 import com.kuanquan.weixinedit.widget.ExpandTextView;
 import com.kuanquan.weixinedit.widget.NineGridView;
 
