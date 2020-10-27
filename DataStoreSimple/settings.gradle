@@ -1,0 +1,3 @@
+include ':Lint Library'
+include ':app'
+rootProject.name = "DataStoreSimple"

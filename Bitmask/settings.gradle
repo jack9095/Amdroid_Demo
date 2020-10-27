@@ -1,0 +1,4 @@
+include ':bitmask'
+include ':lib'
+include ':app'
+rootProject.name = "Bitmask"
