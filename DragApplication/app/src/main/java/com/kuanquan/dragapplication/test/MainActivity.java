@@ -3,82 +3,77 @@ package com.kuanquan.dragapplication.test;
 import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
-import android.view.animation.TranslateAnimation;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.graphics.ColorUtils;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kuanquan.dragapplication.R;
+import com.kuanquan.dragapplication.divider.PicItemDecoration;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView mRecy;
+    private RecyclerView recyclerView;
     private PicMgrAdapter adapter;
-    private ItemTouchHelper helper;
-    private PicDragHelperCallback picDragHelperCallback;
-    private LinearLayoutManager manager;
 
-    private View delArea;
-    private AppCompatImageView delIcon;
+    private View delArea; // 删除区域
+    private AppCompatImageView delIcon; // 删除图标
 
     int count = 9;
 
     private Handler mHandler = new Handler();
 
-    private AnimationSet mShowAction;
-    private AnimationSet mHideAction;
+    private AnimationSet mShowAction;  // 开始拖拽显示的动画
+    private AnimationSet mHideAction; // 拖拽结束显示的动画
 
-    private ScaleAnimation mDelShowScaleAnim;
-    private ScaleAnimation mDelHideScaleAnim;
-
-    private TextView btn;
+//    private ScaleAnimation mDelShowScaleAnim;  // 删除区域现实的动画
+//    private ScaleAnimation mDelHideScaleAnim;  // 删除区域隐藏的动画
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_test);
 
-        mDelShowScaleAnim = new ScaleAnimation(1.0f, 1.3f, 1.0f, 1.3f,
-                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        mDelShowScaleAnim.setFillAfter(true);
-        mDelShowScaleAnim.setDuration(150);
-        mDelHideScaleAnim = new ScaleAnimation(1.3f, 1.0f, 1.3f, 1.0f,
-                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        mDelHideScaleAnim.setDuration(150);
+//        mDelShowScaleAnim = new ScaleAnimation(1.0f, 1.3f, 1.0f, 1.3f,
+//                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+//        mDelShowScaleAnim.setFillAfter(true);
+//        mDelShowScaleAnim.setDuration(150);
+//
+//        mDelHideScaleAnim = new ScaleAnimation(1.3f, 1.0f, 1.3f, 1.0f,
+//                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+//        mDelHideScaleAnim.setDuration(150);
 
         ScaleAnimation showScaleAnim = new ScaleAnimation(0.8f, 1.0f, 0.8f, 1.0f,
                 Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        ScaleAnimation hideScaleAnim = new ScaleAnimation(1.0f, 0.8f, 1.0f, 0.8f,
-                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+
+//        ScaleAnimation hideScaleAnim = new ScaleAnimation(1.0f, 0.8f, 1.0f, 0.8f,
+//                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+
         AlphaAnimation showAlphaAnim = new AlphaAnimation(0.0f, 1.0f);
-        AlphaAnimation hideAlphaAnim = new AlphaAnimation(1.0f, 0.0f);
+//        AlphaAnimation hideAlphaAnim = new AlphaAnimation(1.0f, 0.0f);
 
         mShowAction = new AnimationSet(true);
         mShowAction.addAnimation(showScaleAnim);
         mShowAction.addAnimation(showAlphaAnim);
 
-        mHideAction = new AnimationSet(true);
-        mHideAction.addAnimation(hideScaleAnim);
-        mHideAction.addAnimation(hideAlphaAnim);
+//        mHideAction = new AnimationSet(true);
+//        mHideAction.addAnimation(hideScaleAnim);
+//        mHideAction.addAnimation(hideAlphaAnim);
 
         mShowAction.setDuration(150);
-        mHideAction.setDuration(150);
+//        mHideAction.setDuration(150);
+
         mShowAction.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -95,39 +90,36 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        mHideAction.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
 
-            }
+//        mHideAction.setAnimationListener(new Animation.AnimationListener() {
+//            @Override
+//            public void onAnimationStart(Animation animation) {
+//
+//            }
+//
+//            @Override
+//            public void onAnimationEnd(Animation animation) {
+//                delArea.setVisibility(View.INVISIBLE);
+//            }
+//
+//            @Override
+//            public void onAnimationRepeat(Animation animation) {
+//
+//            }
+//        });
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                delArea.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-
-        btn = (Button) findViewById(R.id.btn);
-
-        mRecy = (RecyclerView) findViewById(R.id.recy);
+        recyclerView = (RecyclerView) findViewById(R.id.recy);
         delArea = findViewById(R.id.delete_area);
         delIcon = (AppCompatImageView) findViewById(R.id.delete_icon);
+
         delIcon.setImageResource(R.drawable.ic_edit_delete);
 
         adapter = new PicMgrAdapter(this, 240);
         adapter.setProportion(1.0f);
 
-        manager = new LinearLayoutManager(this);
-        manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
 
-        mRecy.setLayoutManager(manager);
-
-        mRecy.addItemDecoration(new PicItemDecoration(30));
+        recyclerView.addItemDecoration(new PicItemDecoration(30));
 
         ArrayList<Pic> list = new ArrayList<>();
         Pic pic;
@@ -138,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
             list.add(pic);
         }
 
-        mRecy.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);
         adapter.setList(list);
 
         adapter.setPicClickListener(new PicMgrAdapter.PicClickListener() {
@@ -156,29 +148,30 @@ public class MainActivity extends AppCompatActivity {
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mRecy.smoothScrollToPosition(adapter.getItemCount() - 1);
+                        recyclerView.smoothScrollToPosition(adapter.getItemCount() - 1);
                     }
                 }, 300);
             }
         });
 
-        picDragHelperCallback = new PicDragHelperCallback(adapter, delArea);
+        PicDragHelperCallback picDragHelperCallback = new PicDragHelperCallback(adapter, delArea);
         picDragHelperCallback.setScale(1.3f);//1.3f
         picDragHelperCallback.setAlpha(0.9f);
-        helper = new ItemTouchHelper(picDragHelperCallback);
-        helper.attachToRecyclerView(mRecy);
+        ItemTouchHelper helper = new ItemTouchHelper(picDragHelperCallback);
+        helper.attachToRecyclerView(recyclerView);
 
         picDragHelperCallback.setDragListener(new PicDragHelperCallback.DragListener() {
             @Override
             public void onDragStart() {
-                delArea.clearAnimation();
+//                delArea.clearAnimation();
                 delArea.setVisibility(View.VISIBLE);
-                delArea.startAnimation(mShowAction);
+//                delArea.startAnimation(mShowAction);
             }
 
             @Override
             public void onDragFinish(boolean isInside) {
-                delArea.startAnimation(mHideAction);
+//                delArea.startAnimation(mHideAction);
+                delArea.setVisibility(View.INVISIBLE);
                 delIcon.setImageResource(R.drawable.ic_edit_delete);
                 delArea.setBackgroundColor(0x0dffffff);
             }
@@ -192,15 +185,19 @@ public class MainActivity extends AppCompatActivity {
                 if (isInside) {
                     delIcon.setImageResource(R.drawable.ic_edit_deleted);
                     delArea.setBackgroundColor(0x19ffffff);
-                    delArea.startAnimation(mDelShowScaleAnim);
-                    ShakeUtil.vibrator(MainActivity.this, 100);
+//                    delArea.startAnimation(mDelShowScaleAnim);
+
+                    // 震动效果
+//                    ShakeUtil.vibrator(MainActivity.this, 100);
                 } else {
                     delIcon.setImageResource(R.drawable.ic_edit_delete);
                     delArea.setBackgroundColor(0x0dffffff);
-                    delArea.startAnimation(mDelHideScaleAnim);
+//                    delArea.startAnimation(mDelHideScaleAnim);
                 }
             }
         });
+
+
 
         adapter.setEmptyAnimatorListener(new PicMgrAdapter.EmptyAnimatorListener() {
             @Override
@@ -211,16 +208,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapter.startEmptyAnimator(mRecy, 1000L, 0.1f, 0.2f, 0.1f, 0.2f, 0.1f);
+                adapter.startEmptyAnimator(recyclerView, 1000L, 0.1f, 0.2f, 0.1f, 0.2f, 0.1f);
             }
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 }

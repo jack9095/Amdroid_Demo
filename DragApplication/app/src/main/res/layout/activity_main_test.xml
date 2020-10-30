@@ -1,36 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#222222"
     android:clipChildren="false">
 
-    <Button
-        android:id="@+id/btn"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textview"
-        android:text="check" />
-
-    <TextView
-        android:id="@+id/textview"
-        android:visibility="gone"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/recy"
-        android:background="#00ff00"
-        android:text="官方文档：https://github.com/square/okhttp/wiki/Interceptors
-拦截器是 OkHttp 提供的对 Http 请求和响应进行统一处理的强大机制，它可以实现网络监听、请求以及响应重写、请求失败充实等功能。
-OkHttp 中的 Interceptor 就是典型的责任链的实现，它可以设置任意数量的 Intercepter 来对网络请求及其响应做任何中间处理，比如设置缓存，Https证书认证，统一对请求加密/防篡改社会，打印log，过滤请求等等。" />
+        android:layout_height="match_parent"
+        android:clipChildren="false">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false">
+
+            <Button
+                android:id="@+id/btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textview_a"
+                android:text="check"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/textview_a"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/recy"
+                android:background="#00ff00"
+                android:text="，测试，测试测试，测试测试，测试测试，测试测试，测试测试，测试测试，测试测试，测试测试，测试测试，测试测试，测试测试，测试测试，测试测试，测试测试，测试测试，测试测试，测试"
+                android:visibility="visible" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                android:scrollbars="none" />
+
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <RelativeLayout
         android:id="@+id/delete_area"
-        android:layout_width="120dp"
+        android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
         android:background="#0dffffff"
         android:gravity="center"
         android:visibility="invisible">
@@ -40,12 +58,4 @@ OkHttp 中的 Interceptor 就是典型的责任链的实现，它可以设置任
             android:layout_width="40dp"
             android:layout_height="40dp" />
     </RelativeLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recy"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:overScrollMode="never"
-        android:scrollbars="none" />
-
 </RelativeLayout>

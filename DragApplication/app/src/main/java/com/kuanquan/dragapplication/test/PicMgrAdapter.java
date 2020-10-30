@@ -22,7 +22,6 @@ public class PicMgrAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private ArrayList<Pic> mList;
     private LayoutInflater mInflater;
-    private Context mContext;
 
     private static final int MAX_COUNT = 9;
 
@@ -42,7 +41,6 @@ public class PicMgrAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private EmptyAnimatorListener mEmptyAnimatorListener;
 
     public PicMgrAdapter(@NonNull Context context, int itemHeight) {
-        mContext = context;
         mInflater = LayoutInflater.from(context);
         mItemHeight = itemHeight;
         mItemWidth = (int) (itemHeight * mProportion);

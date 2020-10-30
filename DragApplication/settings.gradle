@@ -1,2 +1,3 @@
+include ':pickturelib'
 include ':app'
 rootProject.name = "DragApplication"

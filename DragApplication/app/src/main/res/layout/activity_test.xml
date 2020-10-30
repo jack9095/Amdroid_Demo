@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <Button
+        android:id="@+id/__get_photo_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="获取照片" />
+
+    <LinearLayout
+        android:id="@+id/__container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical">
+
+
+    </LinearLayout>
+    <com.kuanquan.pickturelib.widget.PickRecyclerView
+        android:id="@+id/__prv"
+        app:__column="3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </com.kuanquan.pickturelib.widget.PickRecyclerView>
+</LinearLayout>

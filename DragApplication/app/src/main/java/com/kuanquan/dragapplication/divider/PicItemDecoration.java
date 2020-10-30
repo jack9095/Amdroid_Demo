@@ -1,4 +1,4 @@
-package com.kuanquan.dragapplication.test;
+package com.kuanquan.dragapplication.divider;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -6,6 +6,9 @@ import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * 简易分割线 test  不建议使用
+ */
 public class PicItemDecoration extends RecyclerView.ItemDecoration {
 
     private int mSpace;

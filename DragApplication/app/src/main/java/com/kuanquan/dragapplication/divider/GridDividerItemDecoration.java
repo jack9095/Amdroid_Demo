@@ -1,4 +1,4 @@
-package com.kuanquan.dragapplication;
+package com.kuanquan.dragapplication.divider;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,6 +12,11 @@ import android.view.View;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kuanquan.dragapplication.R;
+
+/**
+ * 有 bug 的网格布局  不建议使用
+ */
 public class GridDividerItemDecoration extends RecyclerView.ItemDecoration {
     private Drawable mDividerDarwable;
     private int mDividerHight = 10;

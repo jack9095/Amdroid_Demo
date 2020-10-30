@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<lint>
+
+    <issue id="AaptCrash" severity="error"/>
+
+    <!-- 在项目中禁止检测 id为 IconMissingDensityFolder的问题 -->
+    <issue id="IconMissingDensityFolder" severity="ignore" />
+
+    <!-- 忽略指定文件中的ObsoleteLayoutParam问题 -->
+    <issue id="ObsoleteLayoutParam">
+        <ignore path="res/layout/activation.xml" />
+        <ignore path="res/layout-xlarge/activation.xml" />
+    </issue>
+
+    <!-- 忽略指定文件中的UselessLeaf问题 -->
+    <issue id="UselessLeaf">
+        <ignore path="res/layout/main.xml" />
+    </issue>
+
+    <!-- 将硬编码字符串(HardcodedText)的严重性更改为“错误” -->
+    <issue id="HardcodedText" severity="error" />
+</lint>
