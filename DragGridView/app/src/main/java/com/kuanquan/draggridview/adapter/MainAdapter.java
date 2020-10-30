@@ -21,7 +21,7 @@ import java.util.List;
 
 public class MainAdapter extends BaseAdapter implements DragAdapterInterface {
 	private boolean IsEdit = false;
-	private List<MenuEntity> datas = new ArrayList<>();
+	private List<MenuEntity> datas;
 	private Context context;
 	private AppContext appContext;
 
@@ -32,13 +32,17 @@ public class MainAdapter extends BaseAdapter implements DragAdapterInterface {
 	}
 
 	public void setDatas(List<MenuEntity> datas) {
-		this.datas.clear();
-		this.datas.addAll(datas);
+		this.datas = datas;
 	}
 
 	@Override
 	public int getCount() {
-		return datas.size();
+		if (datas != null) {
+			return datas.size();
+		} else {
+			return 0;
+		}
+
 	}
 
 	@Override
@@ -57,7 +61,7 @@ public class MainAdapter extends BaseAdapter implements DragAdapterInterface {
 		Holder holder;
 		if (convertView == null) {
 			holder = new Holder();
-			convertView = LayoutInflater.from(context).inflate(R.layout.view_item, null);
+			convertView = LayoutInflater.from(context).inflate(R.layout.main_view_item, null);
 			holder.deleteImg = (ImageView) convertView.findViewById(R.id.delete_img);
 			holder.iconImg = (ImageView) convertView.findViewById(R.id.icon_img);
 			holder.nameTv = (TextView) convertView.findViewById(R.id.name_tv);

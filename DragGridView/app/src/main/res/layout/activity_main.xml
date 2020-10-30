@@ -3,21 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:clipChildren="false"
+    android:background="#222222"
     android:orientation="vertical" >
 
     <com.kuanquan.draggridview.drag.DragForScrollView
         android:id="@+id/sv_index"
         android:layout_width="match_parent"
+        android:background="#222222"
         android:layout_height="match_parent"
+        android:clipChildren="false"
         android:scrollbars="none" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clipChildren="false"
             android:orientation="vertical" >
 
-            <com.kuanquan.draggridview.drag.DragGridView
+            <com.kuanquan.draggridview.drag.DragGridViewMain
                 android:id="@+id/gridview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -25,9 +29,24 @@
                 android:horizontalSpacing="0.5dp"
                 android:numColumns="4"
                 android:verticalSpacing="0.5dp" >
-            </com.kuanquan.draggridview.drag.DragGridView>
+            </com.kuanquan.draggridview.drag.DragGridViewMain>
 
         </LinearLayout>
     </com.kuanquan.draggridview.drag.DragForScrollView>
 
+    <RelativeLayout
+        android:id="@+id/delete_area"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true"
+        android:background="#0dffffff"
+        android:gravity="center"
+        android:visibility="invisible">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/delete_icon"
+            android:src="@mipmap/app_ggtz_ico"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+    </RelativeLayout>
 </RelativeLayout>

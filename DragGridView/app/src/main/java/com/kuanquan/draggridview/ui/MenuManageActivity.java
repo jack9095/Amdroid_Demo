@@ -124,6 +124,11 @@ public class MenuManageActivity extends Activity {
 				Logger.i("end drag at " ,""+ position);
 				sv_index.endDrag(position);
 			}
+
+			@Override
+			public void isDelete(int position, boolean isUp) {
+
+			}
 		});
 		dragGridView.setOnItemClickListener(new OnItemClickListener() {
 			@Override

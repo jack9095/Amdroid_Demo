@@ -21,7 +21,7 @@ public class DragForScrollView extends ScrollView {
     
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-    	Log.e("isDrag",ev.getAction()+"");
+//    	Log.e("isDrag",ev.getAction()+"");
  		if (ev.getAction() == MotionEvent.ACTION_DOWN||ev.getAction() ==MotionEvent.ACTION_UP||ev.getAction() ==MotionEvent.ACTION_MOVE) {
  			if (isDrag) {
  				return false;
