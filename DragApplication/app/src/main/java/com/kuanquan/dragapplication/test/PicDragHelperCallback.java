@@ -26,7 +26,7 @@ public class PicDragHelperCallback extends ItemTouchHelper.Callback {
     private boolean mIsInside = false;
     private int delPos = -1; // 可能要被移除的的 itemView 的 position
     private RecyclerView.ViewHolder tempHolder;
-    private float mScale = 1.2f;
+    private float mScale = 1.1f;
     private float mAlpha = 1.0f;
 
     private float mInsideScale = 0.86f;
@@ -56,53 +56,6 @@ public class PicDragHelperCallback extends ItemTouchHelper.Callback {
         dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
         int swipeFlags = 0;
         return makeMovementFlags(dragFlags, swipeFlags);
-    }
-
-    /**
-     * 拖拽切换Item的回调
-     *
-     * @param recyclerView
-     * @param viewHolder
-     * @param target
-     * @return
-     *          如果Item切换了位置，返回true；反之，返回false
-     */
-    @Override
-    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-//        if (viewHolder.getItemViewType() != target.getItemViewType()) {
-//            return false;
-//        }
-//        if (target instanceof PicMgrAdapter.PicAddViewHolder) {
-//            return false;
-//        }
-        ArrayList<Pic> list = mAdapter.getList();
-//        if (list == null || list.size() < 2) {
-//            return false;
-//        }
-
-        // 返回布局中最新的计算位置，和用户所见到的位置一致，当做用户输入（例如点击事件）的时候考虑使用
-//        viewHolder.getLayoutPosition();
-
-        // 返回数据在Adapter中的位置（也许位置的变化还未来得及刷新到布局中），
-        // 当使用Adapter的时候（例如调用Adapter的notify相关方法时）考虑使用
-        int from = viewHolder.getAdapterPosition();  // 这里指拖拽移动前的位置
-        int endPosition = target.getAdapterPosition(); // 这里指拖拽移动后的位置
-        Log.d("jiabin", "onMove from:" + from + " end:" + endPosition);
-        delPos = endPosition;
-
-        // 交换在指定列表中的指定位置的元素
-        Collections.swap(list, from, endPosition);
-
-        // 移动指定未知的元素并更新
-        mAdapter.notifyItemMoved(from, endPosition);
-        return true;
-    }
-
-    // 针对drag状态，滑动超过百分之多少的距离可以可以调用onMove()函数(注意哦，这里指的是onMove()函数的调用，并不是随手指移动的那个view哦)
-    @Override
-    public float getMoveThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
-//        return super.getMoveThreshold(viewHolder);
-        return .5f;
     }
 
     /**
@@ -176,6 +129,58 @@ public class PicDragHelperCallback extends ItemTouchHelper.Callback {
             object.setScaleX(value);
             object.setScaleY(value);
         }
+    }
+
+    /**
+     * 拖拽切换Item的回调
+     *
+     * @param recyclerView
+     * @param viewHolder
+     * @param target
+     * @return
+     *          如果Item切换了位置，返回true；反之，返回false
+     */
+    @Override
+    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+
+        // 用于防止交换位置时角标越界的问题
+        if (viewHolder.getItemViewType() != target.getItemViewType()) {
+            return false;
+        }
+        if (target instanceof PicMgrAdapter.PicAddViewHolder) {
+            return false;
+        }
+        Log.e("ItemTouchHelp", "from = " + viewHolder.getAdapterPosition());
+        Log.e("ItemTouchHelp", "target = " + target.getAdapterPosition());
+        ArrayList<Pic> list = mAdapter.getList();
+        if (list == null || list.size() < 2) {
+            return false;
+        }
+
+        // 返回布局中最新的计算位置，和用户所见到的位置一致，当做用户输入（例如点击事件）的时候考虑使用
+//        viewHolder.getLayoutPosition();
+
+        // 返回数据在Adapter中的位置（也许位置的变化还未来得及刷新到布局中），
+        // 当使用Adapter的时候（例如调用Adapter的notify相关方法时）考虑使用
+        int from = viewHolder.getAdapterPosition();  // 这里指拖拽移动前的位置
+        int endPosition = target.getAdapterPosition(); // 这里指拖拽移动后的位置
+        Log.d("jiabin", "onMove from:" + from + " end:" + endPosition);
+        delPos = endPosition;
+
+        // 交换在指定列表中的指定位置的元素
+        Collections.swap(list, from, endPosition);
+
+        // 移动指定未知的元素并更新
+        mAdapter.notifyItemMoved(from, endPosition);
+
+        return true;
+    }
+
+    // 针对drag状态，滑动超过百分之多少的距离可以可以调用onMove()函数(注意哦，这里指的是onMove()函数的调用，并不是随手指移动的那个view哦)
+    @Override
+    public float getMoveThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
+//        return super.getMoveThreshold(viewHolder);
+        return .5f;
     }
 
     /**
@@ -279,22 +284,22 @@ public class PicDragHelperCallback extends ItemTouchHelper.Callback {
         boolean isInside = false;
         if (centerY > delAreaY && centerY < delAreaY + delAreaHeight && centerX > delAreaX && centerX < delAreaX + delAreaWidth) {
             isInside = true;
-            Log.e("ItemTouchHelp", "进入删除区域");
+//            Log.e("ItemTouchHelp", "进入删除区域");
         } else {
-            Log.e("ItemTouchHelp", "非删除区域");
+//            Log.e("ItemTouchHelp", "非删除区域");
             isInside = false;
         }
         if (isInside != mIsInside) {
             if (tempHolder != null) {
                 if (isInside) {
-                    Log.e("ItemTouchHelp", "mInsideScale" + mInsideScale);
+//                    Log.e("ItemTouchHelp", "mInsideScale" + mInsideScale);
                     mMoveScale = mInsideScale;
 
 //                    clearActivatingAnim(viewHolder.itemView);
 //                    startActivatingAnim(viewHolder.itemView, mScale, mInsideScale, 150);
 //                    viewHolder.itemView.setAlpha(mInsideAlpha);
                 } else {
-                    Log.e("ItemTouchHelp", "mScale" + mScale);
+//                    Log.e("ItemTouchHelp", "mScale" + mScale);
                     mMoveScale = mScale;
 //                    clearActivatingAnim(viewHolder.itemView);
 //                    startActivatingAnim(viewHolder.itemView, mInsideScale, mScale, 150);
@@ -308,12 +313,18 @@ public class PicDragHelperCallback extends ItemTouchHelper.Callback {
         mIsInside = isInside;
 
         if (!isCurrentlyActive) {
-            Log.e("ItemTouchHelp", "不操作");
+//            Log.e("ItemTouchHelp", "不操作");
         } else {
-            Log.e("ItemTouchHelp", "用户操作");
+//            Log.e("ItemTouchHelp", "用户操作");
         }
 
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+    }
+
+    @Override
+    public int getBoundingBoxMargin() {
+//        return super.getBoundingBoxMargin();
+        return 300;
     }
 
     /**
@@ -389,7 +400,7 @@ public class PicDragHelperCallback extends ItemTouchHelper.Callback {
      * @param scale
      */
     public void setScale(float scale) {
-        mScale = scale;
+//        mScale = scale;
         mMoveScale = mScale;
     }
 

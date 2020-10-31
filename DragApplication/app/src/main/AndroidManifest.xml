@@ -26,37 +26,25 @@
         android:theme="@style/AppTheme">
 
         <activity android:name="com.kuanquan.dragapplication.test.MainActivity">
+
+        </activity>
+
+        <activity android:name=".TestActivity">
+        </activity>
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".MainActivity">
-
-        </activity>
         <activity android:name="com.kuanquan.dragapplication.demo.MainActivity">
 
         </activity>
 
-        <activity android:name="com.kuanquan.dragapplication.TestActivity">
-
-        </activity>
         <activity android:name="com.kuanquan.dragapplication.demo.PostImagesActivity">
 
         </activity>
-
-
-        <activity
-            android:name="com.kuanquan.pickturelib.PicktureActivity"
-            android:configChanges="orientation|screenSize"
-            />
-        <activity
-            android:name="com.kuanquan.pickturelib.ViewPagerActivity"
-            android:configChanges="orientation|screenSize"
-            android:launchMode="singleTop"
-            />
 
     </application>
 

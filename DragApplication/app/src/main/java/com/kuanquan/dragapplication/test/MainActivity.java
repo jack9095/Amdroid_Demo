@@ -1,6 +1,7 @@
 package com.kuanquan.dragapplication.test;
 
 import android.animation.ValueAnimator;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -15,10 +16,15 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.OrientationHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kuanquan.dragapplication.R;
+import com.kuanquan.dragapplication.divider.BaseItemDecoration;
+import com.kuanquan.dragapplication.divider.GridItemDecoration;
 import com.kuanquan.dragapplication.divider.PicItemDecoration;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -119,7 +125,22 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
 
-        recyclerView.addItemDecoration(new PicItemDecoration(30));
+//        recyclerView.addItemDecoration(new PicItemDecoration(30));
+
+        recyclerView.addItemDecoration(
+                new GridItemDecoration.Builder(this, OrientationHelper.VERTICAL)
+                        .setDividerWidthPx(10) // 分割线的宽度 单位px
+                        .setFooterViewCount(0) // 设置尾布局的个数 默认为0 尾布局之间没有分割线
+                        .setHeadViewCount(0) // 设置头布局的个数 默认为0 头布局之间没有分割线 以及头布局与第一条数据之间也是没有分割线
+                        .setDividerMarginPx(0, 0, 0, 0) // 设置分割线距离item的间隔
+                        .setDividerColorProvider(new BaseItemDecoration.DividerColorProvider() {
+                            @Override
+                            public int getDividerColor(int position, @NotNull RecyclerView parent) {
+                                return Color.parseColor("#ffffff");
+                            }
+                        })
+                        .build()
+        );
 
         ArrayList<Pic> list = new ArrayList<>();
         Pic pic;
@@ -215,5 +236,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 }

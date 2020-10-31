@@ -167,15 +167,15 @@ public class PicMgrAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (viewType == TYPE_PIC) {
             Pic pic = mList.get(position);
             PicViewHolder picHolder = (PicViewHolder) holder;
-            picHolder.itemView.getLayoutParams().height = mItemHeight;
-            picHolder.itemView.getLayoutParams().width = mItemWidth;
+//            picHolder.itemView.getLayoutParams().height = mItemHeight;
+//            picHolder.itemView.getLayoutParams().width = mItemWidth;
             picHolder.itemView.setVisibility(View.VISIBLE);
-            picHolder.pic.setImageResource(R.mipmap.f1);
+            picHolder.pic.setImageResource(R.mipmap.ic_launcher);
             picHolder.txt.setText("" + pic.id);
         } else if (viewType == TYPE_PIC_ADD) {
             PicAddViewHolder picAddHolder = (PicAddViewHolder) holder;
-            picAddHolder.itemView.getLayoutParams().height = mItemHeight;
-            picAddHolder.itemView.getLayoutParams().width = mItemWidth;
+//            picAddHolder.itemView.getLayoutParams().height = mItemHeight;
+//            picAddHolder.itemView.getLayoutParams().width = mItemWidth;
 //            if(getItemCount() >= maxCount + 1){
 //                picAddHolder.itemView.setVisibility(View.GONE);
 //            }else {
