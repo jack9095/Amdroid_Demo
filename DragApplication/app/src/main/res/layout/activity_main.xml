@@ -8,6 +8,7 @@
     android:clipChildren="false">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipChildren="false">
@@ -37,6 +38,15 @@
 
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
+
+
+    <com.kuanquan.dragapplication.TriangleView
+        android:layout_above="@+id/deleteArea"
+        android:layout_marginLeft="300dp"
+        android:layout_width="14dp"
+        android:layout_height="5dp"
+        android:layout_marginBottom="10dp"
+        android:background="#00000000" />
 
     <RelativeLayout
         android:id="@+id/deleteArea"

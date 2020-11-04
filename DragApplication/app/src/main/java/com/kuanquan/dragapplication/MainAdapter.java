@@ -6,8 +6,6 @@ import android.widget.*;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import com.kuanquan.dragapplication.test.Pic;
-import com.kuanquan.dragapplication.test.PicMgrAdapter;
-
 import java.util.*;
 
 public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

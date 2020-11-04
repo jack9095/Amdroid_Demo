@@ -78,7 +78,15 @@ public class DragHelperCallback extends ItemTouchHelper.Callback {
         delPos = endPosition;
 
         // 交换在指定列表中的指定位置的元素
-        Collections.swap(list, from, endPosition);
+        if (from < endPosition) {
+            for (int i = from; i < endPosition; i++) {
+                Collections.swap(list, i, i + 1);
+            }
+        } else {
+            for (int i = from; i > endPosition; i--) {
+                Collections.swap(list, i, i - 1);
+            }
+        }
 
         // 移动指定未知的元素并更新
         mAdapter.notifyItemMoved(from, endPosition);
@@ -188,6 +196,7 @@ public class DragHelperCallback extends ItemTouchHelper.Callback {
             Log.e("PicDragHelperCallback", "闲置状态 onSelectedChanged mIsInside:" + mIsInside);
             if (mIsInside && delPos >= 0 && tempHolder != null) {
                 Log.e("PicDragHelperCallback", "删除 onSelectedChanged delPos:" + delPos);
+                // 先设置不可见，如果不设置的话，会看到viewHolder返回到原位置时才消失，因为remove会在viewHolder动画执行完成后才将viewHolder删除
                 tempHolder.itemView.setVisibility(View.INVISIBLE);
                 mAdapter.removeItemFromDrag(delPos);
                 mIsInside = false;
@@ -273,10 +282,18 @@ public class DragHelperCallback extends ItemTouchHelper.Callback {
      * @param viewHolder
      */
     @Override
-    public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+    public void clearView(RecyclerView recyclerView, final RecyclerView.ViewHolder viewHolder) {
         clearActivatingAnim(viewHolder.itemView);
         startActivatingAnim(viewHolder.itemView, mScale, 1.0f);
         viewHolder.itemView.setAlpha(1.0f);
+
+        // 不这么写数据更新后有的 item 会出现空白，这个 bug 改了好久，做个记录
+        viewHolder.itemView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                viewHolder.itemView.setVisibility(View.VISIBLE);
+            }
+        },300);
         super.clearView(recyclerView, viewHolder);
     }
 
