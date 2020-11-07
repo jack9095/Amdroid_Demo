@@ -4,41 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".sharedpreferences.SharedPreferencesActivity">
 
     <Button
         android:id="@+id/saveBtn"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="写入"
-        app:layout_constraintBottom_toTopOf="@+id/readBtn"
-        app:layout_constraintEnd_toEndOf="@+id/readBtn"
+        android:text="sp存储数据"
+        app:layout_constraintBottom_toTopOf="@+id/obtainBtn"
+        app:layout_constraintEnd_toEndOf="@+id/obtainBtn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         tools:ignore="HardcodedText" />
 
     <Button
-        android:id="@+id/readBtn"
-        android:layout_width="409dp"
+        android:id="@+id/obtainBtn"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="读取"
-        app:layout_constraintBottom_toTopOf="@+id/dataMigrationBtn"
+        android:text="sp获取数据"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/saveBtn"
         tools:ignore="HardcodedText" />
-
-    <Button
-        android:id="@+id/dataMigrationBtn"
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        android:text="sp 迁移到 ds"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/readBtn"
-        tools:ignore="HardcodedText" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
