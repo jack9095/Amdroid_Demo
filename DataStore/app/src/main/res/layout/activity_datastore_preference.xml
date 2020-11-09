@@ -33,6 +33,7 @@
         android:id="@+id/dataMigrationBtn"
         android:layout_width="409dp"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:text="sp 迁移到 ds"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -32,6 +32,17 @@ android {
     }
 
     android.buildFeatures.viewBinding = true
+
+    // 设置 proto 文件位置
+    sourceSets {
+        main {
+            proto {
+                // proto 文件默认路径是 src/main/proto
+                // 可以通过 srcDir 修改 proto 文件的位置
+                srcDir 'src/main/proto'
+            }
+        }
+    }
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
@@ -86,4 +97,5 @@ protobuf {
             }
         }
     }
+//    generatedFilesBaseDir = "$projectDir/src/main"
 }

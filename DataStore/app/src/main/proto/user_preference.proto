@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option java_package = "com.kuanquan.datastore.proto";
+//option java_outer_classname = "UserProtos";
+option java_multiple_files = true;
+
+message User {
+
+    string name = 1;
+
+    int32 age = 2;
+
+    repeated VipUser vips = 3;
+}
+
+message VipUser {
+    string avatar = 1;
+    string vipTag = 2;
+    string name = 3;
+    int32 age = 4;
+}

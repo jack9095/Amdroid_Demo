@@ -25,3 +25,161 @@ Ps: Preferences DataStore 只支持 Int , Long , Boolean , Float , String 键值
 
 2.Proto DataStore：存储类的对象（typed objects ），通过 protocol buffers 将对象序列化存储在本地。
     Proto DataStore 通过 protocol buffers 将对象序列化存储在本地，所以首先需要安装 Protobuf 编译 proto 文件
+    
+   在项目中添加 Gradle 插件编译 proto 文件
+   plugins {
+       id "com.google.protobuf" version "0.8.12"
+   }
+   
+   // 设置 proto 文件位置
+   sourceSets {
+       main {
+           proto {
+               // proto 文件默认路径是 src/main/proto
+               // 可以通过 srcDir 修改 proto 文件的位置
+               srcDir 'src/main/proto'
+           }
+       }
+   }
+   
+   // 添加依赖
+   implementation  "com.google.protobuf:protobuf-javalite:3.11.0"
+   
+   /**
+    * 配置 protoc 命令
+    */
+   protobuf {
+       // 设置 protoc 的版本
+       protoc {
+           // 从仓库下载 protoc 这里的版本号需要与依赖 com.google.protobuf:protobuf-javalite:xxx 版本相同
+           artifact = 'com.google.protobuf:protoc:3.11.0'
+       }
+       generateProtoTasks {
+           all().each { task ->
+               task.builtins {
+                   java {
+                       option "lite"
+                   }
+               }
+           }
+       }
+       // 默认生成目录 $buildDir/generated/source/proto 通过 generatedFilesBaseDir 改变生成位置
+       generatedFilesBaseDir = "$projectDir/src/main"
+       
+   }
+   
+   
+   Preference DataStore 与 Proto DataStore，它们之间有什么区别？
+   
+   1.Preference DataStore 主要是为了解决 SharedPreferences 所带来的问题,内部也是定义了一个 proto 文件，通过 PreferencesSerializer 将每一对 key-value 数据映射到 proto 文件定义的 message（PreferenceMap） 类型
+   
+   2.Proto DataStore 比 Preference DataStore  更加灵活，支持更多的类型
+   
+   3.Preference DataStore 支持 Int 、 Long 、 Boolean 、 Float 、 String
+     protocol buffers 支持的类型，Proto DataStore 都支持
+   
+   4.Preference DataStore 以 XML 的形式存储 key-value 数据，可读性很好
+   
+   5.Proto DataStore 使用了二进制编码压缩，体积更小，速度比 XML 更快
+   
+   接下来开始创建一个 proto 文件：
+   
+       // 指定 protobuf 的版本，如果没有指定默认使用 proto2，必须是.proto文件的除空行和注释内容之外的第一行
+       // proto3 学习的官网 https://developers.google.com/protocol-buffers/docs/proto3
+       syntax = "proto3";
+       
+       // option ：表示一个可选字段
+       // java_package ： 指定生成 java 类所在的包名
+       option java_package = "com.kuanquan.datastore.proto";
+       
+       // java_outer_classname ： 指定生成 java 类的名字
+       option java_outer_classname = "UserProtos";
+       
+       // java_multiple_files 该选项为true时，生成的Java类将是包级别的，否则会在一个包装类中
+       option java_multiple_files = true;
+       
+       // message 中包含了一个 string 类型的字段(name)。注意 ：= 号后面都跟着一个字段编号(类似于数据库的主键，用于在编译后的二进制消息格式中对字段进行识别)
+       message UserPreferences {
+       
+           // 格式：字段类型 + 字段名称 + 字段编号
+           string name = 1;
+           
+           // 每个字段由三部分组成：字段类型 + 字段名称 + 字段编号，在 Java 中每个字段会被编译成 Java 对象
+           int32 age = 2;
+           
+           // repeated 修饰的等价于 java 中的 List<VipUser> vips
+           repeated VipUser vips = 3;
+       }
+       
+       message VipUser {
+           string avatar = 1;
+           string vipTag = 2;
+           string name = 3;
+           int32 age = 4;
+       }
+   
+   下面是罗列常用的映射
+   proto3      Java
+   string  ->  String
+   int32  ->   int
+   int64  ->   long
+   bool  ->    boolean
+   float  ->   float
+   double  ->  double
+   
+  开始构建 DataStore:
+  
+  实现了 Serializer<User>  接口，这是为了告诉 DataStore 如何从 proto 文件中读写数据
+  User 是通过编译 proto 文件生成的 Java 类
+  User.parseFrom(input) 是编译器自动生成的，用于读取并解析 input 的消息
+  t.writeTo(output) 是编译器自动生成的，用于写入序列化消息
+  
+    object UserSerializer: Serializer<User> {
+            override fun readFrom(input: InputStream): User {
+                try {
+                    return User.parseFrom(input) // 是编译器自动生成的，用于读取并解析 input 的消息
+                } catch (exception: InvalidProtocolBufferException) {
+                    throw CorruptionException("Cannot read proto.", exception)
+                }
+            }
+    
+            override fun writeTo(t: User, output: OutputStream) {
+                t.writeTo(output) // t.writeTo(output) 是编译器自动生成的，用于写入序列化消息
+            }
+    
+    }
+    
+    private val dataStore: DataStore<User> =
+            createDataStore(
+                fileName = "user_prefs.pb",
+                serializer = UserSerializer
+            )
+            
+  读取数据：
+  DataStore 是基于 Flow 实现的，所以通过 dataStore.data 会返回一个 Flow<T>，每当数据变化的时候都会重新发出
+   
+    private fun readData(): Flow<User> = dataStore.data
+            .catch {
+                if (it is IOException) {
+                    it.printStackTrace()
+                    emit(User.getDefaultInstance())
+                } else {
+                    throw it
+                }
+
+    readData().asLiveData().observe(this, Observer {
+                    Log.e(TAG, "asLiveData -> $it")
+                })
+                
+  写入数据：
+  在 Proto DataStore 中是通过 DataStore.updateData() 方法写入数据的，DataStore.updateData() 是一个 suspend 函数，
+  所以只能在协程体内使用，每当遇到 suspend 函数以挂起的方式运行，并不会阻塞主线程。
+  user.toBuilder() 是编译器为每个类生成 Builder 类，用于创建消息实例。
+  
+  
+      private suspend fun saveData(data: User) {
+              dataStore.updateData { user ->
+                  user.toBuilder().setAge(data.age).setName(data.name).build()
+              }
+          }
+   

@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.kuanquan.datastore.PREFERENCE_NAME
 import com.kuanquan.datastore.R
 import com.kuanquan.datastore.SHARED_PREFERENCE_NAME
+import com.kuanquan.datastore.SP_KEY_NAME
 import kotlinx.android.synthetic.main.activity_datastore_preference.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -24,7 +25,7 @@ import java.io.IOException
 
 class PreferenceDataStoreActivity : AppCompatActivity() {
 
-    val TAG = PreferenceDataStoreActivity::class.simpleName
+    private val TAG = PreferenceDataStoreActivity::class.simpleName
 
     /*
         这里和我们之前使用 SharedPreferences 的有点不一样，
@@ -32,7 +33,7 @@ class PreferenceDataStoreActivity : AppCompatActivity() {
         只支持 Int , Long , Boolean , Float , String
      */
     val dsKey = preferencesKey<String>("test_name")
-    val spKey = preferencesKey<String>("name")
+    val spKey = preferencesKey<String>(SP_KEY_NAME)
 
     // 构建 DataStore
 //    private val dataStore: DataStore<Preferences> = createDataStore(name = PREFERENCE_NAME)
@@ -67,11 +68,11 @@ class PreferenceDataStoreActivity : AppCompatActivity() {
                 Log.e(TAG, "asLiveData -> $it")
             })
 
-            lifecycleScope.launch {
-                readData(dsKey).collect {
-                    Log.e(TAG, "collect -> $it")
-                }
-            }
+//            lifecycleScope.launch {
+//                readData(dsKey).collect {
+//                    Log.e(TAG, "collect -> $it")
+//                }
+//            }
         }
     }
 
@@ -90,9 +91,9 @@ class PreferenceDataStoreActivity : AppCompatActivity() {
             }
         }
         .map { currentPreferences ->
-            val data = currentPreferences[dsKey] ?: "测试数据"
-            data
+            currentPreferences[dsKey] ?: "测试数据"
         }
+
 
     /**
      * 迁移 SharedPreferences 到 DataStore
