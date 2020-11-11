@@ -36,7 +36,7 @@ echo "********************** 本地打包 ****************************"
 cd ..
 
 echo "********************** 反编译 apk 文件 ****************************"
-java -jar apktool_2.4.1.jar d -f "${projectName}"/app/build/outputs/apk/innerArm64V8a/release/app-inner-arm64V8a-release.apk
+java -jar apktool_2.4.1.jar d -f "${projectName}"/app/build/outputs/apk/innerArm64V8a/release/app-inner-arm64V8a-release.apk -only-main-classes
 
 echo "********************** 检索字符串并写入文件 ****************************"
 if [ $default -eq 0 ]; then

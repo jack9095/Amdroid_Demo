@@ -44,6 +44,11 @@ public class StringToHtml {
             outFile.getParentFile().mkdirs();
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile), "UTF-8"));
 
+            bw.write("<br/>");
+            bw.write("<h1 align=\"center\" width=\"50%\">");
+            bw.write(projectName);
+            bw.write("</h1>");
+
             ArrayList<String> lists = new ArrayList<>();
             if ("0".equals(hasDefault)) {
                 lists.add(localPath + "installed.txt");
@@ -79,13 +84,17 @@ public class StringToHtml {
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 
-            StringBuilder sb = new StringBuilder();
+//            StringBuilder sb = new StringBuilder();
+            List<String> rowLists = new ArrayList<>();
             String line;
             while ((line = br.readLine()) != null) {
-                sb.append(line);
+                System.out.println("line的大小 = "+ line.length());
+//                sb.append(line);
+                rowLists.add(line);
             }
-            String[] strs = sb.toString().split("\\.//");
-
+//            String sbStr = sb.toString();
+//            String[] strs = sbStr.split("\\.//");
+//            sb.trimToSize();
             String title;
             String subtitle;
             String replace = textFile.replace(".txt", "");
@@ -134,7 +143,7 @@ public class StringToHtml {
 
             bw.write("</tr>");
 
-            for (String str : strs) {
+            for (String str : rowLists) {
                 if (str.isEmpty()) {
                     continue;
                 }
@@ -176,6 +185,7 @@ public class StringToHtml {
                 }
             }
             bw.write("</table>");
+            rowLists.clear();
             br.close();
         } catch (Exception e) {
             e.printStackTrace();

@@ -36,6 +36,11 @@ public class StringToHtml {
             File outFile = new File("scan.html");
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile), "UTF-8"));
 
+            bw.write("<br/>");
+            bw.write("<h1 align=\"center\" width=\"50%\">");
+            bw.write(projectName);
+            bw.write("</h1>");
+
             ArrayList<String> lists = new ArrayList<>();
             if ("0".equals(hasDefault)) {
                 lists.add(localPath + "installed.txt");
