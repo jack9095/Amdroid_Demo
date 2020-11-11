@@ -7,28 +7,64 @@ public class StringToHtml {
 
     public static void main(String[] args) {
 
-        HashMap<String, String> hashMap = dependentMap("/Users/fei/Downloads/searchDocument/bixin/class-map.txt");
+        String customStr = null;
+        String hasDefault = "0";
+        String projectName = "";
+        String[] split = null;
+        if (args.length >= 3) {
+            System.out.println("是否加载默认数据=" + args[0]);
+            projectName = args[0];
+            hasDefault = args[1];
+            customStr = args[2];
+            System.out.println("加载自定义数据=" + args[1]);
+        } else if (args.length >= 2) {
+            projectName = args[0];
+            hasDefault = args[1];
+        } else if (args.length >= 1) {
+            projectName = args[0];
+        }
+
+        String localPath = "/Users/fei/Downloads/searchDocument/bixin/";
+//        String localPath = "";
+
+        HashMap<String, String> hashMap = dependentMap(localPath + "class-map.txt");
+//        HashMap<String, String> hashMap = dependentMap(projectName + "/class-map.txt");
 
         try {
 
+            if (customStr != null && !"".equals(customStr)) {
+                split = customStr.split(",");
+            }
+
+
             // 生成 html 文件的文件夹路径
             String path = "/Users/fei/Downloads/html";
-            File outFile = new File(path, "scan.html");
+            File outFile = new File(path,"scan.html");
+//            File outFile = new File("scan.html");
             outFile.getParentFile().mkdirs();
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile), "UTF-8"));
 
-            String[] array = new String[]{
-                    "/Users/fei/Downloads/searchDocument/bixin/installed.txt",
-                    "/Users/fei/Downloads/searchDocument/bixin/imei.txt",
-                    "/Users/fei/Downloads/searchDocument/bixin/mac.txt",
-                    "/Users/fei/Downloads/searchDocument/bixin/location.txt",
-                    "/Users/fei/Downloads/searchDocument/bixin/sms.txt",
-                    "/Users/fei/Downloads/searchDocument/bixin/calls.txt",
-                    "/Users/fei/Downloads/searchDocument/bixin/contract.txt"
-            };
+            ArrayList<String> lists = new ArrayList<>();
+            if ("0".equals(hasDefault)) {
+                lists.add(localPath + "installed.txt");
+                lists.add(localPath + "imei.txt");
+                lists.add(localPath + "mac.txt");
+                lists.add(localPath + "location.txt");
+                lists.add(localPath + "sms.txt");
+                lists.add(localPath + "calls.txt");
+                lists.add(localPath + "contract.txt");
+            }
 
-            for (String str : array) {
-                string2Html(str, bw, hashMap);
+            if (split != null && split.length > 0) {
+                for (String str: split) {
+                    if (!"".equals(str.trim())) {
+                        lists.add(str+".txt");
+                    }
+                }
+            }
+
+            for (String str : lists) {
+                string2Html(str, bw, hashMap, hasDefault);
             }
 
             bw.close();
@@ -37,7 +73,7 @@ public class StringToHtml {
         }
     }
 
-    public static void string2Html(String textFile, BufferedWriter bw, HashMap<String, String> hashMap) {
+    public static void string2Html(String textFile, BufferedWriter bw, HashMap<String, String> hashMap, String hasDefault) {
         List<String> classNames = new ArrayList<>();
         File file = new File(textFile);
         try {
@@ -50,12 +86,35 @@ public class StringToHtml {
             }
             String[] strs = sb.toString().split("\\.//");
 
+            String title;
+            String subtitle;
+            String replace = textFile.replace(".txt", "");
+            System.out.println("replace" + textFile);
+            if ("0".equals(hasDefault)) {
+                System.out.println("getTitle(replace)" + getTitle(textFile));
+                if ("".equals(getTitle(textFile))) {
+                    title = replace;
+                } else {
+                    title = getTitle(textFile);
+                }
+
+                System.out.println("searchCommand(replace)" + searchCommand(textFile));
+                if ("".equals(searchCommand(textFile))) {
+                    subtitle = "搜索条件：grep -rn --color=auto " + replace + " ./ --include='*.smali'";
+                } else {
+                    subtitle = searchCommand(textFile);
+                }
+            } else {
+                title = replace;
+                subtitle = "搜索条件：grep -rn --color=auto " + replace + " ./ --include='*.smali'";
+            }
+
             bw.write("<br/>");
             bw.write("<h2>");
-            bw.write(getTitle(textFile));
+            bw.write(title);
             bw.write("</h2>");
 
-            bw.write(searchCommand(textFile));
+            bw.write(subtitle);
 
             bw.write("<table border=\"1\">");
 
@@ -186,7 +245,7 @@ public class StringToHtml {
         } else if (fileName.contains("mac.txt")) {
             return "搜索条件：grep -rn --color=auto getMac ./ --include='*.smali'";
         } else if (fileName.contains("location.txt")) {
-            return "搜索条件：grep -rn -E --color=auto \"getLastKnownLocation|LocationListener\" ./ --include='*.smali'";
+            return "搜索条件：grep -rn -E --color=auto 'getLastKnownLocation|LocationListener' ./ --include='*.smali'";
         } else if (fileName.contains("sms.txt")) {
             return "搜索条件：grep -rn --color=auto 'Telephony$Sms;->CONTENT_URI' ./ --include='*.smali'";
         } else if (fileName.contains("calls.txt")) {
