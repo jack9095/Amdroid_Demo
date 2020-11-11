@@ -24,7 +24,7 @@ public class StringToHtml {
             projectName = args[0];
         }
 
-        String localPath = "/Users/fei/Downloads/searchDocument/bixin/";
+        String localPath = "/Users/fei/Downloads/searchDocument/test/";
 //        String localPath = "";
 
         HashMap<String, String> hashMap = dependentMap(localPath + "class-map.txt");
