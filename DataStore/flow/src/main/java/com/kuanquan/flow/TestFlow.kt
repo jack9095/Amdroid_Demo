@@ -1,10 +1,8 @@
 package com.kuanquan.flow
 
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withTimeoutOrNull
+import kotlin.math.sign
 
 /**
  *   flow 为 Flow 类型构建器函数。
@@ -24,7 +22,16 @@ class TestFlow {
 //            TestFlow().asFlowTEst()
 //            TestFlow().mapTest()
 //            TestFlow().transformTest()
-            TestFlow().takeTest()
+//            TestFlow().takeTest()
+//            TestFlow().collect()
+//            TestFlow().reduce()
+//            TestFlow().toList()
+//            TestFlow().toSet()
+//            TestFlow().first()
+//            TestFlow().single()
+//            TestFlow().filter()
+//            TestFlow().flowOn()
+            TestFlow().buffe()
         }
     }
 
@@ -118,24 +125,125 @@ class TestFlow {
             }
     }
 
-    /************************************** 末端流操作符 *****************************************/
+    /************************************** 末端流操作符 start *****************************************/
+    // collect
+    fun collect() = runBlocking {
+        (1..5).asFlow()
+            .map {
+                it * it // 数字 1 至 5 的平方
+            }
+            .collect{ a ->
+                println(a)
+            }
+    }
+
     // 求和  runBlocking 阻塞协成
     fun reduce() = runBlocking {
         val sum = (1..5).asFlow()
             .map {
-                it * it
+                it * it // 数字 1 至 5 的平方
+            }
+            .reduce{ a, b ->
+                a + b // 求和
             }
         print(sum)
     }
 
+    // 转化为各种集合 例如 toList 与 toSet
+    fun toList() = runBlocking {
+       val lists: List<Int> =  (1..5).asFlow()
+            .map {
+                it + it
+            }
+            .toList()
+        for(i in lists){
+            println(i)
+        }
+    }
+
+    fun toSet() = runBlocking {
+        val sets: Set<Int> =  (1..5).asFlow()
+            .map {
+                it + it
+            }
+            .toSet()
+        for(i in sets){
+            println(i)
+        }
+    }
+
+    fun first() = runBlocking {
+        val first =  (1..5).asFlow()
+            .map {
+                it + it
+            }
+            .first {
+                it*5
+                true
+            }
+        println(first)
+    }
+
+    fun single() = runBlocking {
+//        val single: Int =  (1..5).asFlow()
+//            .map {
+//                it + it
+//            }
+//            .single{
+//
+//            }
+//        println(single)
+    }
+
+//    fun fold() = runBlocking {
+//        (1..5).asFlow()
+//            .map {
+//                it + it
+//            }
+//            .fold()
+//    }
+
+    /************************************** 末端流操作符 end *****************************************/
+
+    fun filter() = runBlocking {
+        (1..5).asFlow()
+            .filter {
+                it % 2 == 0
+            }
+            .map {
+                println("map -> $it")
+                "string $it"
+            }
+            .collect { value ->
+                println("collect -> $value")
+            }
+    }
 
 
+    // 在流中切换线程或者说 更改上下文
+    fun flow() = flow<Int> {
+        for (x in 1..3){
+            Thread.sleep(100) // 假装我们以消耗 CPU 的方式进行计算
+            println("${Thread.currentThread().name} $x")
+            emit(x)
+        }
+    }.flowOn(Dispatchers.Default)
 
 
+    fun  flowOn() = runBlocking {
+        flow().collect{
+            println("${Thread.currentThread().name} $it")
+        }
+    }
 
-
-
-
+    // 使用缓存
+    fun buffe() = runBlocking {
+        flow()
+            .buffer() // 缓冲发射项
+            .collect {
+                println("${Thread.currentThread().name} $it")
+            }
+    }
 
 
 
