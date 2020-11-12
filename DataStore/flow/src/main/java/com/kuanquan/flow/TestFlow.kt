@@ -20,9 +20,11 @@ class TestFlow {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            TestFlow().testFlow()
-            TestFlow().asFlowTEst()
-            TestFlow().mapTest()
+//            TestFlow().testFlow()
+//            TestFlow().asFlowTEst()
+//            TestFlow().mapTest()
+//            TestFlow().transformTest()
+            TestFlow().takeTest()
         }
     }
 
@@ -67,7 +69,8 @@ class TestFlow {
     }
 
     // 模拟一个网络请求
-    private fun requestData(requestParameter: Int): String{
+    private suspend fun requestData(requestParameter: Int): String{
+        delay(1000) // 模仿长时间运行的移步任务
         return "response $requestParameter"
     }
 
@@ -82,8 +85,67 @@ class TestFlow {
 
     // flow 的 transform 转换操作符
     fun transformTest() = runBlocking {
-
+        (1..3).asFlow()
+            .transform { request ->
+                emit("Making request -> $request")
+                emit(requestData(request))
+            }
+            .collect{ response ->
+                println(response)
+            }
     }
+
+
+    fun numbers() = flow{
+        try {
+            emit(1)
+            emit(2)
+            emit(3)
+            emit(4)
+            println("this line will not execute")
+            emit(5)
+        } finally {
+            println("finally in number")
+        }
+    }
+
+    // 限长操作符
+    fun takeTest() = runBlocking {
+        numbers()
+            .take(4) // 只获取前四个
+            .collect { data ->
+                println(data)
+            }
+    }
+
+    /************************************** 末端流操作符 *****************************************/
+    // 求和  runBlocking 阻塞协成
+    fun reduce() = runBlocking {
+        val sum = (1..5).asFlow()
+            .map {
+                it * it
+            }
+        print(sum)
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     fun test() = runBlocking<Unit> {
         // 启动并发的协程以验证主线程并未阻塞

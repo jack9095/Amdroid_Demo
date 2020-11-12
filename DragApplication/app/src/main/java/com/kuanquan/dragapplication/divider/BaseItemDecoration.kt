@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 
 /**
- * Date:2019/7/9
  * Des:ItemDecoration的基类
  * 该分割线需要支持 网格 线性 瀑布布局
  * 分割线的种类 颜色 单纯的空格 drawable

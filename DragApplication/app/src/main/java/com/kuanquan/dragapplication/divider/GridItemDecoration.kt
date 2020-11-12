@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 
 /**
- *Date:2019/7/9
  *Des:网格布局分割线
  **/
 class GridItemDecoration(builder: Builder) : BaseItemDecoration(builder) {

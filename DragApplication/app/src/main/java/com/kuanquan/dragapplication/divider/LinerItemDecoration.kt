@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 
 /**
- *Date:2019/7/10
  *Des:线性布局分割线 注意该分割线 只能用在LinerLayoutManager 网格布局请使用网格分割线
  **/
 class LinerItemDecoration(builder: Builder) : BaseItemDecoration(builder) {
