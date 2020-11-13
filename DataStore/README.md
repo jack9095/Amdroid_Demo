@@ -3,7 +3,13 @@
 
 一、DataStore 是什么？
 
-    DataStore 是 JetPack 家族的一个库，它提供了一个新的数据存储解决方案，目前处于 alpha 阶段。
+    DataStore 提供了一种存储轻量数据的安全稳定的方案，例如配置文件，应用状态等。
+    它不支持局部更新：如果任何一个成员变量被修改了，整个对象都将被序列化并持久化到磁盘。
+    对于局部修改，请考虑使用 Room。
+    
+    DataStore 保证原子性，一致性，隔离性，持久性。它是线程安全，且非阻塞的。尤其是，它解决了 SharedPreferences API 的设计缺陷
+    官方的博客： https://android-developers.googleblog.com/2020/09/prefer-storing-data-with-jetpack.html
+    掘金上的文章：
 
 二、DataStore 与 SharedPreferences 有什么不同，为什么要抛弃 SharedPreferences
 
@@ -17,26 +23,32 @@
     使用 Preference DataStore 带来的优点：
     1). DataStore 是基于 Flow 实现的，所以保证了在主线程的安全性
     2). 自动完成 SharedPreferences 迁移到 DataStore，保证数据一致性，不会造成数据损坏
-    3). 可以监听到操作成功或者失败结果
+    3). 可以监听数据操作
 
-三、和相类似比有什么好处 例如 MMKV 差距在哪儿
+   ![Image text](https://3.bp.blogspot.com/-Vk_q5hWw6DQ/X00ZfiRrB9I/AAAAAAAAPlo/u-kvBvmMfzgRnNViYLwaAim-E7wq5yxKACLcBGAsYHQ/s1600/Screen%2BShot%2B2020-08-31%2Bat%2B11.25.43%2BAM.png)
 
-四、性能如何，基于什么实现
+三、性能如何，基于什么实现
+    基于 Flow 和 protocol buffers
+    protocol buffers 将对象序列化存储在本地（磁盘）
+    Protocol Buffers ：它是 Google 开源的跨语言编码协议，可以应用到 C++ 、C# 、Dart 、Go 、Java 、Python 等等语言，
+    Google 内部几乎所有 RPC 都在使用这个协议，使用了二进制编码压缩，体积更小，速度比 JSON 更快，但是缺点是牺牲了可读性。
+    
 
-五、使用场景，以及如何优化使用
+四、使用场景，以及如何优化使用
+
 
 JetPack DataStore 有两种实现方式：
 
 1.Preferences DataStore：以键值对的形式存储在本地和 SharedPreferences 类似
    Preference DataStore 主要是为了解决 SharedPreferences 所带来的性能问题。
 
-
-
-
+    文件存放目录： data/data/当前包名/files/datastore
 Ps: Preferences DataStore 只支持 Int , Long , Boolean , Float , String 键值对数据，适合存储简单、小型的数据。
 
-2.Proto DataStore：存储类的对象（typed objects ），通过 protocol buffers 将对象序列化存储在本地。
+2.Proto DataStore：存储类的对象（typed objects ），通过 protocol buffers 将对象序列化存储在本地（磁盘）。
     Proto DataStore 通过 protocol buffers 将对象序列化存储在本地，所以首先需要安装 Protobuf 编译 proto 文件
+    
+    SingleProcessDataStore 单进程实现
     
    在项目中添加 Gradle 插件编译 proto 文件
    plugins {
@@ -163,7 +175,7 @@ Ps: Preferences DataStore 只支持 Int , Long , Boolean , Float , String 键值
     
     private val dataStore: DataStore<User> =
             createDataStore(
-                fileName = "user_prefs.pb",
+                fileName = "user_prefs.pb", // filename参数告知数据存储到用于存储数据的文件
                 serializer = UserSerializer
             )
             

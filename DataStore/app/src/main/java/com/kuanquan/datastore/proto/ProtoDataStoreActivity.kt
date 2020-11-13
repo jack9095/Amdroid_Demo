@@ -47,12 +47,6 @@ class ProtoDataStoreActivity : AppCompatActivity() {
         initViews()
     }
 
-    private fun observePreferences() {
-        dataStore.data.asLiveData().observe(this, Observer {
-            Log.e(TAG, "$it")
-        })
-    }
-
     private fun initViews() {
         saveBtn.setOnClickListener {
             lifecycleScope.launch {
@@ -64,15 +58,21 @@ class ProtoDataStoreActivity : AppCompatActivity() {
             readData().asLiveData().observe(this@ProtoDataStoreActivity, Observer {
                 Log.e(TAG, "asLiveData -> $it")
             })
-
-//            lifecycleScope.launch {
-//                readData().collect {
-//                    Log.e(TAG, "collect -> $it")
-//                }
-//            }
         }
     }
 
+    /**
+     * 数据监听
+     */
+    private fun observePreferences() {
+        dataStore.data.asLiveData().observe(this, Observer {
+            Log.e(TAG, "$it")
+        })
+    }
+
+    /**
+     * ProtoDataStore 读取数据
+     */
     private fun readData(): Flow<User> = dataStore.data
         .catch {
             if (it is IOException) {
@@ -83,6 +83,20 @@ class ProtoDataStoreActivity : AppCompatActivity() {
             }
         }
 
+    val userPreference = dataStore.data.catch {
+        if (it is IOException) {
+            Log.e(TAG, "Error reading sort order preferences.", it)
+            emit(User.getDefaultInstance())
+        } else {
+            throw it
+        }
+    }.map {
+        UserConfig("Jack", 20)
+    }
+
+    /**
+     * ProtoDataStore 保存数据
+     */
     private suspend fun saveData(data: UserConfig) {
         dataStore.updateData { user ->
             user.toBuilder().setAge(data.age).setName(data.name).build()
@@ -90,7 +104,7 @@ class ProtoDataStoreActivity : AppCompatActivity() {
     }
 
 
-    /*
+    /**
      * 当 DataStore 对象构建完了之后，需要执行一次读取或者写入操作，
      * 即可完成 SharedPreferences 迁移到 DataStore，当迁移成功之后，会自动删除 SharedPreferences 使用的文件
      */
@@ -105,5 +119,26 @@ class ProtoDataStoreActivity : AppCompatActivity() {
                 .setName(name)
                 .build()
         }
+
+}
+
+data class UserConfig(
+    val name: String?,
+    val age: Int
+)
+
+// 序列化 读写
+object UserSerializer: Serializer<User> {
+    override fun readFrom(input: InputStream): User {
+        try {
+            return User.parseFrom(input) // 是编译器自动生成的，用于读取并解析 input 的消息
+        } catch (exception: InvalidProtocolBufferException) {
+            throw CorruptionException("Cannot read proto.", exception)
+        }
+    }
+
+    override fun writeTo(t: User, output: OutputStream) {
+        t.writeTo(output) // t.writeTo(output) 是编译器自动生成的，用于写入序列化消息
+    }
 
 }

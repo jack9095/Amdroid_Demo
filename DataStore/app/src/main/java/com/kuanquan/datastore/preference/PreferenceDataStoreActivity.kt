@@ -8,18 +8,14 @@ import androidx.datastore.preferences.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
-import com.kuanquan.datastore.PREFERENCE_NAME
+import com.kuanquan.datastore.*
 import com.kuanquan.datastore.R
-import com.kuanquan.datastore.SHARED_PREFERENCE_NAME
-import com.kuanquan.datastore.SP_KEY_NAME
 import kotlinx.android.synthetic.main.activity_datastore_preference.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.IOException
 
 
@@ -36,7 +32,7 @@ class PreferenceDataStoreActivity : AppCompatActivity() {
     val spKey = preferencesKey<String>(SP_KEY_NAME)
 
     // 构建 DataStore
-//    private val dataStore: DataStore<Preferences> = createDataStore(name = PREFERENCE_NAME)
+//    private val dataStore: DataStore<Preferences> = createDataStore(name = DATA_STORE_PREFERENCE_NAME)
     private lateinit var dataStore: DataStore<Preferences>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,18 +44,10 @@ class PreferenceDataStoreActivity : AppCompatActivity() {
         initViews()
     }
 
-    private fun observeUiPreferences() {
-        dataStore.data.asLiveData().observe(this, Observer { data ->
-            Log.e(TAG, "$data")
-        })
-    }
-
     private fun initViews() {
         saveBtn.setOnClickListener {
             lifecycleScope.launch {
-                dataStore.edit { preferences ->
-                    preferences[dsKey] = "tom"
-                }
+                writeData()
             }
         }
 
@@ -73,6 +61,24 @@ class PreferenceDataStoreActivity : AppCompatActivity() {
 //                    Log.e(TAG, "collect -> $it")
 //                }
 //            }
+        }
+    }
+
+    /**
+     *  DataStore 监听数据
+     */
+    private fun observeUiPreferences() {
+        dataStore.data.asLiveData().observe(this, Observer { data ->
+            Log.e(TAG, "$data")
+        })
+    }
+
+    /**
+     * DataStore 写入数据
+     */
+    private suspend fun writeData() {
+        dataStore.edit { preferences ->
+            preferences[dsKey] = "tom"
         }
     }
 
@@ -104,11 +110,15 @@ class PreferenceDataStoreActivity : AppCompatActivity() {
          *  需要执行 一次读取 或者 写入，DataStore 才会自动合并 SharedPreference 文件内容
          */
         dataStore = createDataStore(
-            name = PREFERENCE_NAME,
+            name = DATA_STORE_PREFERENCE_NAME,
             migrations = listOf(
                 SharedPreferencesMigration(
                     this,
                     SHARED_PREFERENCE_NAME
+                ),
+                SharedPreferencesMigration(
+                    this,
+                    SHARED_OTHER_PREFERENCE_NAME
                 )
             )
         )
