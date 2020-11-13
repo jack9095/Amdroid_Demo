@@ -29,13 +29,13 @@
 
 三、性能如何，基于什么实现
     基于 Flow 和 protocol buffers
+    使用Kotlin协程以及Flow异步存储数据
     protocol buffers 将对象序列化存储在本地（磁盘）
     Protocol Buffers ：它是 Google 开源的跨语言编码协议，可以应用到 C++ 、C# 、Dart 、Go 、Java 、Python 等等语言，
     Google 内部几乎所有 RPC 都在使用这个协议，使用了二进制编码压缩，体积更小，速度比 JSON 更快，但是缺点是牺牲了可读性。
     
 
-四、使用场景，以及如何优化使用
-
+四、如何使用
 
 JetPack DataStore 有两种实现方式：
 

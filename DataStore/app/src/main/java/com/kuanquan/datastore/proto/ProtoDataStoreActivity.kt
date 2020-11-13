@@ -1,6 +1,8 @@
 package com.kuanquan.datastore.proto
 
+import android.content.Context
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.CorruptionException
@@ -13,9 +15,7 @@ import androidx.datastore.preferences.protobuf.InvalidProtocolBufferException
 import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
-import com.kuanquan.datastore.R
-import com.kuanquan.datastore.SHARED_PREFERENCE_NAME
-import com.kuanquan.datastore.SP_KEY_NAME
+import com.kuanquan.datastore.*
 import kotlinx.android.synthetic.main.activity_datastore_preference.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -27,12 +27,23 @@ import java.io.InputStream
 import java.io.OutputStream
 
 const val TAG = "ProtoDataStoreActivity"
+
 class ProtoDataStoreActivity : AppCompatActivity() {
 
+    val sp by lazy {
+        getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+    }
+
+    val spOther by lazy {
+        getSharedPreferences(SHARED_OTHER_PREFERENCE_NAME, Context.MODE_PRIVATE)
+    }
     private lateinit var dataStore: DataStore<User>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val keys = sp.all.keys
+        Log.e(TAG, "key长度${keys.size}")
 
 //        dataStore = createDataStore(fileName = "user_prefs.pb", serializer = UserSerializer)
         dataStore = createDataStore(
@@ -66,7 +77,7 @@ class ProtoDataStoreActivity : AppCompatActivity() {
      */
     private fun observePreferences() {
         dataStore.data.asLiveData().observe(this, Observer {
-            Log.e(TAG, "$it")
+            Log.e(TAG, it.name)
         })
     }
 
@@ -83,16 +94,16 @@ class ProtoDataStoreActivity : AppCompatActivity() {
             }
         }
 
-    val userPreference = dataStore.data.catch {
-        if (it is IOException) {
-            Log.e(TAG, "Error reading sort order preferences.", it)
-            emit(User.getDefaultInstance())
-        } else {
-            throw it
-        }
-    }.map {
-        UserConfig("Jack", 20)
-    }
+//    val userPreference = dataStore.data.catch {
+//        if (it is IOException) {
+//            Log.e(TAG, "Error reading sort order preferences.", it)
+//            emit(User.getDefaultInstance())
+//        } else {
+//            throw it
+//        }
+//    }.map {
+//        UserConfig("Jack", 20)
+//    }
 
     /**
      * ProtoDataStore 保存数据
@@ -109,16 +120,54 @@ class ProtoDataStoreActivity : AppCompatActivity() {
      * 即可完成 SharedPreferences 迁移到 DataStore，当迁移成功之后，会自动删除 SharedPreferences 使用的文件
      */
     private val shardPrefsMigration =
-        SharedPreferencesMigration<User>(this, SHARED_PREFERENCE_NAME) { sharedPreferencesView, user ->
+        SharedPreferencesMigration<User>(
+            this,
+            SHARED_PREFERENCE_NAME
+//            keysToMigrate = sp.all.keys
+        ) { sharedPreferencesView, user ->
 
             // 获取 SharedPreferences 的数据
             val name = sharedPreferencesView.getString(SP_KEY_NAME, "")
 
-            // 将 SharedPreferences 每一对 key-value 的数据映射到 Proto DataStore 中
-            user.toBuilder()
-                .setName(name)
-                .build()
+            if (!TextUtils.equals(name, user.name)) {
+                // 将 SharedPreferences 每一对 key-value 的数据映射到 Proto DataStore 中
+                user.toBuilder()
+                    .setName(name)
+                    .build()
+            } else {
+                user
+            }
+
         }
+
+//    private val shardOtherPrefsMigration =
+//        SharedPreferencesMigration<User>(
+//            this,
+//            SHARED_OTHER_PREFERENCE_NAME,
+//            keysToMigrate = spOther.all.keys
+//        ) { sharedPreferencesView, user ->
+//
+//            // 获取 SharedPreferences 的数据
+//            val name = sharedPreferencesView.getString(SP_KEY_TITLE, "")
+//
+//            val all = sharedPreferencesView.getAll()
+//
+//            for ((key, value) in all) {
+////                user.toBuilder().
+//            }
+//
+//            if (!TextUtils.equals(name, user.name)) {
+//                // 将 SharedPreferences 每一对 key-value 的数据映射到 Proto DataStore 中
+////                user.toBuilder()
+////                    .setName(name)
+////                    .build()
+//
+//                user
+//            } else {
+//                user
+//            }
+//
+//        }
 
 }
 
@@ -128,7 +177,7 @@ data class UserConfig(
 )
 
 // 序列化 读写
-object UserSerializer: Serializer<User> {
+object UserSerializer : Serializer<User> {
     override fun readFrom(input: InputStream): User {
         try {
             return User.parseFrom(input) // 是编译器自动生成的，用于读取并解析 input 的消息
