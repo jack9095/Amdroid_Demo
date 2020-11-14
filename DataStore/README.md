@@ -69,9 +69,8 @@ Ps: Preferences DataStore 只支持 Int , Long , Boolean , Float , String 键值
    // 添加依赖
    implementation  "com.google.protobuf:protobuf-javalite:3.11.0"
    
-   /**
-    * 配置 protoc 命令
-    */
+
+    # 配置 protoc 命令
    protobuf {
        // 设置 protoc 的版本
        protoc {
