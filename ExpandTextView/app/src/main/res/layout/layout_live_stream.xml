@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/liveAnchorStartLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="visible"
+    tools:ignore="ResourceName"
+    android:background="@color/cd8d8d8">
+
+    <RelativeLayout
+        android:id="@+id/topLayout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginRight="6dp">
+
+        <RelativeLayout
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="5dp"
+            android:alpha="0.5"
+            android:background="@drawable/live_anchor_count_bg">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewImageView"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:cardCornerRadius="@dimen/public_15dp">
+
+                <ImageView
+                    android:id="@+id/anchorAvatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/timg" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/anchorName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_toRightOf="@+id/cardViewImageView"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="主播名称"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_9" />
+
+            <TextView
+                android:id="@+id/anchorID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="4dp"
+                android:layout_marginBottom="2dp"
+                android:layout_toRightOf="@+id/cardViewImageView"
+                android:text="直播号/个人ID"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_9" />
+
+            <Button
+                android:id="@+id/followButton"
+                android:layout_width="40dp"
+                android:layout_height="24dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/live_look_follow_sys_bg"
+                android:text="关注"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_12"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/fanTextNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:layout_marginTop="40dp"
+            android:alpha="0.5"
+            android:background="@drawable/live_anchor_fan_bg"
+            android:gravity="center"
+            android:minWidth="@dimen/public_75dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="粉丝:0"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_10" />
+
+        <TextView
+            android:id="@+id/rewardTextNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="40dp"
+            android:layout_toRightOf="@+id/fanTextNumber"
+            android:alpha="0.5"
+            android:background="@drawable/live_anchor_fan_bg"
+            android:gravity="center"
+            android:minWidth="@dimen/public_75dp"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="10dp"
+            android:text="赏金: 0"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_10" />
+
+        <ImageView
+            android:id="@+id/netWorkImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="40dp"
+            android:layout_toRightOf="@+id/rewardTextNumber"
+            android:src="@mipmap/net_work_four"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/netWorkText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="43dp"
+            android:layout_toRightOf="@+id/netWorkImage"
+            android:text="网络较差"
+            android:textColor="#666666"
+            android:textSize="10sp"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:id="@+id/liveMemberCountLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="5dp">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/live_gift_one"
+                android:visibility="invisible" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/liveMemberCount"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                android:layout_below="@+id/image"
+                android:layout_marginTop="-3dp"
+                android:alpha="0.5"
+                android:text="99999"
+                android:autoSizeTextType="uniform"
+                android:background="@drawable/live_anchor_count_bg"
+                android:gravity="center"
+                android:textColor="#ffffff"
+                android:visibility="visible"
+                android:minWidth="27dp"
+                app:autoSizeMinTextSize="8dp"
+                app:autoSizeMaxTextSize="10dp"
+                android:maxLines="1" />
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/anchorTopRecyclerView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="160dp"
+            android:layout_toLeftOf="@+id/liveMemberCountLayout"
+            android:orientation="horizontal" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/llComment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomLayout"
+        android:layout_below="@+id/topLayout"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.8" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+
+            <LinearLayout
+                android:id="@+id/ll_gift_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:animateLayoutChanges="true"
+                android:orientation="vertical" />
+        </FrameLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.8" />
+
+        <FrameLayout
+            android:id="@+id/frameLayoutComment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/commentRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp" />
+        </FrameLayout>
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/bottomLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/public_38dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="8dp">
+
+        <ImageView
+            android:id="@+id/liveComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/live_comment" />
+
+        <ImageView
+            android:id="@+id/liveShare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/public_50dp"
+            android:src="@mipmap/live_share" />
+
+        <ImageView
+            android:id="@+id/liveSetQing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/public_100dp"
+            android:src="@mipmap/live_watch_qing"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/liveShop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:src="@mipmap/shop_icon"
+            android:layout_marginLeft="@dimen/public_150dp"
+            android:visibility="visible"/>
+
+        <ImageView
+            android:id="@+id/liveSetImg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="50dp"
+            android:src="@mipmap/live_g_icon" />
+
+        <ImageView
+            android:id="@+id/liveGift"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="50dp"
+            android:src="@mipmap/live_gift"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/liveClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/live_close" />
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iv_bg"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/public_200dp"
+        android:background="@mipmap/ic_pic"
+        android:scaleType="centerCrop"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cl_user"
+        android:layout_width="@dimen/public_60dp"
+        android:layout_height="@dimen/public_60dp"
+        android:layout_marginRight="@dimen/public_20dp"
+        app:cardCornerRadius="@dimen/public_5dp"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_bg">
+
+        <ImageView
+            android:id="@+id/iv_user"
+            android:layout_width="@dimen/public_60dp"
+            android:layout_height="@dimen/public_60dp"
+            android:background="@drawable/nim_avatar_default"
+            android:scaleType="fitXY"
+            tools:ignore="MissingConstraints" />
+    </androidx.cardview.widget.CardView>
+
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/public_10dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingTop="@dimen/public_5dp"
+        android:shadowColor="#999666"
+        android:shadowDx="3"
+        android:shadowDy="3"
+        android:shadowRadius="1"
+        android:textColor="#ffffff"
+        android:textSize="@dimen/text_size_14sp"
+        app:layout_constraintRight_toLeftOf="@+id/cl_user"
+        app:layout_constraintTop_toTopOf="@+id/cl_user"
+        android:text="今天很开心" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_message"
+        android:layout_width="@dimen/public_140dp"
+        android:layout_height="@dimen/public_40dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/public_10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/message_bg"
+        android:paddingLeft="@dimen/public_10dp"
+        android:paddingRight="@dimen/public_10dp"
+        android:visibility="gone"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cl_user">
+
+        <ImageView
+            android:id="@+id/message_avatar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/nim_avatar_default"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/message_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/public_6dp"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_14sp"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/message_avatar"
+            app:layout_constraintTop_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/public_20dp"
+        android:paddingTop="@dimen/public_10dp"
+        android:paddingBottom="@dimen/public_10dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/cl_message">
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="今天"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/iv_photo"
+            android:layout_width="@dimen/public_75dp"
+            android:layout_height="@dimen/public_75dp"
+            android:layout_marginLeft="@dimen/public_12dp"
+            android:src="@mipmap/icon_photo"
+            app:layout_constraintLeft_toRightOf="@+id/tv_time"
+            app:layout_constraintTop_toTopOf="@+id/tv_time" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

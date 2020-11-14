@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:toolbar="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/public_50dp"
+    android:background="@color/colorPrimary"
+    toolbar:contentInsetStart="0dp">
+
+    <LinearLayout
+        android:id="@+id/ll_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/public_10dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="@dimen/public_20dp"
+            android:layout_height="@dimen/public_20dp"
+            android:layout_margin="@dimen/public_5dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_arrow_back_black_24dp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="@color/cffffff"
+        android:textSize="@dimen/text_size_18"
+        android:text="朋友圈" />
+
+    <ImageView
+        android:id="@+id/iv_right"
+        android:layout_width="@dimen/public_20dp"
+        android:layout_height="@dimen/public_20dp"
+        android:layout_gravity="center|right"
+        android:layout_marginRight="@dimen/public_20dp" />
+
+
+</androidx.appcompat.widget.Toolbar>

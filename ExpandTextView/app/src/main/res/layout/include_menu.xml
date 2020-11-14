@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/layout_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:paddingTop="@dimen/size_30dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/isimg"
+            android:layout_width="@dimen/size_70dp"
+            android:layout_height="@dimen/size_70dp"
+            android:visibility="visible">
+
+
+
+                <ImageView
+                    android:id="@+id/info"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:src="@mipmap/user"
+                    app:layout_constraintDimensionRatio="h,1.40:1"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
+
+                <ImageView
+                    android:id="@+id/head_noble_iv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="visible"
+                    app:layout_constraintLeft_toLeftOf="@+id/info"
+                    app:layout_constraintRight_toRightOf="@+id/info"
+                    app:layout_constraintTop_toTopOf="@+id/info"
+                    app:layout_constraintBottom_toBottomOf="@+id/info"
+                    android:layout_marginBottom="4dp"
+                    android:scaleType="centerCrop"
+                    tools:src="@mipmap/sp_qingtong"/>
+
+                <RelativeLayout
+                    android:id="@+id/img_vip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/size_20dp"
+                    android:layout_centerHorizontal="true"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="@dimen/size_25dp"
+                        android:layout_height="@dimen/size_20dp"
+                        android:layout_centerHorizontal="true"
+                        android:src="@mipmap/dengji" />
+
+                    <TextView
+                        android:id="@+id/menu_vip_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="@dimen/size_3dp"
+                        android:text=""
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_10"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+
+
+
+            <RelativeLayout
+                android:id="@+id/menu_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_10dp"
+                android:visibility="visible"
+                android:padding="@dimen/size_2dp"
+
+                app:layout_constraintBottom_toBottomOf="@+id/isimg"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <ImageView
+                    android:id="@+id/menu_add_iv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/size_20dp"
+                    android:layout_centerInParent="true"
+                    android:background="@mipmap/menu_add" />
+
+                <ImageView
+                    android:id="@+id/menu_added_iv"
+                    android:layout_width="@dimen/size_20dp"
+                    android:layout_height="@dimen/size_20dp"
+                    android:layout_centerInParent="true"
+                    android:background="@mipmap/menu_added"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_thumb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_12dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_thumb"
+                style="@style/video_menu_img"
+                android:src="@mipmap/thumb" />
+
+            <TextView
+                android:id="@+id/tv_thumb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_3dp"
+                android:gravity="center"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_commend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_12dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                style="@style/video_menu_img"
+                android:src="@drawable/ic_insert_comment_black_24dp" />
+
+            <TextView
+                android:id="@+id/tv_commend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_3dp"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_12dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_share"
+                style="@style/video_menu_img"
+                android:src="@mipmap/share" />
+
+            <TextView
+                android:id="@+id/tv_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_3dp"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_reward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_12dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                style="@style/video_menu_img"
+                android:contentDescription="@null"
+                android:src="@mipmap/reward" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/img_public"
+            style="@style/video_menu_img"
+            android:layout_marginTop="@dimen/size_10dp"
+            android:src="@mipmap/eyes_open"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/img_delete"
+            style="@style/video_menu_img"
+            android:layout_marginTop="@dimen/size_18dp"
+            android:src="@mipmap/delete_video"
+            android:visibility="gone" />
+    </LinearLayout>
+</RelativeLayout>

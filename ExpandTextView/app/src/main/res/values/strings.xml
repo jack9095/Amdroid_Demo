@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">ExpandTextView</string>
+    <string name="the_content_of_the_comment_cannot_exceed_500_words">评论内容不能超过500字...</string>
+    <string-array name="courier_array">
+        <item>请选择您需要的快递公司</item>
+        <item>圆通</item>
+        <item>中通</item>
+        <item>申通</item>
+        <item>汇通</item>
+        <item>韵达</item>
+        <item>顺丰</item>
+        <item>京东</item>
+        <item>EMS</item>
+    </string-array>
+    <string name="content_text">西魏年间乱世混战，大批平民在战乱中沦为奴隶，命如草芥。奴籍少女楚乔（赵丽颖饰）被送入人猎场供贵族娱乐射杀，幸得西凉世子燕洵暗中相救。</string>
+    <string name="copied">已复制</string>
+    <string name="save_to_device">保存到手机</string>
+    <string name="picture_save_fail">图片保存失败</string>
+    <string name="picture_save_to">图片已保存到手机</string>
+</resources>

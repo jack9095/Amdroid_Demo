@@ -1,2 +1,3 @@
+include ':updata'
 include ':app'
 rootProject.name = "version_updata"
