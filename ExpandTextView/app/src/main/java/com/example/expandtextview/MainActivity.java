@@ -72,7 +72,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 /**
- * @作者: njb
  * @时间: 2019/7/22 10:53
  * @描述: 仿微信朋友圈实现
  */
