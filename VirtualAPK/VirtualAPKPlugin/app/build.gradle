@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'com.didi.virtualapk.plugin'
 }
 
 android {
@@ -42,4 +43,10 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+}
+
+virtualApk{
+    packageId = 0x6f
+    targetHost = '../../VirtualAPKHost/app'
+    applyHostMapping = true
 }
