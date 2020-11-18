@@ -7,12 +7,15 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/tv_channel_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="渠道名称:" />
+
+    <TextView
+        android:id="@+id/tv_channel_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/tv_channel_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

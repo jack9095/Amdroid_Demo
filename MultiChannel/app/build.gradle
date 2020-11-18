@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id "kotlin-android-extensions"
 }
 
 android {
@@ -15,12 +16,29 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        flavorDimensions "default"
     }
 
     buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String","FIELD_TEST","\"debug\""
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String","FIELD_TEST","\"release\""
+        }
+    }
+    productFlavors {
+        baidu {
+            applicationIdSuffix ".baidu"
+            manifestPlaceholders = [app_name: "@string/app_name_baidu",app_icon:"@mipmap/icon_baidu", APP_CHANNEL_VALUE: "baidu"]
+        }
+        qq {
+            applicationIdSuffix ".qq"
+            manifestPlaceholders = [app_name: "@string/app_name_qq", app_icon:"@mipmap/icon_qq",APP_CHANNEL_VALUE: "qq"]
         }
     }
     compileOptions {
