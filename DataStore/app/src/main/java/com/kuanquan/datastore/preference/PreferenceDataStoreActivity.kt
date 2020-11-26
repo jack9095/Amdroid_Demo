@@ -3,8 +3,12 @@ package com.kuanquan.datastore.preference
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.datastore.DataStore
+import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.*
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.preferencesKey
 import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
@@ -23,23 +27,33 @@ class PreferenceDataStoreActivity : AppCompatActivity() {
 
     private val TAG = PreferenceDataStoreActivity::class.simpleName
 
-    /*
-        这里和我们之前使用 SharedPreferences 的有点不一样，
-        在 Preferences DataStore 中 Key 是一个 Preferences.Key<T> 类型，
-        只支持 Int , Long , Boolean , Float , String
-     */
-    val dsKey = preferencesKey<String>("test_name")
-    val spKey = preferencesKey<String>(SP_KEY_NAME)
+    private val dsKey = preferencesKey<String>("test_name")
+    private val spKey = preferencesKey<String>(SP_KEY_NAME)
 
     // 构建 DataStore
-//    private val dataStore: DataStore<Preferences> = createDataStore(name = DATA_STORE_PREFERENCE_NAME)
     private lateinit var dataStore: DataStore<Preferences>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_datastore_preference)
 
-        migrationSP2DataStore()
+        dataStore = createDataStore(name = DATA_STORE_PREFERENCE_NAME)
+        /**
+         *  传入 migrations 参数，构建一个 DataStore 之后
+         */
+//        dataStore = createDataStore(
+//            name = DATA_STORE_PREFERENCE_NAME,
+//            migrations = listOf(
+//                SharedPreferencesMigration(
+//                    this,
+//                    SHARED_PREFERENCE_NAME
+//                ),
+//                SharedPreferencesMigration(
+//                    this,
+//                    SHARED_OTHER_PREFERENCE_NAME
+//                )
+//            )
+//        )
         observeUiPreferences()
         initViews()
     }
@@ -56,11 +70,11 @@ class PreferenceDataStoreActivity : AppCompatActivity() {
                 Log.e(TAG, "asLiveData -> $it")
             })
 
-//            lifecycleScope.launch {
-//                readData(dsKey).collect {
-//                    Log.e(TAG, "collect -> $it")
-//                }
-//            }
+            lifecycleScope.launch {
+                readData(dsKey).collect {
+                    Log.e(TAG, "collect -> $it")
+                }
+            }
         }
     }
 
@@ -87,8 +101,6 @@ class PreferenceDataStoreActivity : AppCompatActivity() {
      */
     private fun readData(dsKey: Preferences.Key<String>): Flow<String> = dataStore.data
         .catch {
-            // 当读取数据遇到错误时，如果是 `IOException` 异常，发送一个 emptyPreferences 来重新使用
-            // 但是如果是其他的异常，最好将它抛出去，不要隐藏问题
             if (it is IOException) {
                 it.printStackTrace()
                 emit(emptyPreferences())
@@ -99,28 +111,4 @@ class PreferenceDataStoreActivity : AppCompatActivity() {
         .map { currentPreferences ->
             currentPreferences[dsKey] ?: "测试数据"
         }
-
-
-    /**
-     * 迁移 SharedPreferences 到 DataStore
-     */
-    private fun migrationSP2DataStore() {
-        /**
-         *  传入 migrations 参数，构建一个 DataStore 之后，
-         *  需要执行 一次读取 或者 写入，DataStore 才会自动合并 SharedPreference 文件内容
-         */
-        dataStore = createDataStore(
-            name = DATA_STORE_PREFERENCE_NAME,
-            migrations = listOf(
-                SharedPreferencesMigration(
-                    this,
-                    SHARED_PREFERENCE_NAME
-                ),
-                SharedPreferencesMigration(
-                    this,
-                    SHARED_OTHER_PREFERENCE_NAME
-                )
-            )
-        )
-    }
 }
