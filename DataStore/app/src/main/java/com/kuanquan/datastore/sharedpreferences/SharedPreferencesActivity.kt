@@ -32,7 +32,7 @@ class SharedPreferencesActivity : AppCompatActivity() {
             }
             sp.edit {
                 putString(SP_KEY_NAME, "安卓")
-                putInt("name", 0)
+//                putInt("name", 0)
             }
         }
 

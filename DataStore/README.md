@@ -8,9 +8,8 @@
     对于局部修改，请考虑使用 Room。
     
     DataStore 保证原子性，一致性，隔离性，持久性。它是线程安全，且非阻塞的。
-    官方的博客： https://android-developers.googleblog.com/2020/09/prefer-storing-data-with-jetpack.html
 
-*二、DataStore 与 SharedPreferences 有什么不同，为什么要抛弃 SharedPreferences
+*二、DataStore 与 SharedPreferences 有什么不同？
 
     SharedPreferences 目前在使用的过程中存在的问题：
        1). 通过 getXXX() 读取数据会造成主线程阻塞（因为是同步的）
@@ -24,15 +23,13 @@
     2). 自动完成 SharedPreferences 迁移到 DataStore，保证数据一致性，不会造成数据损坏
     3). 可以监听数据操作
 
-    ![Image text](https://3.bp.blogspot.com/-Vk_q5hWw6DQ/X00ZfiRrB9I/AAAAAAAAPlo/u-kvBvmMfzgRnNViYLwaAim-E7wq5yxKACLcBGAsYHQ/s1600/Screen%2BShot%2B2020-08-31%2Bat%2B11.25.43%2BAM.png)
-
 *三、性能如何，基于什么实现
 
-    基于 Flow 和 protocol buffers
+    基于 Flow 和 proto buffers
     使用Kotlin协程以及Flow异步存储数据
     protocol buffers 将对象序列化存储在本地（磁盘）
     Protocol Buffers ：它是 Google 开源的跨语言编码协议，可以应用到 C++ 、C# 、Dart 、Go 、Java 、Python 等等语言，
-    Google 内部几乎所有 RPC 都在使用这个协议，使用了二进制编码压缩，体积更小，速度比 JSON 更快，但是缺点是牺牲了可读性。
+    Google 内部几乎所有 RPC (远程调用) 都在使用这个协议，使用了二进制编码压缩，体积更小，速度比 JSON 更快，但是缺点是牺牲了可读性。
     
 
 *四、如何使用

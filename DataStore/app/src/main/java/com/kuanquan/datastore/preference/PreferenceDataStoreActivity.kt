@@ -15,10 +15,8 @@ import androidx.lifecycle.lifecycleScope
 import com.kuanquan.datastore.*
 import com.kuanquan.datastore.R
 import kotlinx.android.synthetic.main.activity_datastore_preference.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.io.IOException
 
@@ -37,23 +35,23 @@ class PreferenceDataStoreActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_datastore_preference)
 
-        dataStore = createDataStore(name = DATA_STORE_PREFERENCE_NAME)
+//        dataStore = createDataStore(name = DATA_STORE_PREFERENCE_NAME)
         /**
          *  传入 migrations 参数，构建一个 DataStore 之后
          */
-//        dataStore = createDataStore(
-//            name = DATA_STORE_PREFERENCE_NAME,
-//            migrations = listOf(
-//                SharedPreferencesMigration(
-//                    this,
-//                    SHARED_PREFERENCE_NAME
-//                ),
-//                SharedPreferencesMigration(
-//                    this,
-//                    SHARED_OTHER_PREFERENCE_NAME
-//                )
-//            )
-//        )
+        dataStore = createDataStore(
+            name = DATA_STORE_PREFERENCE_NAME,
+            migrations = listOf(
+                SharedPreferencesMigration(
+                    this,
+                    SHARED_PREFERENCE_NAME
+                ),
+                SharedPreferencesMigration(
+                    this,
+                    SHARED_OTHER_PREFERENCE_NAME
+                )
+            )
+        )
         observeUiPreferences()
         initViews()
     }
@@ -108,6 +106,7 @@ class PreferenceDataStoreActivity : AppCompatActivity() {
                 throw it
             }
         }
+//        .flowOn(Dispatchers.IO)
         .map { currentPreferences ->
             currentPreferences[dsKey] ?: "测试数据"
         }
