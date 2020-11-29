@@ -78,6 +78,9 @@ dependencies {
     // Protobuf
     implementation  "com.google.protobuf:protobuf-javalite:3.11.0"
 
+    // 花样 TextView
+    implementation  'com.github.albert-lii:HighlightTextView:1.0.0'
+
 }
 
 protobuf {
