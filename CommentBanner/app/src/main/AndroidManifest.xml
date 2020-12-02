@@ -2,7 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kuanquan.commentbanner">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -16,6 +19,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".viewpager2.ViewPager2LunchActivity">
+
+        </activity>
+
+<!--        <activity android:name=".viewpager2.ViewPager2LunchActivity"/>-->
+<!--        <activity android:name=".viewpager2.Pager2RecyclerViewActivity"/>-->
+        <activity android:name=".viewpager2.Pager2MainActivity" />
+        <activity android:name=".viewpager2.MultPager2BannerActivity">
+
+        </activity>
+        <activity android:name=".viewpager2.NestedPager2Activity"/>
+        <activity android:name=".viewpager2.FragmentStateAdapterActivity"/>
     </application>
 
 </manifest>
