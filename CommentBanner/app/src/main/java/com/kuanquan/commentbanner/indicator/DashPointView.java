@@ -5,8 +5,10 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -77,6 +79,20 @@ public class DashPointView extends LinearLayout implements Indicator {
         params.addRule(RelativeLayout.CENTER_HORIZONTAL);
         params.bottomMargin = dip2px(20);
         return params;
+    }
+
+    /**
+     * 控制在banner中的位置
+     */
+    private FrameLayout.LayoutParams frameLayoutParams;
+    @Override
+    public FrameLayout.LayoutParams getFlParams() {
+        if (frameLayoutParams == null) {
+            frameLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+            frameLayoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+            frameLayoutParams.bottomMargin = dip2px(10);
+        }
+        return frameLayoutParams;
     }
 
     @Override

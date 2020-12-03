@@ -3,10 +3,12 @@ package com.kuanquan.commentbanner.v2;
 import android.content.Context;
 import android.graphics.*;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.*;
 import android.view.animation.Interpolator;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import androidx.annotation.*;
 import java.lang.annotation.*;
@@ -92,6 +94,20 @@ public class IndicatorView extends View implements Indicator {
             params.bottomMargin = dip2px(10);
         }
         return params;
+    }
+
+    /**
+     * 控制在banner中的位置
+     */
+    private FrameLayout.LayoutParams frameLayoutParams;
+    @Override
+    public FrameLayout.LayoutParams getFlParams() {
+        if (frameLayoutParams == null) {
+            frameLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+            frameLayoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+            frameLayoutParams.bottomMargin = dip2px(10);
+        }
+        return frameLayoutParams;
     }
 
     @Override

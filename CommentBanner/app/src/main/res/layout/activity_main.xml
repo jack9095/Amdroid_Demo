@@ -23,4 +23,14 @@
         app:layout_constraintTop_toTopOf="parent"
         />
 
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        app:layout_constraintStart_toStartOf="@+id/banner"
+        android:background="#80000000"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/banner"
+        app:layout_constraintBottom_toBottomOf="@+id/banner"
+        android:layout_width="0dp"
+        android:layout_height="42dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

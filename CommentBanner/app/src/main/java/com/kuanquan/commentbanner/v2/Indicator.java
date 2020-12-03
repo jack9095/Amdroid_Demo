@@ -1,6 +1,7 @@
 package com.kuanquan.commentbanner.v2;
 
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.Px;
@@ -26,6 +27,8 @@ public interface Indicator {
      * return RelativeLayout.LayoutParams，Set the position of the banner within the RelativeLayout
      */
     RelativeLayout.LayoutParams getParams();
+
+    FrameLayout.LayoutParams getFlParams();
 
     /**
      * This method will be invoked when the current page is scrolled, either as part

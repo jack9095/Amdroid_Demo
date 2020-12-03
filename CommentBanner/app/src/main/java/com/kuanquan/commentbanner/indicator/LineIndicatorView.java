@@ -3,8 +3,10 @@ package com.kuanquan.commentbanner.indicator;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 
@@ -50,6 +52,20 @@ public class LineIndicatorView extends MagicIndicator implements Indicator {
         }
     }
 
+    /**
+     * 控制在banner中的位置
+     */
+    private FrameLayout.LayoutParams frameLayoutParams;
+    @Override
+    public FrameLayout.LayoutParams getFlParams() {
+        if (frameLayoutParams == null) {
+            frameLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+            frameLayoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+            frameLayoutParams.bottomMargin = dip2px(10);
+        }
+        return frameLayoutParams;
+    }
+
     @Override
     public void initIndicatorCount(final int pagerCount) {
         setBackgroundColor(Color.LTGRAY);
@@ -83,6 +99,9 @@ public class LineIndicatorView extends MagicIndicator implements Indicator {
         params.width = UIUtil.dip2px(getContext(), 20 * pagerCount);
     }
 
+    private int dip2px(float dp) {
+        return (int) (dp * getContext().getResources().getDisplayMetrics().density);
+    }
     @Override
     public View getView() {
         return this;

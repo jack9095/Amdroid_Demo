@@ -10,12 +10,13 @@ import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import androidx.viewpager2.widget.*
 import kotlin.math.*
 
+
 class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
     private var changeCallback: ViewPager2.OnPageChangeCallback? = null
     private val adapterWrapper by lazy {
         BannerAdapterWrapper()
     }
-    private var indicator: Indicator? = null
+    private var indicator: LIndicator? = null
     private val viewPager2 by lazy {
         ViewPager2(context).apply {
             layoutParams = ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
@@ -29,8 +30,8 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
     private var isBeginPagerChange = true
     private var autoTurningTime = DEFAULT_AUTO_TIME
     private var pagerScrollDuration = DEFAULT_PAGER_DURATION
-    private val needPage = NORMAL_COUNT
-    private val sidePage = needPage / NORMAL_COUNT
+    private var needPage = NORMAL_COUNT
+    private var sidePage = needPage / NORMAL_COUNT
     private var tempPosition = 0
     private var startX = 0f
     private var startY = 0f
@@ -58,7 +59,7 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
             indicator?.initIndicatorCount(realCount)
         }
         if (isAutoPlay()) {
-            startTurning()
+            startAutoPlay()
         }
     }
 
@@ -68,14 +69,14 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         if (isAutoPlay()) {
-            startTurning()
+            startAutoPlay()
         }
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         if (isAutoPlay()) {
-            stopTurning()
+            stopAutoPlay()
         }
     }
 
@@ -111,9 +112,9 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
         if (isAutoPlay() && viewPager2.isUserInputEnabled) {
             val action = ev.action
             if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_OUTSIDE) {
-                startTurning()
+                startAutoPlay()
             } else if (action == MotionEvent.ACTION_DOWN) {
-                stopTurning()
+                stopAutoPlay()
             }
         }
         return super.dispatchTouchEvent(ev)
@@ -272,7 +273,7 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
         override fun smoothScrollToPosition(recyclerView: RecyclerView, state: RecyclerView.State, position: Int) {
             val linearSmoothScroller: LinearSmoothScroller = object : LinearSmoothScroller(recyclerView.context) {
                 override fun calculateTimeForDeceleration(dx: Int): Int {
-                    return (pagerScrollDuration * (1 - .3356)).toInt()
+                    return (pagerScrollDuration * (1 - 0.3356)).toInt()
                 }
             }
             linearSmoothScroller.targetPosition = position
@@ -280,78 +281,61 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
         }
     }
 
+    private fun dip2px(dp: Float): Float {
+        return dp * context.resources.displayMetrics.density
+    }
+
     /*--------------- 下面是对外暴露的方法 ---------------*/
-    fun setAutoTurningTime(autoTurningTime: Long): BannerView {
+    fun setAutoTurningTime(autoTurningTime: Long) {
         this.autoTurningTime = autoTurningTime
-        return this
     }
 
-    fun setOuterPageChangeListener(listener: ViewPager2.OnPageChangeCallback?): BannerView {
+    fun setOuterPageChangeListener(listener: ViewPager2.OnPageChangeCallback?) {
         changeCallback = listener
-        return this
     }
 
-    fun setOffscreenPageLimit(limit: Int): BannerView {
+    fun setOffscreenPageLimit(limit: Int) {
         viewPager2.offscreenPageLimit = limit
-        return this
     }
 
     /**
      * 设置viewpager2的切换时长
      */
-    fun setPagerScrollDuration(pagerScrollDuration: Long): BannerView {
+    fun setPagerScrollDuration(pagerScrollDuration: Long) {
         this.pagerScrollDuration = pagerScrollDuration
-        return this
     }
 
-    /**
-     * 是否自动轮播 大于1页轮播才生效
-     */
-    fun setAutoPlay(autoPlay: Boolean): BannerView {
+    fun setAutoPlay(autoPlay: Boolean) {
         isAutoPlay = autoPlay
         if (isAutoPlay && realCount > 1) {
-            startTurning()
+            startAutoPlay()
         }
-        return this
     }
 
     fun isAutoPlay(): Boolean {
         return isAutoPlay && realCount > 1
     }
 
-    fun setIndicator(indicator: Indicator?): BannerView {
-        return setIndicator(indicator, true)
-    }
-
     /**
-     * 设置indicator，支持在xml中创建
-     *
-     * @param attachToRoot true 添加到banner布局中
+     * 设置indicator
      */
-    fun setIndicator(indicator: Indicator?, attachToRoot: Boolean): BannerView {
+    fun setIndicator(indicator: LIndicator?) {
         if (this.indicator != null) {
-            removeView(this.indicator?.view)
+            removeView(this.indicator?.getView())
         }
         if (indicator != null) {
             this.indicator = indicator
-            if (attachToRoot) {
-                addView(this.indicator?.view, this.indicator?.params)
-            }
+            addView(this.indicator?.getView(), this.indicator?.getParams())
         }
-        return this
     }
 
-    /**
-     * 设置banner圆角 api21以上
-     */
-    fun setRoundCorners(radius: Float): BannerView {
+    fun setRoundCorners(radius: Float) {
         outlineProvider = object : ViewOutlineProvider() {
             override fun getOutline(view: View, outline: Outline) {
-                outline.setRoundRect(0, 0, view.width, view.height, radius)
+                outline.setRoundRect(0, 0, view.width, view.height, dip2px(radius))
             }
         }
         clipToOutline = true
-        return this
     }
 
     /**
@@ -369,12 +353,12 @@ class BannerView @JvmOverloads constructor(context: Context, attrs: AttributeSet
             setAdapter(adapter, 0)
         }
 
-    fun startTurning() {
-        stopTurning()
+    fun startAutoPlay() {
+        stopAutoPlay()
         postDelayed(task, autoTurningTime)
     }
 
-    fun stopTurning() {
+    fun stopAutoPlay() {
         removeCallbacks(task)
     }
 
