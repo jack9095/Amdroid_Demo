@@ -13,9 +13,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.Priority
+import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.kuanquan.afewscreens.databinding.ActivityMainBinding
+import com.kuanquan.afewscreens.glide.GlideApp
 
 
 /**
@@ -147,15 +151,34 @@ class MainActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             val imageViewHolder = holder as ImageViewHolder
-            Glide.with(imageViewHolder.image)
+            // 最原始的加载，图片多和大的时候会卡顿
+//            Glide.with(imageViewHolder.image)
+//                    .load(items[position])
+//                    .apply(RequestOptions())
+//                    .transform(RoundedCorners(10))
+//                    .into(imageViewHolder.image)
+
+            // 优化后的，不卡顿
+            GlideApp.with(imageViewHolder.image)
+                    .asDrawable()
                     .load(items[position])
-                    .apply(RequestOptions())
-                    .transform(RoundedCorners(10))
+                    .transition(DrawableTransitionOptions.withCrossFade(200))
+                    .apply(RequestOptions().priority(Priority.IMMEDIATE))
+                    .placeholder(R.mipmap.ic_launcher)
+                    .error(R.mipmap.ic_launcher)
+                    .format(DecodeFormat.PREFER_ARGB_8888)
+                    .transform(RoundedCorners(1))
                     .into(imageViewHolder.image)
         }
 
         override fun getItemCount(): Int {
             return items.size
+        }
+
+        override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+            super.onViewRecycled(holder)
+            val imageViewHolder = holder as ImageViewHolder
+            GlideApp.with(imageViewHolder.image).clear(imageViewHolder.image)
         }
     }
 
