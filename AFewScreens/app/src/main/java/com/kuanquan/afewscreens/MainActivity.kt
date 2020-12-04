@@ -1,6 +1,5 @@
 package com.kuanquan.afewscreens
 
-import android.R.attr.scrollY
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -88,6 +87,8 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        val getHeightView = View(this@MainActivity)
+
         with(viewBinding.recyclerView){
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = ImageAdapter(imageUrls)
@@ -96,9 +97,14 @@ class MainActivity : AppCompatActivity() {
                 private var _firstItemPosition = -1
                 private  var _lastItemPosition:Int = 0
                 private var fistView: View? = null
-                private  var lastView:android.view.View? = null
+                private  var lastView: View? = null
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
+
+                    getHeightView.scrollBy(0, dy)
+                    Log.e("滑动高度", "${getHeightView.scrollY}")
+                    Log.e("dy = ", "$dy")
+
 
                     val layoutManager = recyclerView.layoutManager
                     //判断是当前layoutManager是否为LinearLayoutManager
