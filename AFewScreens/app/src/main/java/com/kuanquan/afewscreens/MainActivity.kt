@@ -1,17 +1,23 @@
 package com.kuanquan.afewscreens
 
-import androidx.appcompat.app.AppCompatActivity
+import android.R.attr.scrollY
+import android.os.Build
 import android.os.Bundle
+import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.kuanquan.afewscreens.databinding.ActivityMainBinding
+
 
 /**
  * https://blog.csdn.net/u012864297/article/details/107247756/
@@ -49,14 +55,81 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var viewBinding: ActivityMainBinding
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityMainBinding.inflate(LayoutInflater.from(this))
         setContentView(viewBinding.root)
 
+        val outMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(outMetrics)
+        val widthPixels = outMetrics.widthPixels
+        val heightPixels = outMetrics.heightPixels
+        Log.e("屏幕的高度 = ", "$heightPixels")
+
+        // 亲测有效（LinearLayoutManager）
+        viewBinding.recyclerView.setOnScrollChangeListener(object: View.OnScrollChangeListener{
+
+            override fun onScrollChange(v: View?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int) {
+                val offset: Int = viewBinding.recyclerView.computeVerticalScrollOffset()
+                Log.e("滑动距离监听 = ", " \n scrollY -> $scrollY \n oldScrollY -> $oldScrollY \n offset -> $offset")
+
+                if (offset >= heightPixels * 3) {
+                    Log.e("滑出三屏幕了 = ", "$offset")
+                }
+
+                // 如果是垂直滑动，获取垂直滑动距离
+                val distance: Float = dp2px(48f)
+                if (offset <= distance) {
+                    val percentage = 1 - offset / distance
+//                    colorEvaluator(percentage)
+                }
+
+            }
+        })
+
         with(viewBinding.recyclerView){
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = ImageAdapter(imageUrls)
+
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                private var _firstItemPosition = -1
+                private  var _lastItemPosition:Int = 0
+                private var fistView: View? = null
+                private  var lastView:android.view.View? = null
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    val layoutManager = recyclerView.layoutManager
+                    //判断是当前layoutManager是否为LinearLayoutManager
+                    // 只有LinearLayoutManager才有查找第一个和最后一个可见view位置的方法
+                    if (layoutManager is LinearLayoutManager) {
+                        //获取最后一个可见view的位置
+                        val lastItemPosition = layoutManager.findLastVisibleItemPosition()
+                        //获取第一个可见view的位置
+                        val firstItemPosition = layoutManager.findFirstVisibleItemPosition()
+                        //获取可见view的总数
+                        val visibleItemCount = layoutManager.childCount
+                        if (_firstItemPosition < firstItemPosition) {
+                            _firstItemPosition = firstItemPosition
+                            _lastItemPosition = lastItemPosition
+//                            GCView(fistView)
+                            fistView = recyclerView.getChildAt(0)
+                            lastView = recyclerView.getChildAt(visibleItemCount - 1)
+                        } else if (_lastItemPosition > lastItemPosition) {
+                            _firstItemPosition = firstItemPosition
+                            _lastItemPosition = lastItemPosition
+//                            GCView(lastView)
+                            fistView = recyclerView.getChildAt(0)
+                            lastView = recyclerView.getChildAt(visibleItemCount - 1)
+                        }
+                    }
+                }
+
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                }
+            })
         }
     }
 
@@ -82,5 +155,9 @@ class MainActivity : AppCompatActivity() {
 
     internal class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val image: ImageView = itemView.findViewById(R.id.img)
+    }
+
+    private fun dp2px(dp: Float): Float {
+        return dp * resources.displayMetrics.density
     }
 }
