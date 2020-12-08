@@ -1,0 +1,3 @@
+rootProject.name='Animator'
+include ':app', ':circleMenu'
+include ':javaTest'
