@@ -1,5 +1,7 @@
 package com.kuanquan.afewscreens
 
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -141,6 +143,14 @@ class MainActivity : AppCompatActivity() {
                 }
             })
         }
+
+        val drawable = CommonShapeBuilder()
+                .setCornerRadius(CommonShapeBuilder.ANGLE_TOP_LEFT, dp2px(100f))
+                .setCornerRadius(CommonShapeBuilder.ANGLE_BOTTOM_RIGHT, dp2px(100f))
+                .setGradientColors(intArrayOf(Color.parseColor("#637DFF"), Color.parseColor("#B57AFF")))
+                .setOrientation(GradientDrawable.Orientation.LEFT_RIGHT).build()
+
+        viewBinding.ll.background = drawable
     }
 
     internal class ImageAdapter(private val items: List<String>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

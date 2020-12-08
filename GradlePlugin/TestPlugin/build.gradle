@@ -1,7 +1,7 @@
 plugins {
     id 'java-library'  // 导入java插件用于，编译打包我们的插件
     id 'maven' // maven插件，用于上传插件到仓库
-
+    id 'groovy'
 }
 
 java {
@@ -12,19 +12,37 @@ java {
 // uploadArchives 类型是upload，这个task不是'maven'创建的
 // 而是'maven'定义了一个rule,而后由我们自己创建的，关于rule，请看后面内容
 // 用于上传整个工程的jar包
-uploadArchives{
-    //本地仓库的一种
-    repositories{
-        flatDir{ // 创建一个仓库
-            name "localRepository"
-            dir "localRepository/libs"
-        }
+//uploadArchives{
+//    //本地仓库的一种
+//    repositories{
+//        flatDir{ // 创建一个仓库
+//            name "localRepository"
+//            dir "localRepository/libs"
+//        }
+//    }
+//}
+//group = "com.kuanquan.test" // project属性
+//version = "1.0" // project属性
+
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: uri('../repo'))
+        pom.groupId = 'com.app.plugin'//你的包名
+        pom.artifactId = 'gradleplugin'//在需要引用插件时用到
+        pom.version = '1.0.0'
     }
 }
-group = "com.kuanquan.test" // project属性
-version = "1.0" // project属性
 
 dependencies {
     // 导入Gradle的api，要写插件，肯定要使用Gradle的api
+//    implementation gradleApi()
+
+    //gradle sdk
     implementation gradleApi()
+    //groovy sdk
+    implementation localGroovy()
+}
+
+repositories {
+    mavenCentral()
 }
