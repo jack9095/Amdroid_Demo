@@ -1,6 +1,10 @@
 package com.kuanquan.afewscreens
 
+import android.animation.Animator
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.graphics.Color
+import android.graphics.PointF
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
@@ -9,12 +13,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.LinearInterpolator
+import android.view.animation.TranslateAnimation
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -58,7 +64,9 @@ class MainActivity : AppCompatActivity() {
             "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2482360593,2739674846&fm=26&gp=0.jpg"
     )
 
+    private var heightPixels = 0
     private lateinit var viewBinding: ActivityMainBinding
+    private var defaultHeight = 0
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,19 +77,164 @@ class MainActivity : AppCompatActivity() {
         val outMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(outMetrics)
         val widthPixels = outMetrics.widthPixels
-        val heightPixels = outMetrics.heightPixels
+        heightPixels = outMetrics.heightPixels
         Log.e("屏幕的高度 = ", "$heightPixels")
+        scrollScreen()
 
+        getHeightView = View(this@MainActivity)
+
+        // 设置 shape 背景
+        val drawable = CommonShapeBuilder()
+                .setCornerRadius(CommonShapeBuilder.ANGLE_TOP_LEFT, dp2px(100f))
+                .setCornerRadius(CommonShapeBuilder.ANGLE_BOTTOM_RIGHT, dp2px(100f))
+                .setGradientColors(intArrayOf(Color.parseColor("#637DFF"), Color.parseColor("#B57AFF")))
+                .setOrientation(GradientDrawable.Orientation.LEFT_RIGHT).build()
+        viewBinding.textView.background = drawable
+
+
+
+//        val animator = zhixian(viewBinding.ll,dp2px(viewBinding.ll.width.toFloat()).toInt())
+//        animator?.setDuration(300)
+//        animator?.start()
+
+        viewBinding.textView.setOnClickListener {
+            Log.e("MainActivity", " 点击事件")
+        }
+
+        viewBinding.textView.postDelayed({
+            defaultHeight = getHeightView?.scrollY ?: 0
+            Log.e("defaultHeight = ", " $defaultHeight")
+        }, 30000)
+
+        var isGone = false
+        viewBinding.imageButton.setOnClickListener {
+            if (isGone) {
+                isGone = false
+                viewBinding.ll.visibility = View.VISIBLE
+//                viewBinding.textView.animate()
+//                        .translationX(dp2px(-150f))
+//                        .setDuration(1500)
+//                        .start()
+                animationApply(1,0,viewBinding.textView)
+            } else {
+                isGone = true
+//                viewBinding.textView.animate()
+//                        .translationX(dp2px(150f))
+//                        .setDuration(1500)
+//                        .start()
+                animationApply(0,1,viewBinding.textView)
+            }
+        }
+    }
+
+    private val runnableTabLayout: Runnable by lazy {
+        Runnable {
+
+        }
+    }
+
+    private val animatorListener1 = object : Animator.AnimatorListener {
+
+        override fun onAnimationRepeat(p0: Animator?) {
+        }
+
+        override fun onAnimationEnd(p0: Animator?) {
+            viewBinding.ll.visibility = View.GONE
+        }
+
+        override fun onAnimationCancel(p0: Animator?) {
+        }
+
+        override fun onAnimationStart(p0: Animator?) {
+        }
+
+    }
+
+    private val animatorListener: Animator.AnimatorListener by lazy {
+        object : Animator.AnimatorListener {
+
+            override fun onAnimationRepeat(p0: Animator?) {
+            }
+
+            override fun onAnimationEnd(p0: Animator?) {
+                viewBinding.ll.visibility = View.GONE
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {
+            }
+
+            override fun onAnimationStart(p0: Animator?) {
+            }
+
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        objectAnimator?.run {
+            removeListener(animatorListener)
+            cancel()
+        }
+    }
+
+    private var objectAnimator: ObjectAnimator? = null
+    private fun animationApply(from: Int, to: Int, view: View) {
+        if (from != 1) {
+            objectAnimator = ObjectAnimator.ofFloat(view, "translationX", view.width.toFloat()).apply {
+                addListener(animatorListener)
+                duration = 800L
+                start()
+            }
+//            objectAnimator.addListener(animatorListener)
+//            objectAnimator.duration = 800L
+//            objectAnimator.start()
+        } else {
+            objectAnimator = ObjectAnimator.ofFloat(view, "translationX", 0f).apply {
+                duration = 800L
+                start()
+            }
+//            objectAnimator.duration = 800L
+//            objectAnimator.start()
+        }
+//        val ctrlAnimation = TranslateAnimation(
+//                TranslateAnimation.RELATIVE_TO_SELF, from.toFloat(), TranslateAnimation.RELATIVE_TO_SELF, to.toFloat(),
+//                TranslateAnimation.RELATIVE_TO_SELF, 0f, TranslateAnimation.RELATIVE_TO_SELF, 0f)
+//        ctrlAnimation.duration = 800L
+//        ctrlAnimation.setAnimationListener(object : Animation.AnimationListener{
+//            override fun onAnimationRepeat(p0: Animation?) {}
+//
+//            override fun onAnimationEnd(p0: Animation?) {
+//                if (from != 1) {
+//                    viewBinding.ll.visibility = View.GONE
+//                }
+//            }
+//
+//            override fun onAnimationStart(p0: Animation?) {
+//            }
+//
+//        })
+//        view.startAnimation(ctrlAnimation)
+//        ctrlAnimation.setAnimationListener(null)
+//        ctrlAnimation.cancel()
+    }
+
+    var getHeightView: View? = null
+    /**
+     * 滑动几屏
+     */
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun scrollScreen() {
         // 亲测有效（LinearLayoutManager）
         viewBinding.recyclerView.setOnScrollChangeListener(object: View.OnScrollChangeListener{
 
             override fun onScrollChange(v: View?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int) {
                 val offset: Int = viewBinding.recyclerView.computeVerticalScrollOffset()
-                Log.e("滑动距离监听 = ", " \n scrollY -> $scrollY \n oldScrollY -> $oldScrollY \n offset -> $offset")
+//                Log.e("滑动距离监听 = ", " \n scrollY -> $scrollY \n oldScrollY -> $oldScrollY \n offset -> $offset")
 
-                if (offset >= heightPixels * 3) {
-                    Log.e("滑出三屏幕了 = ", "$offset")
-                }
+//                if (offset - defaultHeight >= heightPixels * 3) {
+//                    Log.e("滑出三屏幕了 = ", "$offset")
+//                    animationApply(0,1,viewBinding.textView)
+//                }
 
                 // 如果是垂直滑动，获取垂直滑动距离
                 val distance: Float = dp2px(48f)
@@ -92,8 +245,6 @@ class MainActivity : AppCompatActivity() {
 
             }
         })
-
-        val getHeightView = View(this@MainActivity)
 
         with(viewBinding.recyclerView){
             layoutManager = LinearLayoutManager(this@MainActivity)
@@ -107,9 +258,18 @@ class MainActivity : AppCompatActivity() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
 
-                    getHeightView.scrollBy(0, dy)
-                    Log.e("滑动高度", "${getHeightView.scrollY}")
-                    Log.e("dy = ", "$dy")
+                    getHeightView?.scrollBy(0, dy)
+                    Log.e("滑动高度", "${getHeightView?.scrollY}")
+//                    Log.e("dy = ", "$dy")
+
+                    getHeightView?.let { heightView ->
+                        Log.e("两者相减 -> ", "${heightView.scrollY - defaultHeight}")
+                        if (heightView.scrollY - defaultHeight >= heightPixels * 3) {
+                            Log.e("滑出三屏幕了 = ", "${heightView.scrollY}")
+                            animationApply(0,1,viewBinding.textView)
+                        }
+                    }
+
 
 
                     val layoutManager = recyclerView.layoutManager
@@ -143,14 +303,39 @@ class MainActivity : AppCompatActivity() {
                 }
             })
         }
+    }
 
-        val drawable = CommonShapeBuilder()
-                .setCornerRadius(CommonShapeBuilder.ANGLE_TOP_LEFT, dp2px(100f))
-                .setCornerRadius(CommonShapeBuilder.ANGLE_BOTTOM_RIGHT, dp2px(100f))
-                .setGradientColors(intArrayOf(Color.parseColor("#637DFF"), Color.parseColor("#B57AFF")))
-                .setOrientation(GradientDrawable.Orientation.LEFT_RIGHT).build()
+    /**
+     * 沿直线运动。
+     *
+     */
+    fun zhixian(view: View, length: Int): ValueAnimator? {
+        val valueAnimator = ValueAnimator()
+        valueAnimator.setObjectValues(PointF(0f, 0f))
+        valueAnimator.interpolator = LinearInterpolator()
+        valueAnimator.setEvaluator { fraction, startValue, endValue ->
 
-        viewBinding.ll.background = drawable
+            // fraction = t / duration
+            Log.v("znz", "znz ---> $fraction")
+            val point = PointF()
+            point.x = fraction * length
+            point
+        }
+//        valueAnimator.addUpdateListener { animation ->
+//            val point = animation.animatedValue as PointF
+//            val params: RelativeLayout.LayoutParams = RelativeLayout.LayoutParams(
+//                    image_width, image_width)
+//            params.leftMargin = (point.x.toInt()
+//                    + (window_width / 2 - image_width / 2)) // Your
+//            // coordinate
+//            params.topMargin = (point.y.toInt()
+//                    + (window_height / 2 - image_width / 2)) // Your Y
+//            // coordinate
+//            Log.v("znz", "point.x ---> " + point.x)
+//            Log.v("znz", "point.y ---> " + point.y)
+//            view.layoutParams = params
+//        }
+        return valueAnimator
     }
 
     internal class ImageAdapter(private val items: List<String>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

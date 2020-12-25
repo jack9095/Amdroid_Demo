@@ -65,6 +65,28 @@ public class AnimatorActivity extends AppCompatActivity implements View.OnClickL
      */
     private ImageView istar;
 
+    private Animation.AnimationListener listener = new Animation.AnimationListener() {
+        @Override
+        public void onAnimationEnd(Animation arg0) {
+            // ObjectAnimator fadeIn = ObjectAnimator.ofFloat(imageview,"alpha", 0f, 1f);
+            startAnimator();
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+        }
+
+        @Override
+        public void onAnimationStart(Animation animation) {
+        }
+
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,23 +99,7 @@ public class AnimatorActivity extends AppCompatActivity implements View.OnClickL
         AlphaAnimation aa = new AlphaAnimation(0.7f, 1.0f);
         aa.setDuration(500);
         view.startAnimation(aa);
-        aa.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationEnd(Animation arg0) {
-                // ObjectAnimator fadeIn = ObjectAnimator.ofFloat(imageview,
-                // "alpha", 0f, 1f);
-                startAnimator();
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-        });
+        aa.setAnimationListener(listener);
 
         WindowManager wm = (WindowManager) getBaseContext().getSystemService(
                 Context.WINDOW_SERVICE);
@@ -135,13 +141,10 @@ public class AnimatorActivity extends AppCompatActivity implements View.OnClickL
 
         AnimatorSet animSet = new AnimatorSet();
 
-        ObjectAnimator fadeIn = ObjectAnimator.ofFloat(headImage,
-                "alpha", 0f, 1f);
-        ObjectAnimator fadeOut = ObjectAnimator.ofFloat(istar, "alpha",
-                1f, 0f);
+        ObjectAnimator fadeIn = ObjectAnimator.ofFloat(headImage, "alpha", 0f, 1f);
+        ObjectAnimator fadeOut = ObjectAnimator.ofFloat(istar, "alpha", 1f, 0f);
 
-        animSet.playTogether(fadeIn, fadeOut, shopanim, fansanim,
-                newsanim, expressionanim, trailsanim);
+        animSet.playTogether(fadeIn, fadeOut, shopanim, fansanim, newsanim, expressionanim, trailsanim);
         animSet.setDuration(1000);
         animSet.start();
     }

@@ -18,18 +18,22 @@
     <LinearLayout
         android:id="@+id/ll"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="30dp"
+        app:layout_constraintEnd_toEndOf="@+id/imageButton"
+        android:layout_marginBottom="60dp"
+        android:background="#0000ff"
         android:layout_marginEnd="43dp"
+        android:visibility="visible"
         android:gravity="center"
-        android:paddingStart="16dp"
-        android:paddingEnd="40dp"
         android:layout_width="wrap_content"
         android:layout_height="44dp">
 
         <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="40dp"
             android:maxWidth="180dp"
             android:adjustViewBounds="true"
             android:singleLine="true"
@@ -46,6 +50,8 @@
         android:src="@mipmap/btn_publis"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
