@@ -1,33 +1,36 @@
-package com.kuanquan.pagetransitionanimation;
+package com.kuanquan.appbarlayoutnestedscrollview;
 
 import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.graphics.Color;
-import android.os.Build;
-import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.bumptech.glide.Glide;
 
 /**
- * Created by Harry on 2019/4/15.
- * desc:普通的实现方式，易于集成的方式请看{@link DetailActivity2}中的实现方式{@link AnimationFrameLayout},基本的实现注释也是在{@link AnimationFrameLayout}
+ * 父控件的拉动滑动动画，更易于集成
  */
-public class DetailActivity extends AppCompatActivity implements GestureDetector.OnGestureListener {
+public class AnimationFrameLayout extends FrameLayout implements GestureDetector.OnGestureListener {
     //退出进度
-    private float DEFAULT_EXIT_SCALE = 0.8f;
-    private GestureDetector mGestureDetector;
-    LinearLayout parent;
-    private float mExitScalingRef; // 触摸退出进度
-    private int viewHeight;
+    private float DEFAULT_EXIT_SCALE = 0.5f;
+    //当前自定义FrameLayout
     private FrameLayout frameLayout;
+    //FrameLayout的第一个子view
+    private View parent;
+    private GestureDetector mGestureDetector;
+    //触摸退出进度
+    private float mExitScalingRef;
+    //子view的高度
+    private int viewHeight;
+    //结束的监听器
+    private FinishListener finishListener;
+
+    public void setDefaultExitScale(float defaultExitScale) {
+        DEFAULT_EXIT_SCALE = defaultExitScale;
+    }
 
     TypeEvaluator<Integer> mColorEvaluator = new TypeEvaluator<Integer>() {
         @Override
@@ -43,32 +46,30 @@ public class DetailActivity extends AppCompatActivity implements GestureDetector
         }
     };
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
-        if (Build.VERSION.SDK_INT >= 23) {
-            View decorView = getWindow().getDecorView();
-            int option = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-            decorView.setSystemUiVisibility(option);
-            getWindow().setStatusBarColor(Color.WHITE);
-        }
-        parent = findViewById(R.id.parent);
-        frameLayout = findViewById(R.id.frame_layout);
-        ImageView imageView = findViewById(R.id.image);
-        String url = getIntent().getStringExtra("url");
-        Glide.with(this).load(url).into(imageView);
-        mGestureDetector = new GestureDetector(this, this);
+    public AnimationFrameLayout(Context context) {
+        this(context, null);
     }
 
+    public AnimationFrameLayout(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        frameLayout = this;
+        mGestureDetector = new GestureDetector(context, this);
+    }
+
+    public void setFinishListener(FinishListener finishListener) {
+        this.finishListener = finishListener;
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_UP) {
             if (mExitScalingRef < DEFAULT_EXIT_SCALE) {
                 //缩小到一定的程度，将其关闭
-                onBackPressed();
+                if (finishListener != null) {
+                    finishListener.finish();
+                }
             } else {
+                //如果拉动距离不到某个角度，则将其动画返回原位置
                 final float moveX = parent.getTranslationX();
                 final float moveY = parent.getTranslationY();
                 final float scaleX = parent.getScaleX();
@@ -84,7 +85,6 @@ public class DetailActivity extends AppCompatActivity implements GestureDetector
                         parent.setTranslationY(moveY + (0 - moveY) * p);
                         parent.setScaleX(scaleX + (1 - scaleX) * p);
                         parent.setScaleY(scaleY + (1 - scaleY) * p);
-                        frameLayout.setBackgroundColor(mColorEvaluator.evaluate(p, 0x00000000, 0xFF000000));
                     }
                 });
                 valueAnimator.start();
@@ -93,9 +93,9 @@ public class DetailActivity extends AppCompatActivity implements GestureDetector
         return mGestureDetector.onTouchEvent(event);
     }
 
-
     @Override
     public boolean onDown(MotionEvent e) {
+        //必须要返回true，否则onScroll将不会被回调
         return true;
     }
 
@@ -109,9 +109,11 @@ public class DetailActivity extends AppCompatActivity implements GestureDetector
         return false;
     }
 
-
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        if (parent == null) {
+            parent = getChildAt(0);
+        }
         if (viewHeight == 0) {
             viewHeight = parent.getHeight();
         }
@@ -119,21 +121,18 @@ public class DetailActivity extends AppCompatActivity implements GestureDetector
         float moveY = e2.getY() - e1.getY();
 
         mExitScalingRef = 1;
-        if (moveY > 0) {
-            mExitScalingRef = mExitScalingRef - moveY / viewHeight;
-        } else {
-            mExitScalingRef = mExitScalingRef + (-moveY) / viewHeight;
-        }
+        mExitScalingRef = mExitScalingRef - moveY / viewHeight;
         parent.setTranslationX(moveX);
         parent.setTranslationY(moveY);
         parent.setScaleX(mExitScalingRef);
         parent.setScaleY(mExitScalingRef);
         if (mExitScalingRef > 1) {
+            //当用户往上滑动的时候
             frameLayout.setBackgroundColor(mColorEvaluator.evaluate(2 - mExitScalingRef, 0x00000000, 0xFF000000));
         } else {
+            //当用户往下滑动的时候
             frameLayout.setBackgroundColor(mColorEvaluator.evaluate(mExitScalingRef, 0x00000000, 0xFF000000));
         }
-
         return false;
     }
 
@@ -145,5 +144,9 @@ public class DetailActivity extends AppCompatActivity implements GestureDetector
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         return false;
+    }
+
+    public interface FinishListener {
+        void finish();
     }
 }

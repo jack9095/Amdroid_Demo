@@ -25,11 +25,17 @@
                 app:cardElevation="5dp"
                 app:layout_scrollFlags="scroll">
 
-                <ImageView
+                <!--<ImageView
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:scaleType="fitXY"
-                    android:src="@mipmap/image1" />
+                    android:src="@mipmap/image1" />-->
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/grid_view"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
             </androidx.cardview.widget.CardView>
 
             <View
@@ -48,7 +54,14 @@
                 android:textStyle="bold" />
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.core.widget.NestedScrollView
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!--<androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -134,7 +147,7 @@
                     android:layout_marginBottom="50dp"
                     android:src="@mipmap/ic_launcher" />
             </RelativeLayout>
-        </androidx.core.widget.NestedScrollView>
+        </androidx.core.widget.NestedScrollView>-->
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
