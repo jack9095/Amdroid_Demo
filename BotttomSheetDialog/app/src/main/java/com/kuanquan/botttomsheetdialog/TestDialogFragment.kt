@@ -41,15 +41,17 @@ class TestDialogFragment : BaseDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
        val dialogfragment = BottomSheetDialog(requireContext())
-        val view1 = View.inflate(context, R.layout.dialog_fragment_layout, null)
-        dialogfragment.setContentView(view1)
-        mBehavior = BottomSheetBehavior.from(view1.parent as View)
-        mBehavior?.setPeekHeight(height())
+//        val view1 = View.inflate(context, R.layout.dialog_fragment_layout, null)
+//        view?.let { dialogfragment.setContentView(it) }
+//        mBehavior = BottomSheetBehavior.from(view?.parent as View)
+//        mBehavior?.setPeekHeight(height())
         return dialogfragment
     }
 
     override fun onStart() {
         super.onStart()
+        mBehavior = BottomSheetBehavior.from(view?.parent as View)
+        mBehavior?.setPeekHeight(height())
         mBehavior?.setState(BottomSheetBehavior.STATE_EXPANDED) //全屏展开
     }
 
@@ -85,6 +87,9 @@ class TestDialogFragment : BaseDialogFragment() {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     @SuppressLint
     override fun initViews(view: View) {
+//        view?.let { dialogfragment.setContentView(it) }
+//        mBehavior = BottomSheetBehavior.from(view.parent as View)
+//        mBehavior?.setPeekHeight(height())
         setMaxHeight(height())
 //        arguments?.run {
             recyclerView.layoutManager = LinearLayoutManager(recyclerView.context)
