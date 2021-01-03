@@ -1,12 +1,15 @@
 package com.kuanquan.botttomsheetdialog
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.graphics.Outline
 import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.dialog_fragment_layout.*
 
 class TestDialogFragment : BaseDialogFragment() {
@@ -26,12 +29,28 @@ class TestDialogFragment : BaseDialogFragment() {
         private val ACTION_DIMAMOUNT = 0.5f
     }
 
+    private var mBehavior: BottomSheetBehavior<*>? = null
+
     private val list by lazy {
         mutableListOf<TestData>().apply {
             for (item in 0..19) {
                 add(TestData("天龙八部", "金庸写的一部小说，当年风靡一时，炙手可热"))
             }
         }
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+       val dialogfragment = BottomSheetDialog(requireContext())
+        val view1 = View.inflate(context, R.layout.dialog_fragment_layout, null)
+        dialogfragment.setContentView(view1)
+        mBehavior = BottomSheetBehavior.from(view1.parent as View)
+        mBehavior?.setPeekHeight(height())
+        return dialogfragment
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mBehavior?.setState(BottomSheetBehavior.STATE_EXPANDED) //全屏展开
     }
 
     override val layoutId: Int
@@ -66,10 +85,11 @@ class TestDialogFragment : BaseDialogFragment() {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     @SuppressLint
     override fun initViews(view: View) {
-        arguments?.run {
+        setMaxHeight(height())
+//        arguments?.run {
             recyclerView.layoutManager = LinearLayoutManager(recyclerView.context)
             recyclerView.adapter = TestAdapter(list)
-        }
+//        }
         rootView.run {
             outlineProvider = object : ViewOutlineProvider() {
                 override fun getOutline(view: View, outline: Outline) {

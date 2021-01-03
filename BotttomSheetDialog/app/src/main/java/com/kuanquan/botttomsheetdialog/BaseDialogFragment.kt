@@ -60,8 +60,7 @@ abstract class BaseDialogFragment : AppCompatDialogFragment() {
 
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(layoutId, null, false)
         return mDelegates.onCreateView(view, container, savedInstanceState)
     }

@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">ActivityOptions</string>
+    <string name="app_name">RecyclerViewItemPlaceHolder</string>
+    <string name="image">sameImage</string>
 </resources>

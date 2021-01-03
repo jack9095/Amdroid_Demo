@@ -16,6 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".test.TestActivity" />
+        <activity android:name=".demo.DemoActivity"/>
+        <activity android:name=".demo.share.RecyclerVireWithBottomSheetDialogActivity"/>
     </application>
 
 </manifest>

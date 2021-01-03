@@ -1,0 +1,45 @@
+<resources>
+
+    <dimen name="dp1">1dp</dimen>
+    <dimen name="dp2">2dp</dimen>
+    <dimen name="dp4">4dp</dimen>
+    <dimen name="dp5">5dp</dimen>
+    <dimen name="dp6">6dp</dimen>
+    <dimen name="dp7">7dp</dimen>
+    <dimen name="dp8">8dp</dimen>
+    <dimen name="dp9">9dp</dimen>
+    <dimen name="dp10">10dp</dimen>
+    <dimen name="dp11">11dp</dimen>
+    <dimen name="dp12">12dp</dimen>
+    <dimen name="dp13">13dp</dimen>
+    <dimen name="dp14">14dp</dimen>
+    <dimen name="dp16">16dp</dimen>
+    <dimen name="dp20">20dp</dimen>
+    <dimen name="dp21">21dp</dimen>
+
+    <dimen name="sp_14">14sp</dimen>
+    <dimen name="sp_15">15sp</dimen>
+    <dimen name="sp_16">16sp</dimen>
+    <dimen name="sp_18">18sp</dimen>
+
+    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="chat_msg_send_padding_left">12dp</dimen>
+    <dimen name="chat_msg_send_padding_right">12dp</dimen>
+    <dimen name="chat_msg_send_time_margin_bottom">12dp</dimen>
+    <dimen name="chat_msg_send_time_margin_top">8dp</dimen>
+    <dimen name="chat_msg_receive_avatar_size">42dp</dimen>
+    <dimen name="chat_msg_receive_text_margin_left">6dp</dimen>
+    <dimen name="chat_msg_receive_text_padding_right">12dp</dimen>
+    <dimen name="chat_msg_receive_text_padding_left">17dp</dimen>
+    <dimen name="chat_msg_receive_text_padding_verical">10dp</dimen>
+    <dimen name="chat_msg_accept_friend_margin_vertical">4dp</dimen>
+    <dimen name="chat_msg_update_icon_background_length">32dp</dimen>
+    <dimen name="chat_msg_item_margin_horizon">14dp</dimen>
+    <dimen name="x_normal_font">16sp</dimen>
+    <dimen name="small_font">11sp</dimen>
+    <dimen name="common_dialog_body_padding_right">40dp</dimen>
+    <dimen name="common_dialog_body_padding_left">40dp</dimen>
+
+
+</resources>
