@@ -11,8 +11,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 /**
- * Created by Harry on 2019/4/19.
- * desc:父控件的拉动滑动动画，更易于集成
+ * 父控件的拉动滑动动画，更易于集成
  */
 public class AnimationFrameLayout extends FrameLayout implements GestureDetector.OnGestureListener {
     //退出进度
