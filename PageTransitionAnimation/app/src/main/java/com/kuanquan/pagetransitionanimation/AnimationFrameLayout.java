@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -93,8 +94,11 @@ public class AnimationFrameLayout extends FrameLayout implements GestureDetector
         return mGestureDetector.onTouchEvent(event);
     }
 
+    private float mDownX;
+    private float mDownY;
     @Override
     public boolean onDown(MotionEvent e) {
+        Log.e("onDown = ", moveX + "");
         //必须要返回true，否则onScroll将不会被回调
         return true;
     }
@@ -119,6 +123,9 @@ public class AnimationFrameLayout extends FrameLayout implements GestureDetector
         }
         float moveX = e2.getX() - e1.getX();
         float moveY = e2.getY() - e1.getY();
+
+        Log.e("moveX = ", moveX + "");
+        Log.e("moveY = ", moveY + "");
 
         mExitScalingRef = 1;
         mExitScalingRef = mExitScalingRef - moveY / viewHeight;
