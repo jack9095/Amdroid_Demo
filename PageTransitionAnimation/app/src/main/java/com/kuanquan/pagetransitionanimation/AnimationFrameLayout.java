@@ -185,13 +185,22 @@ public class AnimationFrameLayout extends FrameLayout implements GestureDetector
             parent.setScaleX(mExitScalingRef);
             parent.setScaleY(mExitScalingRef);
             currentStatus = STATUS_MOVING;
+            Log.e("手势", "mExitScalingRef = " + mExitScalingRef);
+            float mExitScalingColor = 0;
             if (mExitScalingRef > 1) {
+                mExitScalingColor = 2 - mExitScalingRef;
                 //当用户往上滑动的时候
-                frameLayout.setBackgroundColor(mColorEvaluator.evaluate(2 - mExitScalingRef, 0x00000000, 0xFF000000));
+//                frameLayout.setBackgroundColor(mColorEvaluator.evaluate(mExitScalingColor, 0x00000000, 0xFF000000));
             } else {
+                mExitScalingColor = mExitScalingRef;
                 //当用户往下滑动的时候
-                frameLayout.setBackgroundColor(mColorEvaluator.evaluate(mExitScalingRef, 0x00000000, 0xFF000000));
+//                frameLayout.setBackgroundColor(mColorEvaluator.evaluate(mExitScalingRef, 0x00000000, 0xFF000000));
             }
+
+            if (mExitScalingColor > 0.8f) {
+                mExitScalingColor = 0.8f;
+            }
+            frameLayout.setBackgroundColor(mColorEvaluator.evaluate(mExitScalingColor, 0x00000000, 0xFF000000));
         }
         return false;
     }
