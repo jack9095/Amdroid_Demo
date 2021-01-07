@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, DetailActivity2.class);
                 intent.putExtra("url",datas.get(position));
                 startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, v, "sharedView").toBundle());
+//                startActivity(intent);
             }
         });
 

@@ -1,12 +1,11 @@
 package com.kuanquan.pagetransitionanimation;
 
-import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -62,7 +61,7 @@ public class FAnimationFrameLayout extends FrameLayout {
 
     public void init(Context context) {
         screenHeight = getScreenHeight(context);
-        setBackgroundColor(Color.BLACK);
+//        setBackgroundColor(Color.BLACK);
 //        addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 //            @Override
 //            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -126,6 +125,7 @@ public class FAnimationFrameLayout extends FrameLayout {
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         try {
             if (currentShowView != null) {
+                Log.e(TAG,"控件不为空");
                 switch (ev.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         mDownX = ev.getRawX();
@@ -135,14 +135,18 @@ public class FAnimationFrameLayout extends FrameLayout {
                         int deltaX = Math.abs((int) (ev.getRawX() - mDownX));
                         int deltaY = (int) (ev.getRawY() - mDownY);
                         if (deltaY > DRAG_GAP_PX && deltaX <= DRAG_GAP_PX) {
+                            Log.e(TAG,"拦截事件");
                             return true;
                         }
                         break;
                     case MotionEvent.ACTION_UP:
+                        Log.e(TAG,"拦截事件——ACTION_UP");
                         break;
                     default:
                         break;
                 }
+            } else {
+                Log.e(TAG,"控件为空");
             }
             return super.onInterceptTouchEvent(ev);
         } catch (Exception e) {
@@ -153,7 +157,9 @@ public class FAnimationFrameLayout extends FrameLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+        Log.e(TAG,"onTouchEvent");
         if (currentStatus == STATUS_RESETTING) {
+            Log.e(TAG,"onTouchEvent_false");
             return false;
         }
         try {
@@ -170,11 +176,13 @@ public class FAnimationFrameLayout extends FrameLayout {
                     if (deltaY <= DRAG_GAP_PX && currentStatus != STATUS_MOVING) {
                         return super.onTouchEvent(ev);
                     }
-                    //viewpager不在切换中，并且手指往下滑动，开始缩放
+                    //viewpager2 或者 RecyclerView(水平) 不在切换中，并且手指往下滑动，开始缩放
 //                    if (currentPageStatus != SCROLL_STATE_DRAGGING && (deltaY > DRAG_GAP_PX || currentStatus == STATUS_MOVING)) {
-//                        moveView(ev.getRawX(), ev.getRawY());
-//                        return true;
-//                    }
+                    if (deltaY > DRAG_GAP_PX || currentStatus == STATUS_MOVING) {
+                        Log.e(TAG, "moveView");
+                        moveView(ev.getRawX(), ev.getRawY());
+                        return true;
+                    }
                     break;
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:

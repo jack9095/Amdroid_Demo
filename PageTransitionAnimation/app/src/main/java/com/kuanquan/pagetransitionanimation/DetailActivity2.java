@@ -28,6 +28,20 @@ public class DetailActivity2 extends AppCompatActivity {
             decorView.setSystemUiVisibility(option);
         }
         AnimationFrameLayout frameLayout = findViewById(R.id.frame_layout);
+//        View contentView = getWindow().getDecorView().findViewById(android.R.id.content);
+//        frameLayout.setCurrentShowView(contentView);
+//        frameLayout.setIAnimClose(new FAnimationFrameLayout.IAnimClose(){
+//
+//            @Override
+//            public void onPictureClick() {
+//
+//            }
+//
+//            @Override
+//            public void onPictureRelease(View view) {
+//                onBackPressed();
+//            }
+//        });
         //将内部的布局item_linear_layout，放入AnimationFrameLayout中
         View view = LayoutInflater.from(this).inflate(R.layout.item_linear_layout, frameLayout);
         frameLayout.setDefaultExitScale(0.68f);
@@ -40,7 +54,6 @@ public class DetailActivity2 extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
     }
 
 

@@ -30,6 +30,11 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    // TODO 使用 viewBinding
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
