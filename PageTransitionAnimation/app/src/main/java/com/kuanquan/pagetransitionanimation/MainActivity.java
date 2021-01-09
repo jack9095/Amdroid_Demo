@@ -9,6 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kuanquan.pagetransitionanimation.adapter.MyAdapter;
+import com.kuanquan.pagetransitionanimation.elementspage.DetailActivity2;
+
 import java.util.ArrayList;
 import java.util.List;
 

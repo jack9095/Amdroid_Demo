@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.kuanquan.pagetransitionanimation.AnimationFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.kuanquan.pagetransitionanimation.animationlayout.AnimationFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/frame_layout"
     android:layout_width="match_parent"
@@ -8,4 +8,4 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-</com.kuanquan.pagetransitionanimation.AnimationFrameLayout>
+</com.kuanquan.pagetransitionanimation.animationlayout.AnimationFrameLayout>

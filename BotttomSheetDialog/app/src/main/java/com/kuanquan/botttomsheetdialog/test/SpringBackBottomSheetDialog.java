@@ -26,12 +26,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.kuanquan.botttomsheetdialog.R;
 
 /**
- * Created by lgh on 18-4-9.
- *
  * 添加了可控的回弹距离
- *
  */
-
 public class SpringBackBottomSheetDialog extends AppCompatDialog {
 
     private BottomSheetBehavior<FrameLayout> mBehavior;

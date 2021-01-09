@@ -1,4 +1,4 @@
-package com.kuanquan.pagetransitionanimation;
+package com.kuanquan.pagetransitionanimation.animationlayout;
 
 import android.animation.ValueAnimator;
 import android.content.Context;

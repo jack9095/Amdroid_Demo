@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PageTransitionAnimation"
         android:usesCleartextTraffic="true">
-        <activity android:name=".DetailActivity3"
+        <activity android:name=".elementspage.DetailActivity3"
             android:theme="@style/Share_Style"/>
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -22,10 +22,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DetailActivity"
+            android:name=".elementspage.DetailActivity"
             android:theme="@style/Share_Style" />
         <activity
-            android:name=".DetailActivity2"
+            android:name=".elementspage.DetailActivity2"
             android:theme="@style/Share_Style" />
     </application>
 

@@ -1,4 +1,4 @@
-package com.kuanquan.pagetransitionanimation;
+package com.kuanquan.pagetransitionanimation.elementspage;
 
 import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.kuanquan.pagetransitionanimation.animationlayout.AnimationFrameLayout;
+import com.kuanquan.pagetransitionanimation.R;
 
 /**
  * 普通的实现方式，易于集成的方式请看{@link DetailActivity2}中的实现方式{@link AnimationFrameLayout},基本的实现注释也是在{@link AnimationFrameLayout}

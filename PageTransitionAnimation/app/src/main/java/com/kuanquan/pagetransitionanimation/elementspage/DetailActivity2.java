@@ -1,4 +1,4 @@
-package com.kuanquan.pagetransitionanimation;
+package com.kuanquan.pagetransitionanimation.elementspage;
 
 import android.graphics.Color;
 import android.os.Build;
@@ -10,9 +10,10 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.kuanquan.pagetransitionanimation.animationlayout.AnimationFrameLayout;
+import com.kuanquan.pagetransitionanimation.R;
 
 /**
- * Created by Harry on 2019/4/15.
  * desc:更易于集成的实现方式，layout里放入{@link AnimationFrameLayout}，通过LayoutInflater.from(this).inflate方式放入内部的布局
  */
 public class DetailActivity2 extends AppCompatActivity {

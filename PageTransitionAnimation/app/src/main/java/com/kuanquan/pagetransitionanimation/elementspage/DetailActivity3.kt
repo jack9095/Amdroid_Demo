@@ -1,4 +1,4 @@
-package com.kuanquan.pagetransitionanimation
+package com.kuanquan.pagetransitionanimation.elementspage
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,8 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.kuanquan.pagetransitionanimation.R
+import com.kuanquan.pagetransitionanimation.animationlayout.TAnimationFrameLayout
 import com.kuanquan.pagetransitionanimation.databinding.ActivityDetail3Binding
 
 /**

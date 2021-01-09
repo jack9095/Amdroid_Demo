@@ -1,4 +1,4 @@
-package com.kuanquan.pagetransitionanimation;
+package com.kuanquan.pagetransitionanimation.animationlayout;
 
 import android.animation.Animator;
 import android.animation.TypeEvaluator;
@@ -31,11 +31,15 @@ public class AnimationFrameLayout extends FrameLayout implements GestureDetector
     private int viewHeight;
     //结束的监听器
     private FinishListener finishListener;
+    // 是否水平滑动 true 表示水平滑动
+    private boolean isHorizontal;
+    // 是否中间抬起过手指头
+    private boolean isUp;
 
     public final int DRAG_GAP_PX = dp2px(getContext(),8f);
-    public static final int STATUS_NORMAL = 0;//正常浏览状态
-    public static final int STATUS_MOVING = 1;//滑动状态
-    public static final int STATUS_RESETTING = 2;//返回中状态
+    public static final int STATUS_NORMAL = 0;   // 正常浏览状态
+    public static final int STATUS_MOVING = 1;   // 滑动状态
+    public static final int STATUS_RESETTING = 2;// 返回中状态
     private int currentStatus = STATUS_NORMAL;
 
     public void setDefaultExitScale(float defaultExitScale) {
@@ -71,12 +75,15 @@ public class AnimationFrameLayout extends FrameLayout implements GestureDetector
     }
 
     int deltaY; // 垂直移动的距离
+    int deltaX; // 水平移动的距离
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             Log.e(TAG, "按下");
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
             Log.e(TAG, "放开");
+            isHorizontal = false;
+            isUp = false;
             if (currentStatus != STATUS_MOVING) {
                 return super.onTouchEvent(event);
             }
@@ -132,15 +139,10 @@ public class AnimationFrameLayout extends FrameLayout implements GestureDetector
         } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
             Log.e(TAG, "移动");
             deltaY = (int) (event.getRawY() - mDownY);
-            //手指往上滑动
-//            if (deltaY <= DRAG_GAP_PX && currentStatus != STATUS_MOVING) {
-//                Log.e(TAG, "currentStatus = " + currentStatus);
-//                return super.onTouchEvent(event);
-//            }
+            deltaX = (int) (event.getRawX() - mDownX);
         }
 
         return mGestureDetector.onTouchEvent(event);
-//        return super.onTouchEvent(event);
     }
 
     private float mDownX;
@@ -178,7 +180,8 @@ public class AnimationFrameLayout extends FrameLayout implements GestureDetector
         mExitScalingRef = 1;
 
         //viewpager2 或者 RecyclerView(水平) 不在切换中，并且手指往下滑动，开始缩放
-        if (deltaY > DRAG_GAP_PX || currentStatus == STATUS_MOVING) {
+//        if (deltaY > DRAG_GAP_PX || currentStatus == STATUS_MOVING) {
+        if (interceptMoveEvent(deltaX, deltaY) && !isHorizontal) {
             mExitScalingRef = mExitScalingRef - moveY / viewHeight;
             parent.setTranslationX(moveX);
             parent.setTranslationY(moveY);
@@ -262,9 +265,7 @@ public class AnimationFrameLayout extends FrameLayout implements GestureDetector
             case MotionEvent.ACTION_MOVE:
                 float deltaY = ev.getRawY() - mDownY;
                 float deltaX = ev.getRawX() - mDownX;
-//                if (deltaY > DRAG_GAP_PX && deltaX <= DRAG_GAP_PX) {
-//                    return true;
-//                }
+
                 if (interceptMoveEvent(deltaX, deltaY)) {
                     requestDisallowInterceptTouchEvent(true);
                     return true;
@@ -277,17 +278,22 @@ public class AnimationFrameLayout extends FrameLayout implements GestureDetector
     }
 
     private boolean interceptMoveEvent(float deltaX, float deltaY) {
-        if (mDownX < 0) {//在滚动状态
-            return false;
-        }
+//        if (mDownX < 0) {//在滚动状态
+//            return false;
+//        }
         if (currentStatus == STATUS_RESETTING) {
             return false;
         }
         if (deltaX < DRAG_GAP_PX && deltaY < DRAG_GAP_PX) {
             return false;
         }
-        boolean interceptX = deltaX > 0 && Math.abs(deltaX) >= Math.abs(deltaY);
+//        boolean interceptX = deltaX > 0 && Math.abs(deltaX) >= Math.abs(deltaY);
         boolean interceptY = deltaY > 0 && Math.abs(deltaY) >= Math.abs(deltaX);
+
+        if (!interceptY && !isUp) {
+            isHorizontal = true;
+            isUp = true;
+        }
 
 //        return interceptX || interceptY;
         return interceptY;
