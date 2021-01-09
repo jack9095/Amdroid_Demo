@@ -12,8 +12,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PageTransitionAnimation"
         android:usesCleartextTraffic="true">
-        <activity android:name=".elementspage.DetailActivity3"
+
+        <activity
+            android:name=".elementspage.ShareElementsActivity"
             android:theme="@style/Share_Style"/>
+        <activity
+            android:name=".elementspage.DetailActivity3"
+            android:theme="@style/Share_Style" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

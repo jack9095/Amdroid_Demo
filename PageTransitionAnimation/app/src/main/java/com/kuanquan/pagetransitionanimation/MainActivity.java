@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.kuanquan.pagetransitionanimation.adapter.MyAdapter;
 import com.kuanquan.pagetransitionanimation.elementspage.DetailActivity2;
+import com.kuanquan.pagetransitionanimation.elementspage.ShareElementsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
         myAdapter.setOnClickListener(new MyAdapter.OnClickListener() {
             @Override
             public void onClick(View v, int position) {
-                Intent intent = new Intent(MainActivity.this, DetailActivity2.class);
+                Intent intent = new Intent(MainActivity.this, ShareElementsActivity.class);
+//                Intent intent = new Intent(MainActivity.this, DetailActivity2.class);
                 intent.putExtra("url",datas.get(position));
                 startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, v, "sharedView").toBundle());
 //                startActivity(intent);

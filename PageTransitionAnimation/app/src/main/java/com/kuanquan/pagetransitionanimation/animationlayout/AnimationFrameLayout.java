@@ -11,10 +11,11 @@ import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
 
 /**
- * 父控件的拉动滑动动画，更易于集成
+ * 父控件的拉动滑动动画，更易于集成   java版本，较为完美实现
  */
 public class AnimationFrameLayout extends FrameLayout implements GestureDetector.OnGestureListener {
     public static final String TAG = AnimationFrameLayout.class.getSimpleName();
@@ -33,8 +34,6 @@ public class AnimationFrameLayout extends FrameLayout implements GestureDetector
     private FinishListener finishListener;
     // 是否水平滑动 true 表示水平滑动
     private boolean isHorizontal;
-    // 是否中间抬起过手指头
-    private boolean isUp;
 
     public final int DRAG_GAP_PX = dp2px(getContext(),8f);
     public static final int STATUS_NORMAL = 0;   // 正常浏览状态
@@ -68,6 +67,9 @@ public class AnimationFrameLayout extends FrameLayout implements GestureDetector
         super(context, attrs);
         frameLayout = this;
         mGestureDetector = new GestureDetector(context, this);
+        // Android 中获取系统所认为的最小滑动距离 TouchSlop
+        int touchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+        Log.e(TAG, "系统默认最小距离 = " + touchSlop);
     }
 
     public void setFinishListener(FinishListener finishListener) {
@@ -83,7 +85,7 @@ public class AnimationFrameLayout extends FrameLayout implements GestureDetector
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
             Log.e(TAG, "放开");
             isHorizontal = false;
-            isUp = false;
+            isScroll = false;
             if (currentStatus != STATUS_MOVING) {
                 return super.onTouchEvent(event);
             }
@@ -182,6 +184,7 @@ public class AnimationFrameLayout extends FrameLayout implements GestureDetector
         //viewpager2 或者 RecyclerView(水平) 不在切换中，并且手指往下滑动，开始缩放
 //        if (deltaY > DRAG_GAP_PX || currentStatus == STATUS_MOVING) {
         if (interceptMoveEvent(deltaX, deltaY) && !isHorizontal) {
+//        if (!isHorizontal) {
             mExitScalingRef = mExitScalingRef - moveY / viewHeight;
             parent.setTranslationX(moveX);
             parent.setTranslationY(moveY);
@@ -284,20 +287,28 @@ public class AnimationFrameLayout extends FrameLayout implements GestureDetector
         if (currentStatus == STATUS_RESETTING) {
             return false;
         }
-        if (deltaX < DRAG_GAP_PX && deltaY < DRAG_GAP_PX) {
-            return false;
-        }
-//        boolean interceptX = deltaX > 0 && Math.abs(deltaX) >= Math.abs(deltaY);
-        boolean interceptY = deltaY > 0 && Math.abs(deltaY) >= Math.abs(deltaX);
+//        if (deltaX < DRAG_GAP_PX && deltaY < DRAG_GAP_PX) {
+//            return false;
+//        }
+        boolean interceptX = Math.abs(deltaX) >= Math.abs(deltaY);
+//        boolean interceptY = deltaY > 0 && Math.abs(deltaY) >= Math.abs(deltaX);
+        boolean interceptY = deltaY > ViewConfiguration.get(getContext()).getScaledTouchSlop();
+        boolean distenY = Math.abs(deltaY) > 0;
 
-        if (!interceptY && !isUp) {
-            isHorizontal = true;
-            isUp = true;
+        if (!interceptY) {
+            if (!isScroll) {
+                isHorizontal = true;
+            }
+        } else {
+            isScroll = true;
         }
 
 //        return interceptX || interceptY;
-        return interceptY;
+        return distenY;
     }
+
+    // 是否随着手指头开始滑动
+    boolean isScroll;
 
     private int dp2px(Context context, float dp) {
         if (context == null) {
