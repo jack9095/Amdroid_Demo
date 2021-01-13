@@ -31,9 +31,18 @@ class ShareElementsActivity : AppCompatActivity() {
         val url = intent.getStringExtra("url")
         Glide.with(this).load(url).into(imageView)
         viewBinding.frameLayout.setFinishListener(object : AnimationFrameLayout.FinishListener {
-            override fun finish() {
+            override fun gofinish() {
+//                finish()
+//                finishAffinity()
+//                finishAfterTransition()
                 onBackPressed()
+//                onBackPressedDispatcher
             }
         })
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+//        viewBinding.frameLayout.setBackgroundColor(Color.parseColor("#00000000"))
     }
 }

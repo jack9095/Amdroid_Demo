@@ -59,7 +59,7 @@ class AnimationFrameLayout(context: Context, attrs: AttributeSet) : FrameLayout(
     private var deltaY = 0 // 垂直移动的距离
 
     interface FinishListener {
-        fun finish()
+        fun gofinish()
     }
 
     fun setFinishListener(finishListener: FinishListener?) {
@@ -75,8 +75,9 @@ class AnimationFrameLayout(context: Context, attrs: AttributeSet) : FrameLayout(
                 isScroll = false
                 if (currentStatus != STATUS_MOVING) return super.onTouchEvent(event)
                 if (mExitScalingRef < DEFAULT_EXIT_SCALE) {
+//                    setBackgroundColor(Color.parseColor("#00000000"))
                     //缩小到一定的程度，将其关闭
-                    finishListener?.finish()
+                    finishListener?.gofinish()
                 } else {
                     //如果拉动距离不到某个角度，则将其动画返回原位置
                     ValueAnimator.ofFloat(0f, 1f).apply {
