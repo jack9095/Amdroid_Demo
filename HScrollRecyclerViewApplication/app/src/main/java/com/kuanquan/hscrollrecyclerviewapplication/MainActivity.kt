@@ -46,7 +46,8 @@ class MainActivity : AppCompatActivity() {
                 add(TestBean("$i"))
             }
 
-            add(TestBean(type = TestBean.TYPE_SCROLL))
+            add(TestBean(id = "100", type = TestBean.TYPE_SCROLL))
+            add(TestBean(id = "101", type = TestBean.TYPE_SCROLL))
 
             for (i in 0..9) {
                 add(TestBean("$i"))

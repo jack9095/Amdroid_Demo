@@ -6,25 +6,79 @@
 
     <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:fadingEdge="none"
+        android:overScrollMode="never"
+        android:scrollbars="none">
 
         <RelativeLayout
             android:descendantFocusability="blocksDescendants"
             android:layout_width="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/title_tv"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:layout_height="30dp"
+                android:text="热门话题"
+                android:textStyle="bold"
+                 />
+
+            <TextView
+                android:id="@+id/title_tv_right"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:layout_marginEnd="10dp"
+                android:layout_alignEnd="@+id/leftRecyclerView"
+                android:layout_height="30dp"
+                android:text="热门话题右侧"
+                android:textStyle="bold"
+                />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/leftRecyclerView"
-                android:layout_width="204dp"
+                android:layout_below="@+id/title_tv"
+                android:background="#0000fe"
+                android:layout_width="240dp"
                 android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/title_tv_follow"
+                android:layout_alignStart="@+id/rightRecyclerView"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:layout_height="30dp"
+                android:text="关注话题"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:id="@+id/title_tv_follow_right"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:layout_marginEnd="10dp"
+                android:layout_alignEnd="@+id/rightRecyclerView"
+                android:layout_height="30dp"
+                android:text="关注话题右侧"
+                android:textStyle="bold"
+                />
+
+<!--            <androidx.constraintlayout.widget.Group-->
+<!--                android:id="@+id/group"-->
+<!--                app:constraint_referenced_ids="title_tv_follow,title_tv_follow_right"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"/>-->
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rightRecyclerView"
+                android:layout_below="@+id/title_tv_follow"
+                android:background="#ff0000"
                 android:layout_toEndOf="@+id/leftRecyclerView"
                 android:layout_marginStart="10dp"
-                android:layout_width="204dp"
+                android:layout_width="240dp"
                 android:layout_height="wrap_content"/>
 
         </RelativeLayout>
