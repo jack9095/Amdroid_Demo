@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="150dp">
 
-    <HorizontalScrollView
+    <com.kuanquan.hscrollrecyclerviewapplication.CustomHorizontalScrollView
+        android:id="@+id/horizontalScrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fadingEdge="none"
@@ -17,6 +18,15 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:layout_height="wrap_content">
+
+            <View
+                android:layout_alignTop="@+id/title_tv"
+                android:layout_alignBottom="@+id/leftRecyclerView"
+                android:layout_alignStart="@+id/leftRecyclerView"
+                android:layout_alignEnd="@+id/leftRecyclerView"
+                android:background="#0000fe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
             <TextView
                 android:id="@+id/title_tv"
@@ -41,7 +51,6 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/leftRecyclerView"
                 android:layout_below="@+id/title_tv"
-                android:background="#0000fe"
                 android:layout_width="240dp"
                 android:layout_height="wrap_content"/>
 
@@ -83,7 +92,7 @@
 
         </RelativeLayout>
 
-    </HorizontalScrollView>
+    </com.kuanquan.hscrollrecyclerviewapplication.CustomHorizontalScrollView>
 
 </LinearLayout>
 

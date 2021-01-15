@@ -40,23 +40,12 @@ class MainActivity : AppCompatActivity() {
             "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2482360593,2739674846&fm=26&gp=0.jpg"
     )
 
-    val list : MutableList<TestBean> by lazy {
-        mutableListOf<TestBean>().apply {
-            for (i in 0..2) {
-                add(TestBean("$i"))
-            }
-
-            add(TestBean(id = "100", type = TestBean.TYPE_SCROLL))
-            add(TestBean(id = "101", type = TestBean.TYPE_SCROLL))
-
-            for (i in 0..9) {
-                add(TestBean("$i"))
+    val list : MutableList<String> by lazy {
+        mutableListOf<String>().apply {
+            for (i in 0..9){
+                add("$i")
             }
         }
-    }
-
-    private val testAdapter : TestAdapter by lazy {
-        TestAdapter()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,14 +57,17 @@ class MainActivity : AppCompatActivity() {
 
         viewBinding.recyclerView.run {
             layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = testAdapter
-//            adapter = ImageAdapter(imageUrls)
+            adapter = ImageAdapter(imageUrls)
         }
-        testAdapter.setList(list)
 
-        // 必须设置Diff Callback
-//        testAdapter.setDiffCallback(DiffDemoCallback())
-//        testAdapter.setDiffNewData(list)
+
+        // 配合 fragment 使用
+        viewBinding.viewPager?.run {
+//            adapter = AdapterFragmentPager(this@MainActivity)
+//            offscreenPageLimit = 3
+            adapter = AdapterFragmentPagerOther(this@MainActivity, list)
+//            isUserInputEnabled = true
+        }
     }
 
     internal class ImageAdapter(private val items: List<String>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

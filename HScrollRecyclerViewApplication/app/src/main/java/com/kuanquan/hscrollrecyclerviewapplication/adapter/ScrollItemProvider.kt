@@ -3,9 +3,12 @@ package com.kuanquan.hscrollrecyclerviewapplication.adapter
 import android.app.Activity
 import android.content.Context
 import android.util.DisplayMetrics
+import android.util.Log
 import android.util.TypedValue
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.HorizontalScrollView
 import android.widget.RelativeLayout
 import androidx.constraintlayout.widget.Group
 import androidx.recyclerview.widget.GridLayoutManager
@@ -21,10 +24,32 @@ class ScrollItemProvider : BaseItemProvider<TestBean>() {
     override val itemViewType: Int =
         TestBean.TYPE_SCROLL
 
-    override val layoutId: Int =
-        R.layout.item_scroll_layout
+    override val layoutId: Int = R.layout.item_scroll_layout
 
     override fun convert(helper: BaseViewHolder, item: TestBean) {
+        val horizontalScrollView = helper.getView<HorizontalScrollView>(R.id.horizontalScrollView)
+
+//        horizontalScrollView.setOnTouchListener(object : View.OnTouchListener {
+//            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+//                when(event?.action){
+//                    MotionEvent.ACTION_DOWN -> {
+//
+//                    }
+//                    MotionEvent.ACTION_MOVE -> {
+//                        val firstView = (v as HorizontalScrollView).getChildAt(0)
+//                        if (firstView.measuredWidth <= v.getScrollX() + v.getWidth()) {
+//                            // 滑动到最右端
+//                            Log.e("ScrollItemProvider", "滑动到最右端")
+//                        } else if (v.getScrollX() <= 10) {
+//                            // 滑动到最左端
+//                            Log.e("ScrollItemProvider", "滑动到最左端")
+//                        }
+//                    }
+//                }
+//                return false
+//            }
+//        })
+
         val lrv = helper.getView<RecyclerView>(R.id.leftRecyclerView)
         val rrv = helper.getView<RecyclerView>(R.id.rightRecyclerView)
 
