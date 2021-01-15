@@ -71,7 +71,7 @@ class ScrollItemProvider : BaseItemProvider<TestBean>() {
         }
 
         lrv.layoutParams = lp
-        lrv.adapter = ChildAdapter(getData())
+        lrv.adapter = ChildAdapter(getData1())
 
         rrv.run {
             layoutManager = LinearLayoutManager(context)
@@ -79,6 +79,13 @@ class ScrollItemProvider : BaseItemProvider<TestBean>() {
         }
     }
 
+    private fun getData1(): MutableList<String>{
+        val list = mutableListOf<String>()
+        for (i in 0..1){
+            list.add("西瓜小视频$i")
+        }
+        return list
+    }
 
     private fun getData(): MutableList<String>{
         val list = mutableListOf<String>()
