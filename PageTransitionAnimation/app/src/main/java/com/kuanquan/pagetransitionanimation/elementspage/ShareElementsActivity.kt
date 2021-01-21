@@ -5,12 +5,14 @@ import android.graphics.Color
 import android.os.Bundle
 import android.transition.Fade
 import android.transition.Transition
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.Group
 import com.bumptech.glide.Glide
 import com.kuanquan.pagetransitionanimation.AnimationFrameLayout
 import com.kuanquan.pagetransitionanimation.R
@@ -46,6 +48,7 @@ class ShareElementsActivity : AppCompatActivity() {
         val view = LayoutInflater.from(this).inflate(R.layout.item_linear_layout, viewBinding.frameLayout)
         view.setBackgroundColor(Color.TRANSPARENT)
         rootView = view.rootView.findViewById<LinearLayout>(R.id.parent)
+//        rootView.setBackgroundColor(Color.TRANSPARENT)
 
 
 
@@ -62,7 +65,16 @@ class ShareElementsActivity : AppCompatActivity() {
             }
 
             override fun setBackgroundColor(color: Int) {
+                Log.e("颜色 -> ", "$color")
                 rootView.setBackgroundColor(color)
+            }
+
+            override fun setRestitution(isRestitution: Boolean) {
+                if (isRestitution) {
+                    view.findViewById<LinearLayout>(R.id.linearLayout).visibility = View.VISIBLE
+                } else {
+                    view.findViewById<LinearLayout>(R.id.linearLayout).visibility = View.INVISIBLE
+                }
             }
         })
 
@@ -102,7 +114,7 @@ class ShareElementsActivity : AppCompatActivity() {
             override fun onTransitionEnd(transition: Transition?) {
                 // 动画完成之后 处理你自己的逻辑
                 transition?.removeListener(this)
-                rootView.setBackgroundColor(Color.WHITE)
+//                rootView.setBackgroundColor(Color.WHITE)
             }
 
             override fun onTransitionResume(transition: Transition?) {

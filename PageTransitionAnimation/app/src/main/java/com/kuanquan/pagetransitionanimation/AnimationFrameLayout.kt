@@ -19,7 +19,8 @@ class AnimationFrameLayout(context: Context, attrs: AttributeSet) : FrameLayout(
         const val STATUS_MOVING = 1 // 滑动状态
         const val STATUS_RESETTING = 2 // 返回中状态
         const val DEFAULT_EXIT_SCALE = 0.7f // 退出进度
-        const val DEFAULT_TRANSPARENCY = 0.8f // 默认透明度
+//        const val DEFAULT_TRANSPARENCY = 0.8f // 默认透明度
+        const val DEFAULT_TRANSPARENCY_OTHER = 0.0f // 默认子View透明度
         const val DEFAULT_TOUCH_VALUE = 1f // 默认触摸退出
         const val DEFAULT_MAX_TOUCH_VALUE = 2 // 最大触摸退出
         const val DEFAULT_ANIMATOR_DURATION = 500L // 默认动画执行时长
@@ -60,7 +61,13 @@ class AnimationFrameLayout(context: Context, attrs: AttributeSet) : FrameLayout(
 
     interface FinishListener {
         fun gofinish()
+
         fun setBackgroundColor(color: Int)
+
+        /**
+         * isRestitution 是否还原
+         */
+        fun setRestitution(isRestitution: Boolean)
     }
 
     fun setFinishListener(finishListener: FinishListener?) {
@@ -76,12 +83,11 @@ class AnimationFrameLayout(context: Context, attrs: AttributeSet) : FrameLayout(
                 isScroll = false
                 if (currentStatus != STATUS_MOVING) return super.onTouchEvent(event)
                 if (mExitScalingRef < DEFAULT_EXIT_SCALE) {
-//                    setBackgroundColor(Color.parseColor("#00000000"))
-                    finishListener?.setBackgroundColor(Color.TRANSPARENT)
-                    //缩小到一定的程度，将其关闭
+                    // 缩小到一定的程度，将其关闭
                     finishListener?.gofinish()
                 } else {
-                    //如果拉动距离不到某个角度，则将其动画返回原位置
+                    // 如果拉动距离不到某个角度，则将其动画返回原位置
+                    isActionUp = true
                     ValueAnimator.ofFloat(0f, 1f).apply {
                         duration = DEFAULT_ANIMATOR_DURATION
                         addUpdateListener { animation ->
@@ -91,9 +97,31 @@ class AnimationFrameLayout(context: Context, attrs: AttributeSet) : FrameLayout(
                                 translationY += (0 - translationY) * p
                                 scaleX += (1 - scaleX) * p
                                 scaleY += (1 - scaleY) * p
-//                                finishListener?.setBackgroundColor(Color.WHITE)
                             }
+                            finishListener?.setBackgroundColor(mColorEvaluator.evaluate(p, 0x00000000, -0x1000000))
                         }
+                        addListener(object : Animator.AnimatorListener {
+                            override fun onAnimationRepeat(animation: Animator?) {
+                            }
+
+                            override fun onAnimationEnd(animation: Animator?) {
+                                isActionUp = false
+                                finishListener?.setRestitution(true)
+                            }
+
+                            override fun onAnimationEnd(animation: Animator?, isReverse: Boolean) {
+                                super.onAnimationEnd(animation, isReverse)
+                                finishListener?.setRestitution(true)
+                            }
+
+                            override fun onAnimationCancel(animation: Animator?) {
+                                finishListener?.setRestitution(true)
+                            }
+
+                            override fun onAnimationStart(animation: Animator?) {
+                            }
+
+                        })
                         start()
                     }
                 }
@@ -125,7 +153,9 @@ class AnimationFrameLayout(context: Context, attrs: AttributeSet) : FrameLayout(
 
     override fun onShowPress(e: MotionEvent?) {}
     override fun onSingleTapUp(e: MotionEvent?): Boolean = false
-    override fun onDown(e: MotionEvent?): Boolean = true
+    override fun onDown(e: MotionEvent?): Boolean {
+        return true
+    }
     override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean = false
     override fun onLongPress(e: MotionEvent?) {}
 
@@ -135,8 +165,12 @@ class AnimationFrameLayout(context: Context, attrs: AttributeSet) : FrameLayout(
         val moveX = e1?.x?.let { e2?.x?.minus(it) } ?: 0f
         val moveY = e1?.y?.let { e2?.y?.minus(it) } ?: 0f
         mExitScalingRef = DEFAULT_TOUCH_VALUE
+
         //viewpager2 或者 RecyclerView(水平) 不在切换中，并且手指往下滑动，开始缩放
         if (moveEvent(deltaY.toFloat()) && !isHorizontal) {
+
+            finishListener?.setRestitution(false)
+
             mExitScalingRef -= moveY / viewHeight
             parent?.run {
                 translationX = moveX
@@ -147,11 +181,22 @@ class AnimationFrameLayout(context: Context, attrs: AttributeSet) : FrameLayout(
             currentStatus = STATUS_MOVING
             val mExitScalingColor = if (mExitScalingRef > DEFAULT_TOUCH_VALUE) {
                 DEFAULT_MAX_TOUCH_VALUE - mExitScalingRef
+
             } else mExitScalingRef
-            val colorValue = mColorEvaluator.evaluate(mExitScalingColor.coerceAtMost(DEFAULT_TRANSPARENCY), 0x00000000, -0x1000000)
-//            finishListener?.setBackgroundColor(colorValue)
-            setBackgroundColor(colorValue)
+
+            val colorValue_other = mColorEvaluator.evaluate(mExitScalingColor.coerceAtMost(DEFAULT_TRANSPARENCY_OTHER), 0x00000000, -0x1000000)
+            val colorValue_other_f = mColorEvaluator.evaluate(mExitScalingColor, 0x00000000, -0x1000000)
+//            val colorValue = mColorEvaluator.evaluate(mExitScalingColor.coerceAtMost(DEFAULT_TRANSPARENCY), 0x00000000, -0x1000000)
+            if (isActionUp) {
+                finishListener?.setBackgroundColor(colorValue_other_f)
+            } else {
+                finishListener?.setBackgroundColor(colorValue_other)
+            }
+            setBackgroundColor(colorValue_other_f)
         }
         return false
     }
+
+    private var isActionUp = false // 是否放手返回原来位置
+
 }
