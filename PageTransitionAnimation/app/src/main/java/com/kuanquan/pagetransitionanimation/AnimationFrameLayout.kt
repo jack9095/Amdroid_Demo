@@ -60,6 +60,7 @@ class AnimationFrameLayout(context: Context, attrs: AttributeSet) : FrameLayout(
 
     interface FinishListener {
         fun gofinish()
+        fun setBackgroundColor(color: Int)
     }
 
     fun setFinishListener(finishListener: FinishListener?) {
@@ -76,6 +77,7 @@ class AnimationFrameLayout(context: Context, attrs: AttributeSet) : FrameLayout(
                 if (currentStatus != STATUS_MOVING) return super.onTouchEvent(event)
                 if (mExitScalingRef < DEFAULT_EXIT_SCALE) {
 //                    setBackgroundColor(Color.parseColor("#00000000"))
+                    finishListener?.setBackgroundColor(Color.TRANSPARENT)
                     //缩小到一定的程度，将其关闭
                     finishListener?.gofinish()
                 } else {
@@ -89,6 +91,7 @@ class AnimationFrameLayout(context: Context, attrs: AttributeSet) : FrameLayout(
                                 translationY += (0 - translationY) * p
                                 scaleX += (1 - scaleX) * p
                                 scaleY += (1 - scaleY) * p
+//                                finishListener?.setBackgroundColor(Color.WHITE)
                             }
                         }
                         start()
@@ -145,7 +148,9 @@ class AnimationFrameLayout(context: Context, attrs: AttributeSet) : FrameLayout(
             val mExitScalingColor = if (mExitScalingRef > DEFAULT_TOUCH_VALUE) {
                 DEFAULT_MAX_TOUCH_VALUE - mExitScalingRef
             } else mExitScalingRef
-            setBackgroundColor(mColorEvaluator.evaluate(mExitScalingColor.coerceAtMost(DEFAULT_TRANSPARENCY), 0x00000000, -0x1000000))
+            val colorValue = mColorEvaluator.evaluate(mExitScalingColor.coerceAtMost(DEFAULT_TRANSPARENCY), 0x00000000, -0x1000000)
+//            finishListener?.setBackgroundColor(colorValue)
+            setBackgroundColor(colorValue)
         }
         return false
     }

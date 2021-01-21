@@ -46,7 +46,10 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, ShareElementsActivity.class);
 //                Intent intent = new Intent(MainActivity.this, DetailActivity2.class);
                 intent.putExtra("url",datas.get(position));
-                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, v, "sharedView").toBundle());
+//                Bundle options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle();
+                Bundle options =ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, v, "sharedView").toBundle();
+                startActivity(intent,options);
+//                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, v, "sharedView").toBundle());
 //                startActivity(intent);
             }
         });
