@@ -98,6 +98,9 @@ class AnimationFrameLayout(context: Context, attrs: AttributeSet) : FrameLayout(
                                 scaleX += (1 - scaleX) * p
                                 scaleY += (1 - scaleY) * p
                             }
+                            if (p > 0.6) {
+                                finishListener?.setRestitution(true)
+                            }
                             finishListener?.setBackgroundColor(mColorEvaluator.evaluate(p, 0x00000000, -0x1000000))
                         }
                         addListener(object : Animator.AnimatorListener {
@@ -106,11 +109,6 @@ class AnimationFrameLayout(context: Context, attrs: AttributeSet) : FrameLayout(
 
                             override fun onAnimationEnd(animation: Animator?) {
                                 isActionUp = false
-                                finishListener?.setRestitution(true)
-                            }
-
-                            override fun onAnimationEnd(animation: Animator?, isReverse: Boolean) {
-                                super.onAnimationEnd(animation, isReverse)
                                 finishListener?.setRestitution(true)
                             }
 
