@@ -58,6 +58,7 @@ class AnimationFrameLayout(context: Context, attrs: AttributeSet) : FrameLayout(
     private var currentStatus = STATUS_NORMAL
     private var mDownY = 0f
     private var deltaY = 0 // 垂直移动的距离
+    private var isActionUp = false // 是否放手返回原来位置
 
     interface FinishListener {
         fun gofinish()
@@ -194,7 +195,5 @@ class AnimationFrameLayout(context: Context, attrs: AttributeSet) : FrameLayout(
         }
         return false
     }
-
-    private var isActionUp = false // 是否放手返回原来位置
 
 }
