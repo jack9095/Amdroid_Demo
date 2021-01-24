@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
+import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
 import kotlin.math.abs
@@ -174,6 +175,7 @@ class AnimationFrameLayout(context: Context, attrs: AttributeSet) : FrameLayout(
             parent?.run {
                 translationX = moveX
                 translationY = moveY
+                Log.e("mExitScalingRef ->","$mExitScalingRef")
                 scaleX = mExitScalingRef
                 scaleY = mExitScalingRef
             }

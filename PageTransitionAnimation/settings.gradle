@@ -1,2 +1,5 @@
+include ':touchimageview'
+include ':imageviewer'
+include ':drawimageview'
 include ':app'
 rootProject.name = "PageTransitionAnimation"

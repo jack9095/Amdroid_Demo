@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -9,6 +9,16 @@
         android:layout_height="200dp"
         android:layout_margin="10dp"
         android:scaleType="fitXY"
-        android:transitionName="sharedView" />
+         />
+    <ImageView
+        android:id="@+id/imag_iv"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_margin="10dp"
+        android:scaleType="fitXY"
+        />
+<!--    android:transitionName="sharedView"-->
+<!--    加上共享元素动画会有偏差，会闪动-->
+<!--    android:scaleType="centerCrop"-->
 
-</LinearLayout>
+</RelativeLayout>

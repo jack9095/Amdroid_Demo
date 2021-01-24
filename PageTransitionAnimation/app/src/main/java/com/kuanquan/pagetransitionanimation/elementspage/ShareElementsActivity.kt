@@ -1,29 +1,23 @@
 package com.kuanquan.pagetransitionanimation.elementspage
 
-import android.R.transition
-import android.graphics.Color
+import android.annotation.TargetApi
+import android.app.Activity
+import android.app.SharedElementCallback
+import android.content.Intent
 import android.os.Bundle
-import android.transition.Fade
-import android.transition.Transition
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
-import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.Group
-import com.bumptech.glide.Glide
-import com.kuanquan.pagetransitionanimation.AnimationFrameLayout
-import com.kuanquan.pagetransitionanimation.R
-import com.kuanquan.pagetransitionanimation.SineInterpolator
-import com.kuanquan.pagetransitionanimation.TransitionCallBack
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 import com.kuanquan.pagetransitionanimation.databinding.ActivityShareElementsBinding
+import com.kuanquan.pagetransitionanimation.viewpager.PhotoViewerFragment
 
 
 class ShareElementsActivity : AppCompatActivity() {
     lateinit var viewBinding: ActivityShareElementsBinding
-    lateinit var rootView: View
     override fun onCreate(savedInstanceState: Bundle?) {
         window.requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
         window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
@@ -31,108 +25,62 @@ class ShareElementsActivity : AppCompatActivity() {
 
         viewBinding = ActivityShareElementsBinding.inflate(LayoutInflater.from(this))
         setContentView(viewBinding.root)
-//        if (Build.VERSION.SDK_INT >= 23) {
-//            val decorView = window.decorView
-//            window.statusBarColor = Color.TRANSPARENT
-//            val option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-//            decorView.systemUiVisibility = option
-//        }
 
-//        val contentView = window?.decorView?.findViewById<View>(android.R.id.content)
-//        contentView?.setBackgroundColor(Color.TRANSPARENT)
-//
-//        val decorView = window.decorView
-//        decorView.setBackgroundColor(Color.TRANSPARENT)
+        supportPostponeEnterTransition() //延缓执行 然后在fragment里面的控件加载完成后start
 
-        //将内部的布局 item_linear_layout，放入 AnimationFrameLayout 中
-        val view = LayoutInflater.from(this).inflate(R.layout.item_linear_layout, viewBinding.frameLayout)
-        view.setBackgroundColor(Color.TRANSPARENT)
-        rootView = view.rootView.findViewById<LinearLayout>(R.id.parent)
-//        rootView.setBackgroundColor(Color.TRANSPARENT)
+        val urls = intent.getSerializableExtra("url") as? ArrayList<String>
+
+        val position = intent.getIntExtra("index",0)
+
+        val mInnerAdapter = InnerAdapter(supportFragmentManager, urls)
+
+        viewBinding.viewpager.adapter = mInnerAdapter
+
+        viewBinding.viewpager.currentItem = position
 
 
-
-        val imageView = view.findViewById<ImageView>(R.id.image)
-        val url = intent.getStringExtra("url")
-        Glide.with(this).load(url).into(imageView)
-        viewBinding.frameLayout.setFinishListener(object : AnimationFrameLayout.FinishListener {
-            override fun gofinish() {
-//                finish()
-//                finishAffinity()
-//                finishAfterTransition()
-                onBackPressed()
-//                onBackPressedDispatcher
-            }
-
-            override fun setBackgroundColor(color: Int) {
-                Log.e("颜色 -> ", "$color")
-                rootView.setBackgroundColor(color)
-            }
-
-            override fun setRestitution(isRestitution: Boolean) {
-                if (isRestitution) {
-                    view.findViewById<LinearLayout>(R.id.linearLayout).visibility = View.VISIBLE
-                } else {
-                    view.findViewById<LinearLayout>(R.id.linearLayout).visibility = View.INVISIBLE
-                }
+        //这个可以看做个管道  每次进入和退出的时候都会进行调用  进入的时候获取到前面传来的共享元素的信息
+        //退出的时候 把这些信息传递给前面的activity
+        //同时向sharedElements里面put view,跟对view添加transitionname作用一样
+        setEnterSharedElementCallback(object : SharedElementCallback() {
+            override fun onMapSharedElements(names: List<String>, sharedElements: MutableMap<String, View>) {
+                val url: String = urls?.get(viewBinding.viewpager.currentItem) ?: ""
+                val fragment: PhotoViewerFragment = mInnerAdapter.instantiateItem(viewBinding.viewpager, viewBinding.viewpager.currentItem) as PhotoViewerFragment
+                sharedElements.clear()
+                sharedElements[url] = fragment.getSharedElement()
             }
         })
+    }
 
-//        分解效果
-//        window.enterTransition = Explode().setDuration(0)
-//        window.exitTransition = Explode().setDuration(0)
-
-//        滑动效果
-//        window.enterTransition = Slide().setDuration(0)
-//        window.exitTransition = Slide().setDuration(0)
-
-//        val transition = Fade()
-//        transition.startDelay = 0L
-//        transition.duration = 80
-//        transition.interpolator = SineInterpolator()
-
-//        淡入淡出效果
-//        window.enterTransition = transition
-//        window.exitTransition = transition
-
-
-        // 回掉
-//        setExitSharedElementCallback(TransitionCallBack())
-
-//        addTransitionListener()
+    @TargetApi(22)
+    override fun supportFinishAfterTransition() {
+        val data = Intent()
+        data.putExtra("index", viewBinding.viewpager.currentItem)
+        setResult(Activity.RESULT_OK, data)
+        super.supportFinishAfterTransition()
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-//        overridePendingTransition(0,0)
-//        viewBinding.frameLayout.setBackgroundColor(Color.parseColor("#00000000"))
+//        super.onBackPressed()
+        val data = Intent()
+        data.putExtra("index", viewBinding.viewpager.currentItem)
+        setResult(Activity.RESULT_OK, data)
+        super.supportFinishAfterTransition()
     }
 
-    private fun addTransitionListener() {
-        val transition = window.sharedElementEnterTransition
-        transition?.addListener(object : Transition.TransitionListener{
-            override fun onTransitionEnd(transition: Transition?) {
-                // 动画完成之后 处理你自己的逻辑
-                transition?.removeListener(this)
-//                rootView.setBackgroundColor(Color.WHITE)
-            }
+    private class InnerAdapter(fm: FragmentManager, val url: ArrayList<String>?) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+        override fun getItem(position: Int): Fragment {
+                val fragment = PhotoViewerFragment()
+                val bundle = Bundle()
+                bundle.putInt("key", position)
+                bundle.putSerializable("data", url)
+                fragment.arguments = bundle
+                return fragment
+        }
 
-            override fun onTransitionResume(transition: Transition?) {
-                TODO("Not yet implemented")
-            }
+        override fun getCount(): Int {
+            return 10
+        }
 
-            override fun onTransitionPause(transition: Transition?) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onTransitionCancel(transition: Transition?) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onTransitionStart(transition: Transition?) {
-//                rootView.setBackgroundColor(Color.TRANSPARENT)
-            }
-
-        })
     }
 }

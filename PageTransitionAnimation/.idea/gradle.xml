@@ -12,6 +12,9 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/drawimageview" />
+            <option value="$PROJECT_DIR$/imageviewer" />
+            <option value="$PROJECT_DIR$/touchimageview" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

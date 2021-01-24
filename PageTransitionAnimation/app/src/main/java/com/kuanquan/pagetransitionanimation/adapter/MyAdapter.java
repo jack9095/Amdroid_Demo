@@ -40,6 +40,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.myViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull final myViewHolder myViewHolder, int i) {
         Glide.with(context).load(datas.get(i)).into(myViewHolder.imageView);
+        Glide.with(context).load(datas.get(i)).into(myViewHolder.imageViewcopy);
         myViewHolder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,10 +60,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.myViewHolder> {
 
     static class myViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
+        ImageView imageViewcopy;
 
         myViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.image);
+            imageViewcopy = itemView.findViewById(R.id.imag_iv);
         }
     }
 
