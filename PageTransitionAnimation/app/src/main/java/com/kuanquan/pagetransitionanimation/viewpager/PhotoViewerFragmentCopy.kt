@@ -10,7 +10,7 @@ import com.hwangjr.rxbus.RxBus
 import com.kuanquan.pagetransitionanimation.AnimationFrameLayout
 import com.kuanquan.pagetransitionanimation.R
 
-class PhotoViewerFragment: BaseFragment() {
+class PhotoViewerFragmentCopy: BaseFragment() {
     override val layoutId: Int
         get() = R.layout.item_linear_layout
 
@@ -37,6 +37,10 @@ class PhotoViewerFragment: BaseFragment() {
                 if (isRestitution) {
 //                    view.findViewById<LinearLayout>(R.id.linearLayout).visibility = View.VISIBLE
                 } else {
+
+                    //拖拽开始。可以在此额外处理一些逻辑
+                    //此处通知之前点击的view重新显示出来
+//                    RxBus.get().post("updateView", position)
 //                    view.findViewById<LinearLayout>(R.id.linearLayout).visibility = View.INVISIBLE
                 }
             }
@@ -58,6 +62,16 @@ class PhotoViewerFragment: BaseFragment() {
                 return true
             }
         })
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser) {
+//            activity?.postponeEnterTransition() //先停止
+//            imageView?.let { ViewCompat.setTransitionName(it, "sharedView") }
+        } else {
+//            imageView?.let { ViewCompat.setTransitionName(it, imageUrl) }
+        }
     }
 
 

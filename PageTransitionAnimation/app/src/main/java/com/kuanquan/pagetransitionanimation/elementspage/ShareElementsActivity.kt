@@ -26,6 +26,7 @@ class ShareElementsActivity : AppCompatActivity() {
         viewBinding = ActivityShareElementsBinding.inflate(LayoutInflater.from(this))
         setContentView(viewBinding.root)
 
+        // TODO 1. 共享元素动画
         supportPostponeEnterTransition() //延缓执行 然后在fragment里面的控件加载完成后start
 
         val urls = intent.getSerializableExtra("url") as? ArrayList<String>
@@ -39,6 +40,7 @@ class ShareElementsActivity : AppCompatActivity() {
         viewBinding.viewpager.currentItem = position
 
 
+        // TODO 2. 共享元素动画
         //这个可以看做个管道  每次进入和退出的时候都会进行调用  进入的时候获取到前面传来的共享元素的信息
         //退出的时候 把这些信息传递给前面的activity
         //同时向sharedElements里面put view,跟对view添加transitionname作用一样
@@ -65,6 +67,8 @@ class ShareElementsActivity : AppCompatActivity() {
         val data = Intent()
         data.putExtra("index", viewBinding.viewpager.currentItem)
         setResult(Activity.RESULT_OK, data)
+
+        // // TODO 3. 共享元素动画
         super.supportFinishAfterTransition()
     }
 

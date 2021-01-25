@@ -16,8 +16,8 @@
 //import com.bumptech.glide.Glide
 //import com.kuanquan.pagetransitionanimation.AnimationFrameLayout
 //import com.kuanquan.pagetransitionanimation.R
-//import com.kuanquan.pagetransitionanimation.SineInterpolator
-//import com.kuanquan.pagetransitionanimation.TransitionCallBack
+//import com.kuanquan.pagetransitionanimation.util.SineInterpolator
+//import com.kuanquan.pagetransitionanimation.util.TransitionCallBack
 //import com.kuanquan.pagetransitionanimation.databinding.ActivityShareElementsBinding
 //
 //

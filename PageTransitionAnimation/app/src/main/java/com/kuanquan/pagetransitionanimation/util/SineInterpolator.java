@@ -1,4 +1,4 @@
-package com.kuanquan.pagetransitionanimation;
+package com.kuanquan.pagetransitionanimation.util;
 
 import android.view.animation.Interpolator;
 
