@@ -83,6 +83,21 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+
+        getWindow().getDecorView().postDelayed(runnableTabLayout, 1000);
+    }
+
+    private final Runnable runnableTabLayout = new Runnable() {
+        @Override
+        public void run() {
+
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        getWindow().getDecorView().removeCallbacks(runnableTabLayout);
     }
 
     public void setAnimator(final GridLayoutManager lm) {
