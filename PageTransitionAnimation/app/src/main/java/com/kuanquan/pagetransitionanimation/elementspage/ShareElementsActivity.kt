@@ -5,10 +5,7 @@ import android.app.Activity
 import android.app.SharedElementCallback
 import android.content.Intent
 import android.os.Bundle
-import android.transition.ChangeBounds
-import android.transition.ChangeImageTransform
-import android.transition.Transition
-import android.transition.TransitionSet
+import android.transition.*
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +20,7 @@ import com.kuanquan.pagetransitionanimation.viewpager.PhotoViewerFragment
 
 class ShareElementsActivity : AppCompatActivity() {
     lateinit var viewBinding: ActivityShareElementsBinding
+    private var mInnerAdapter: InnerAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         window.requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
         window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
@@ -32,13 +30,13 @@ class ShareElementsActivity : AppCompatActivity() {
         setContentView(viewBinding.root)
 
         // TODO 1. 共享元素动画
-        supportPostponeEnterTransition() //延缓执行 然后在fragment里面的控件加载完成后start
+//        supportPostponeEnterTransition() //延缓执行 然后在fragment里面的控件加载完成后start
 
         val urls = intent.getSerializableExtra("url") as? ArrayList<String>
 
         val position = intent.getIntExtra("index",0)
 
-        val mInnerAdapter = InnerAdapter(supportFragmentManager, urls)
+        mInnerAdapter = InnerAdapter(supportFragmentManager, urls)
 
         viewBinding.viewpager.adapter = mInnerAdapter
 
@@ -96,11 +94,20 @@ class ShareElementsActivity : AppCompatActivity() {
         setEnterSharedElementCallback(object : SharedElementCallback() {
             override fun onMapSharedElements(names: List<String>, sharedElements: MutableMap<String, View>) {
                 val url: String = urls?.get(viewBinding.viewpager.currentItem) ?: ""
-                val fragment: PhotoViewerFragment = mInnerAdapter.instantiateItem(viewBinding.viewpager, viewBinding.viewpager.currentItem) as PhotoViewerFragment
+                val fragment: PhotoViewerFragment = mInnerAdapter?.instantiateItem(viewBinding.viewpager, viewBinding.viewpager.currentItem) as PhotoViewerFragment
                 sharedElements.clear()
                 sharedElements[url] = fragment.getSharedElement()
             }
         })
+
+//        setExitSharedElementCallback(object : SharedElementCallback() {
+//            override fun onMapSharedElements(names: List<String>, sharedElements: MutableMap<String, View>) {
+//                val url: String = urls?.get(viewBinding.viewpager.currentItem) ?: ""
+//                val fragment: PhotoViewerFragment = mInnerAdapter?.instantiateItem(viewBinding.viewpager, viewBinding.viewpager.currentItem) as PhotoViewerFragment
+//                sharedElements.clear()
+//                sharedElements[url] = fragment.getSharedElement()
+//            }
+//        })
 
         val mtransitionset = TransitionSet() //制定过度动画set
 
@@ -111,13 +118,13 @@ class ShareElementsActivity : AppCompatActivity() {
         mtransitionset.addTransition(ChangeImageTransform()) //图片移动，还可以是其他的，要什么效果自己添加
 //        mtransitionset.addTransition(null) //图片移动，还可以是其他的，要什么效果自己添加
 
-        mtransitionset.duration = 500
+//        mtransitionset.duration = 500
 
         //注意，下面是必须的
 //        getWindow().setEnterTransition(mtransitionset)
-        getWindow().setExitTransition(mtransitionset)
+//        getWindow().setExitTransition(mtransitionset)
 //        getWindow().setSharedElementEnterTransition(mtransitionset)
-        getWindow().setSharedElementExitTransition(mtransitionset)
+//        getWindow().setSharedElementExitTransition(mtransitionset)
 
 
 //        分解效果
@@ -181,5 +188,12 @@ class ShareElementsActivity : AppCompatActivity() {
             return 10
         }
 
+    }
+
+    override fun onPostResume() {
+        super.onPostResume()
+//        val fragment: PhotoViewerFragment = mInnerAdapter?.instantiateItem(viewBinding.viewpager, viewBinding.viewpager.currentItem) as PhotoViewerFragment
+//        fragment.imageView?.visibility = View.GONE
+//        fragment.image_other?.bringToFront()
     }
 }

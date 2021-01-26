@@ -8,14 +8,14 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_margin="10dp"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
          />
     <ImageView
         android:id="@+id/imag_iv"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_margin="10dp"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
         />
 <!--    android:transitionName="sharedView"-->
 <!--    加上共享元素动画会有偏差，会闪动-->

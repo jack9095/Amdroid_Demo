@@ -14,13 +14,26 @@ class PhotoViewerFragment: BaseFragment() {
         get() = R.layout.item_linear_layout
 
     var imageView: ImageView? = null
+    var image_other: ImageView? = null
     var imageUrl: String = null ?: ""
+
+    override fun onResume() {
+        super.onResume()
+//        imageView?.visibility = View.GONE
+
+        image_other?.postDelayed({
+            image_other?.visibility = View.VISIBLE
+            image_other?.bringToFront()
+        }, 1000)
+
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val mAnimationFrameLayout = view?.findViewById<AnimationFrameLayout>(R.id.frame_layout)
         val mRelativeLayout = view?.findViewById<RelativeLayout>(R.id.parent)
-        imageView = view?.findViewById<ImageView>(R.id.image)
+        imageView = view?.findViewById(R.id.image)
+        image_other = view?.findViewById(R.id.image_other)
         val position = arguments?.get("key") as Int
 
         mAnimationFrameLayout?.setFinishListener(object : AnimationFrameLayout.FinishListener {
@@ -47,15 +60,17 @@ class PhotoViewerFragment: BaseFragment() {
         if (imageView != null) {
             Glide.with(this).load(imageUrl).into(imageView!!)
         }
+        Glide.with(this).load(imageUrl).into(image_other!!)
+//        Glide.with(this).load("https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1819216937,2118754409&fm=26&gp=0.jpg").into(image_other!!)
 
         // TODO 1. 共享元素动画
-        view!!.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-            override fun onPreDraw(): Boolean {
-                imageView!!.viewTreeObserver.removeOnPreDrawListener(this)
-                activity!!.supportStartPostponedEnterTransition()
-                return true
-            }
-        })
+//        view!!.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+//            override fun onPreDraw(): Boolean {
+//                view!!.viewTreeObserver.removeOnPreDrawListener(this)
+//                activity!!.supportStartPostponedEnterTransition()
+//                return true
+//            }
+//        })
     }
 
 
