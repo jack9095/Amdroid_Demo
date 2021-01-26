@@ -6,7 +6,6 @@ import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import com.bumptech.glide.Glide
-import com.hwangjr.rxbus.RxBus
 import com.kuanquan.pagetransitionanimation.AnimationFrameLayout
 import com.kuanquan.pagetransitionanimation.R
 
@@ -15,7 +14,7 @@ class PhotoViewerFragment: BaseFragment() {
         get() = R.layout.item_linear_layout
 
     var imageView: ImageView? = null
-    var imageUrl: String? = null
+    var imageUrl: String = null ?: ""
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -42,10 +41,9 @@ class PhotoViewerFragment: BaseFragment() {
             }
         })
 
-
         val data = arguments?.get("data") as? ArrayList<String>?
 
-        imageUrl = data?.get(position)
+        imageUrl = data?.get(position) ?: ""
         if (imageView != null) {
             Glide.with(this).load(imageUrl).into(imageView!!)
         }
@@ -65,4 +63,5 @@ class PhotoViewerFragment: BaseFragment() {
     fun getSharedElement(): View {
         return imageView!!
     }
+
 }

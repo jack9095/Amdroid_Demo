@@ -1,4 +1,4 @@
-package com.kuanquan.pagetransitionanimation;
+package com.kuanquan.pagetransitionanimation.copy;
 
 import android.app.SharedElementCallback;
 import android.content.Intent;
@@ -7,22 +7,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.hwangjr.rxbus.RxBus;
-import com.kuanquan.pagetransitionanimation.adapter.MyAdapter;
-import com.kuanquan.pagetransitionanimation.elementspage.ShareElementsActivity;
-import com.kuanquan.pagetransitionanimation.util.DataUtil;
+import com.kuanquan.pagetransitionanimation.MainFragment;
+import com.kuanquan.pagetransitionanimation.R;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivityCopy extends AppCompatActivity {
 
     private List<String> datas;
 //    private MyAdapter myAdapter;
@@ -65,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 //        setAnimator(gridLayoutManager);
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= 22) {
             setExitSharedElementCallback(new SharedElementCallback() {
                 @Override
                 public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
@@ -86,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setAnimator(final GridLayoutManager lm) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= 22) {
             setExitSharedElementCallback(new SharedElementCallback() {
                 @Override
                 public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
