@@ -175,7 +175,7 @@ class AnimationFrameLayout(context: Context, attrs: AttributeSet) : FrameLayout(
             parent?.run {
                 translationX = moveX
                 translationY = moveY
-                Log.e("mExitScalingRef ->","$mExitScalingRef")
+//                Log.e("mExitScalingRef ->","$mExitScalingRef")
                 scaleX = mExitScalingRef
                 scaleY = mExitScalingRef
             }

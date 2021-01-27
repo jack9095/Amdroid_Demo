@@ -1,9 +1,11 @@
 package com.kuanquan.pagetransitionanimation;
 
+import android.annotation.SuppressLint;
 import android.app.SharedElementCallback;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -65,24 +67,24 @@ public class MainActivity extends AppCompatActivity {
 //        setAnimator(gridLayoutManager);
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setExitSharedElementCallback(new SharedElementCallback() {
-                @Override
-                public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
-                    if (bundle != null) {
-                        int position = bundle.getInt("index", 0);
-                        sharedElements.clear();
-                        names.clear();
-                        View itemView = mainFragment.gridLayoutManager.findViewByPosition(position);
-                        ImageView imageView = itemView.findViewById(R.id.image);
-                        names.add(itemView.getTransitionName());
-                        //注意这里第二个参数，如果防止是的条目的item则动画不自然。放置对应的imageView则完美
-                        sharedElements.put(mainFragment.datas.get(position), imageView);
-                        bundle = null;
-                    }
-                }
-            });
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            setExitSharedElementCallback(new SharedElementCallback() {
+//                @Override
+//                public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+//                    if (bundle != null) {
+//                        int position = bundle.getInt("index", 0);
+//                        sharedElements.clear();
+//                        names.clear();
+//                        View itemView = mainFragment.gridLayoutManager.findViewByPosition(position);
+//                        ImageView imageView = itemView.findViewById(R.id.image);
+//                        names.add(itemView.getTransitionName());
+//                        //注意这里第二个参数，如果防止是的条目的item则动画不自然。放置对应的imageView则完美
+//                        sharedElements.put(mainFragment.datas.get(position), imageView);
+//                        bundle = null;
+//                    }
+//                }
+//            });
+//        }
 
         getWindow().getDecorView().postDelayed(runnableTabLayout, 1000);
     }
@@ -100,52 +102,38 @@ public class MainActivity extends AppCompatActivity {
         getWindow().getDecorView().removeCallbacks(runnableTabLayout);
     }
 
-    public void setAnimator(final GridLayoutManager lm) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setExitSharedElementCallback(new SharedElementCallback() {
-                @Override
-                public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
-                    if (bundle != null) {
-                        try {
-                            int position = bundle.getInt("index", 0);
-                            sharedElements.clear();
-                            names.clear();
-                            View itemView = lm.findViewByPosition(position);
-                            ImageView imageView = itemView.findViewById(R.id.image);
-                            names.add(itemView.getTransitionName());
-                            //注意这里第二个参数，如果防止是的条目的item则动画不自然。放置对应的imageView则完美
-//                            sharedElements.put(datas.get(position), itemView);
-                            bundle = null;
-                        } catch (Exception e) {
+//    public void setAnimator(final GridLayoutManager lm) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            setExitSharedElementCallback(new SharedElementCallback() {
+//                @Override
+//                public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+//                    if (bundle != null) {
+//                        try {
+//                            int position = bundle.getInt("index", 0);
+//                            sharedElements.clear();
+//                            names.clear();
+//                            View itemView = lm.findViewByPosition(position);
+//                            ImageView imageView = itemView.findViewById(R.id.image);
+//                            names.add(itemView.getTransitionName());
+//                            //注意这里第二个参数，如果防止是的条目的item则动画不自然。放置对应的imageView则完美
+////                            sharedElements.put(datas.get(position), itemView);
+//                            bundle = null;
+//                        } catch (Exception e) {
+//
+//                        }
+//                    }
+//                }
+//            });
+//        }
+//    }
 
-                        }
-                    }
-                }
-            });
-        }
-    }
+//    private Bundle bundle;
 
-    private View shareView;
-    private String shareUrl;
-
-    public void setAnimatorFragment(String url, View view, List<String> lists) {
-        shareView = view;
-        shareUrl = url;
-        datas = lists;
-    }
-
-    private Bundle bundle;
-
-    // TODO 3. 共享元素动画
+    // TODO 3. 共享元素动画  这一步必须要放到 Activity 中做，其他的可以放到 fragment 中处理
     @Override
     public void onActivityReenter(int resultCode, Intent data) {
         super.onActivityReenter(resultCode, data);
-        bundle = new Bundle(data.getExtras());
+        Log.e("onActivityReenter", "requestCode = " + resultCode);
+        mainFragment.bundle = new Bundle(data.getExtras());
     }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        bundle = new Bundle(data.getExtras());
-//    }
 }

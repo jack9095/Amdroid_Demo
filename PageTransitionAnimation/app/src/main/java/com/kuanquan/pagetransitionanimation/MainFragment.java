@@ -1,10 +1,13 @@
 package com.kuanquan.pagetransitionanimation;
 
+import android.app.SharedElementCallback;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.transition.ChangeBounds;
 import android.transition.ChangeImageTransform;
 import android.transition.TransitionSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -21,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 public class MainFragment  extends BaseFragment {
 
@@ -50,12 +54,37 @@ public class MainFragment  extends BaseFragment {
                 intent.putExtra("url", (Serializable) datas);
                 intent.putExtra("index", position);
 
-                // TODO 1. 共享元素动画
+                // TODO 1. 共享元素动画  必备的步骤
                 Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), v, datas.get(position)).toBundle();
+//                startActivityForResult(intent,200,options);
+
+
                 startActivity(intent,options);
 //                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, v, "sharedView").toBundle());
             }
         });
+
+
+        // TODO 共享元素动画  必备的步骤
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getActivity().setExitSharedElementCallback(new SharedElementCallback() {
+                @Override
+                public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+                    if (bundle != null) {
+                        int position = bundle.getInt("index", 0);
+                        Log.e("onMapSharedElements", "position = " + position);
+                        sharedElements.clear();
+                        names.clear();
+                        View itemView = gridLayoutManager.findViewByPosition(position);
+                        ImageView imageView = itemView.findViewById(R.id.image);
+                        names.add(itemView.getTransitionName());
+                        //注意这里第二个参数，如果防止是的条目的item则动画不自然。放置对应的imageView则完美
+                        sharedElements.put(datas.get(position), imageView);
+                        bundle = null;
+                    }
+                }
+            });
+        }
 
 //        TransitionSet mtransitionset=new TransitionSet();//制定过度动画set
 //        mtransitionset.addTransition(new ChangeBounds());//改变表框大小
@@ -73,4 +102,13 @@ public class MainFragment  extends BaseFragment {
 //        ImageView imageView = itemView.findViewById(R.id.image);
 //        mainActivity.setAnimatorFragment("", imageView, datas);
     }
+
+    public Bundle bundle;
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        Log.e("onActivityResult", "requestCode = " + requestCode);
+//        bundle = new Bundle(data.getExtras());
+//    }
+
 }

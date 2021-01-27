@@ -42,49 +42,49 @@ class ShareElementsActivity : AppCompatActivity() {
 
         viewBinding.viewpager.currentItem = position
 
-        window.sharedElementEnterTransition.addListener(object : Transition.TransitionListener {
-            override fun onTransitionStart(transition: Transition) {
-                Log.e("共享元素动画的实现 Enter -> ", "onTransitionStart")
-            }
+//        window.sharedElementEnterTransition.addListener(object : Transition.TransitionListener {
+//            override fun onTransitionStart(transition: Transition) {
+//                Log.e("共享元素动画的实现 Enter -> ", "onTransitionStart")
+//            }
+//
+//            override fun onTransitionEnd(transition: Transition) {
+//                Log.e("共享元素动画的实现 Enter -> ", "onTransitionEnd")
+//            }
+//
+//            override fun onTransitionCancel(transition: Transition) {
+//                Log.e("共享元素动画的实现 Enter -> ", "onTransitionCancel")
+//            }
+//
+//            override fun onTransitionPause(transition: Transition) {
+//                Log.e("共享元素动画的实现 Enter -> ", "onTransitionPause")
+//            }
+//
+//            override fun onTransitionResume(transition: Transition) {
+//                Log.e("共享元素动画的实现 Enter -> ", "onTransitionResume")
+//            }
+//        })
 
-            override fun onTransitionEnd(transition: Transition) {
-                Log.e("共享元素动画的实现 Enter -> ", "onTransitionEnd")
-            }
-
-            override fun onTransitionCancel(transition: Transition) {
-                Log.e("共享元素动画的实现 Enter -> ", "onTransitionCancel")
-            }
-
-            override fun onTransitionPause(transition: Transition) {
-                Log.e("共享元素动画的实现 Enter -> ", "onTransitionPause")
-            }
-
-            override fun onTransitionResume(transition: Transition) {
-                Log.e("共享元素动画的实现 Enter -> ", "onTransitionResume")
-            }
-        })
-
-        window.sharedElementExitTransition.addListener(object : Transition.TransitionListener {
-            override fun onTransitionStart(transition: Transition) {
-                Log.e("共享元素动画的实现 exit -> ", "onTransitionStart")
-            }
-
-            override fun onTransitionEnd(transition: Transition) {
-                Log.e("共享元素动画的实现 exit -> ", "onTransitionEnd")
-            }
-
-            override fun onTransitionCancel(transition: Transition) {
-                Log.e("共享元素动画的实现 exit -> ", "onTransitionCancel")
-            }
-
-            override fun onTransitionPause(transition: Transition) {
-                Log.e("共享元素动画的实现 exit -> ", "onTransitionPause")
-            }
-
-            override fun onTransitionResume(transition: Transition) {
-                Log.e("共享元素动画的实现 exit -> ", "onTransitionResume")
-            }
-        })
+//        window.sharedElementExitTransition.addListener(object : Transition.TransitionListener {
+//            override fun onTransitionStart(transition: Transition) {
+//                Log.e("共享元素动画的实现 exit -> ", "onTransitionStart")
+//            }
+//
+//            override fun onTransitionEnd(transition: Transition) {
+//                Log.e("共享元素动画的实现 exit -> ", "onTransitionEnd")
+//            }
+//
+//            override fun onTransitionCancel(transition: Transition) {
+//                Log.e("共享元素动画的实现 exit -> ", "onTransitionCancel")
+//            }
+//
+//            override fun onTransitionPause(transition: Transition) {
+//                Log.e("共享元素动画的实现 exit -> ", "onTransitionPause")
+//            }
+//
+//            override fun onTransitionResume(transition: Transition) {
+//                Log.e("共享元素动画的实现 exit -> ", "onTransitionResume")
+//            }
+//        })
 
 
         // TODO 2. 共享元素动画
@@ -109,13 +109,13 @@ class ShareElementsActivity : AppCompatActivity() {
 //            }
 //        })
 
-        val mtransitionset = TransitionSet() //制定过度动画set
+//        val mtransitionset = TransitionSet() //制定过度动画set
 
-        mtransitionset.addTransition(ChangeBounds()) //改变表框大小
+//        mtransitionset.addTransition(ChangeBounds()) //改变表框大小
 
 //        mtransitionset.addTransition(null) //改变表框大小
 
-        mtransitionset.addTransition(ChangeImageTransform()) //图片移动，还可以是其他的，要什么效果自己添加
+//        mtransitionset.addTransition(ChangeImageTransform()) //图片移动，还可以是其他的，要什么效果自己添加
 //        mtransitionset.addTransition(null) //图片移动，还可以是其他的，要什么效果自己添加
 
 //        mtransitionset.duration = 500
@@ -155,22 +155,25 @@ class ShareElementsActivity : AppCompatActivity() {
 //        })
 //    }
 
-    @TargetApi(22)
-    override fun supportFinishAfterTransition() {
-        val data = Intent()
-        data.putExtra("index", viewBinding.viewpager.currentItem)
-        setResult(Activity.RESULT_OK, data)
-        super.supportFinishAfterTransition()
-    }
-
-    override fun onBackPressed() {
-//        super.onBackPressed()
+//    @TargetApi(22)
+//    override fun supportFinishAfterTransition() {
 //        val data = Intent()
 //        data.putExtra("index", viewBinding.viewpager.currentItem)
 //        setResult(Activity.RESULT_OK, data)
+//        super.supportFinishAfterTransition()
+//    }
+
+    override fun onBackPressed() {
+//        super.onBackPressed()
+        val data = Intent()
+        data.putExtra("index", viewBinding.viewpager.currentItem)
+        setResult(Activity.RESULT_OK, data)
+
+        super.onBackPressed()
+//        finish()
 
         // TODO 3. 共享元素动画
-        supportFinishAfterTransition()
+//        supportFinishAfterTransition()
 //        super.supportFinishAfterTransition()
     }
 
@@ -190,10 +193,10 @@ class ShareElementsActivity : AppCompatActivity() {
 
     }
 
-    override fun onPostResume() {
-        super.onPostResume()
+//    override fun onPostResume() {
+//        super.onPostResume()
 //        val fragment: PhotoViewerFragment = mInnerAdapter?.instantiateItem(viewBinding.viewpager, viewBinding.viewpager.currentItem) as PhotoViewerFragment
 //        fragment.imageView?.visibility = View.GONE
 //        fragment.image_other?.bringToFront()
-    }
+//    }
 }
