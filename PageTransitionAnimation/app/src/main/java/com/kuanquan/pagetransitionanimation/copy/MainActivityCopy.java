@@ -67,7 +67,7 @@ public class MainActivityCopy extends AppCompatActivity {
                         int position = bundle.getInt("index", 0);
                         sharedElements.clear();
                         names.clear();
-                        View itemView = mainFragment.gridLayoutManager.findViewByPosition(position);
+                        View itemView = mainFragment.linearLayoutManager.findViewByPosition(position);
                         ImageView imageView = itemView.findViewById(R.id.image);
                         names.add(itemView.getTransitionName());
                         //注意这里第二个参数，如果防止是的条目的item则动画不自然。放置对应的imageView则完美
