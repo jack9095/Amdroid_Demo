@@ -6,14 +6,14 @@
     <ImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="300dp"
         android:layout_margin="10dp"
         android:scaleType="centerCrop"
          />
     <ImageView
         android:id="@+id/imag_iv"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="300dp"
         android:layout_margin="10dp"
         android:scaleType="centerCrop"
         />

@@ -1,21 +1,18 @@
-package com.kuanquan.pagetransitionanimation;
+package com.kuanquan.pagetransitionanimation.copy;
 
 import android.app.SharedElementCallback;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.transition.ChangeBounds;
-import android.transition.ChangeImageTransform;
-import android.transition.TransitionSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kuanquan.pagetransitionanimation.R;
 import com.kuanquan.pagetransitionanimation.adapter.MyAdapter;
 import com.kuanquan.pagetransitionanimation.elementspage.ShareElementsActivity;
 import com.kuanquan.pagetransitionanimation.util.DataUtil;
@@ -27,12 +24,12 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public class MainFragment  extends BaseFragment {
+public class MainFragmentCopy extends BaseFragment {
 
     public List<String> datas = DataUtil.INSTANCE.getData();
     private MyAdapter myAdapter;
-    public LinearLayoutManager linearLayoutManager;
-    public Bundle bundle;
+//    MainActivity mainActivity;
+    public GridLayoutManager gridLayoutManager;
 
     @Override
     protected int getLayoutId() {
@@ -44,23 +41,29 @@ public class MainFragment  extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
 
         RecyclerView recyclerView = getView().findViewById(R.id.recycler_view);
-        linearLayoutManager = new LinearLayoutManager(requireActivity());
+        gridLayoutManager = new GridLayoutManager(requireActivity(), 2);
         myAdapter = new MyAdapter(getActivity(), datas);
         recyclerView.setAdapter(myAdapter);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        myAdapter.setOnClickListener((v, position) -> {
-            Intent intent = new Intent(getContext(), ShareElementsActivity.class);
-            intent.putExtra("url", (Serializable) datas);
-            intent.putExtra("index", position);
+        recyclerView.setLayoutManager(gridLayoutManager);
+        myAdapter.setOnClickListener(new MyAdapter.OnClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent intent = new Intent(getContext(), ShareElementsActivity.class);
+                intent.putExtra("url", (Serializable) datas);
+                intent.putExtra("index", position);
 
-            // TODO 1. 共享元素动画  必备的步骤
-            Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), v, datas.get(position)).toBundle();
-//          startActivityForResult(intent,200,options);
-            startActivity(intent,options);
+                // TODO 1. 共享元素动画  必备的步骤
+                Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), v, datas.get(position)).toBundle();
+//                startActivityForResult(intent,200,options);
+
+
+                startActivity(intent,options);
+//                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, v, "sharedView").toBundle());
+            }
         });
 
 
-        // TODO 2. 共享元素动画  必备的步骤
+        // TODO 共享元素动画  必备的步骤
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getActivity().setExitSharedElementCallback(new SharedElementCallback() {
                 @Override
@@ -70,7 +73,7 @@ public class MainFragment  extends BaseFragment {
                         Log.e("onMapSharedElements", "position = " + position);
                         sharedElements.clear();
                         names.clear();
-                        View itemView = linearLayoutManager.findViewByPosition(position);
+                        View itemView = gridLayoutManager.findViewByPosition(position);
                         ImageView imageView = itemView.findViewById(R.id.image);
                         names.add(itemView.getTransitionName());
                         //注意这里第二个参数，如果防止是的条目的item则动画不自然。放置对应的imageView则完美
@@ -91,6 +94,19 @@ public class MainFragment  extends BaseFragment {
 //        getActivity().getWindow().setSharedElementEnterTransition(mtransitionset);
 //        getActivity().getWindow().setSharedElementExitTransition(mtransitionset);
 
+//        mainActivity = (MainActivity)getActivity();
+
+//        View itemView = gridLayoutManager.findViewByPosition(position);
+//        ImageView imageView = itemView.findViewById(R.id.image);
+//        mainActivity.setAnimatorFragment("", imageView, datas);
     }
+
+    public Bundle bundle;
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        Log.e("onActivityResult", "requestCode = " + requestCode);
+//        bundle = new Bundle(data.getExtras());
+//    }
 
 }
