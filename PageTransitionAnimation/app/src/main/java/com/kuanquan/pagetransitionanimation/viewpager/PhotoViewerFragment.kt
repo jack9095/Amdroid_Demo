@@ -19,22 +19,28 @@ class PhotoViewerFragment: BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-//        imageView?.visibility = View.GONE
 
         image_other?.postDelayed({
+            imageView?.visibility = View.GONE
+            if (position == 0) {
+                imageView?.scaleType = ImageView.ScaleType.MATRIX
+            } else {
+                imageView?.scaleType = ImageView.ScaleType.FIT_CENTER
+            }
             image_other?.visibility = View.VISIBLE
             image_other?.bringToFront()
         }, 1000)
 
     }
 
+    var position = 0
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val mAnimationFrameLayout = view?.findViewById<AnimationFrameLayout>(R.id.frame_layout)
         val mRelativeLayout = view?.findViewById<RelativeLayout>(R.id.parent)
         imageView = view?.findViewById(R.id.image)
         image_other = view?.findViewById(R.id.image_other)
-        val position = arguments?.get("key") as Int
+        position = arguments?.get("key") as Int
 
         mAnimationFrameLayout?.setFinishListener(object : AnimationFrameLayout.FinishListener {
             override fun gofinish() {
