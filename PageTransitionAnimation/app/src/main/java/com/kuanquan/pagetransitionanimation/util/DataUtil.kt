@@ -6,7 +6,6 @@ object DataUtil {
 
     fun getData(): ArrayList<String>{
         val datas =  ArrayList<String>()
-        datas.add("https://p5.hibixin.com/bx-content/98e4a92b-e2ec-4828-b2a4-1c5348bd6252.jpg?imageView2/3/w/2500/h/2500%7CimageMogr2/auto-orient/format/webp/interlace/1")
         datas.add("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2478350582,3338695212&fm=26&gp=0.jpg")
         datas.add("https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3485183293,847227336&fm=26&gp=0.jpg")
         datas.add("https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2037944750,611917901&fm=26&gp=0.jpg")
