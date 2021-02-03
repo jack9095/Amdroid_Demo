@@ -1,2 +1,3 @@
+include ':commentUtilLibrary'
 include ':app'
 rootProject.name = "UtilWidget"
