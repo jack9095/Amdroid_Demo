@@ -1,21 +1,18 @@
-package com.kuanquan.pagetransitionanimation;
+package com.kuanquan.pagetransitionanimation.copy;
 
 import android.app.SharedElementCallback;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.transition.ChangeBounds;
-import android.transition.ChangeImageTransform;
-import android.transition.TransitionSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import androidx.core.app.ActivityOptionsCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kuanquan.pagetransitionanimation.R;
 import com.kuanquan.pagetransitionanimation.adapter.MyAdapter;
 import com.kuanquan.pagetransitionanimation.elementspage.ShareElementsActivity;
 import com.kuanquan.pagetransitionanimation.util.DataUtil;
@@ -55,7 +52,6 @@ public class MainFragment  extends BaseFragment {
 
             // TODO 1. 共享元素动画  必备的步骤
             Bundle options = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), v, datas.get(position)).toBundle();
-//          startActivityForResult(intent,200,options);
             startActivity(intent,options);
         });
 
@@ -72,7 +68,9 @@ public class MainFragment  extends BaseFragment {
                         names.clear();
                         View itemView = linearLayoutManager.findViewByPosition(position);
                         ImageView imageView = itemView.findViewById(R.id.image);
-                        names.add(itemView.getTransitionName());
+                        Log.e("MainFragment -> ", itemView.getTransitionName() + "");
+//                        names.add(itemView.getTransitionName());
+                        names.add(null);
                         //注意这里第二个参数，如果防止是的条目的item则动画不自然。放置对应的imageView则完美
                         sharedElements.put(datas.get(position), imageView);
                         bundle = null;
@@ -80,17 +78,6 @@ public class MainFragment  extends BaseFragment {
                 }
             });
         }
-
-//        TransitionSet mtransitionset=new TransitionSet();//制定过度动画set
-//        mtransitionset.addTransition(new ChangeBounds());//改变表框大小
-//        mtransitionset.addTransition(new ChangeImageTransform());//图片移动，还可以是其他的，要什么效果自己添加
-//        mtransitionset.setDuration(250);
-//
-//        getActivity().getWindow().setEnterTransition(mtransitionset);//注意，下面是必须的
-//        getActivity().getWindow().setExitTransition(mtransitionset);
-//        getActivity().getWindow().setSharedElementEnterTransition(mtransitionset);
-//        getActivity().getWindow().setSharedElementExitTransition(mtransitionset);
-
     }
 
 }

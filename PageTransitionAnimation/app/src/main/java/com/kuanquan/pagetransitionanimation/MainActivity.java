@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
+//import com.kuanquan.pagetransitionanimation.copy.MainFragment;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityReenter(int resultCode, Intent data) {
         super.onActivityReenter(resultCode, data);
         Log.e("onActivityReenter", "requestCode = " + resultCode);
-        mainFragment.bundle = new Bundle(data.getExtras());
+        mainFragment.setBundle(new Bundle(data.getExtras()));
+//        mainFragment.bundle = new Bundle(data.getExtras());
     }
 }

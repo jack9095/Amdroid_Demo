@@ -12,10 +12,6 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hwangjr.rxbus.RxBus;
-import com.hwangjr.rxbus.annotation.Subscribe;
-import com.hwangjr.rxbus.annotation.Tag;
-import com.hwangjr.rxbus.thread.EventThread;
 import com.kuanquan.pagetransitionanimation.R;
 import com.kuanquan.pagetransitionanimation.adapter.MyAdapter;
 import com.kuanquan.pagetransitionanimation.elementspage.ShareElementsActivity;
@@ -34,7 +30,6 @@ public class MainActivityOther extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        RxBus.get().register(this);
         datas = new ArrayList<>();
         datas.add("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2478350582,3338695212&fm=26&gp=0.jpg");
         datas.add("https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3485183293,847227336&fm=26&gp=0.jpg");
@@ -100,21 +95,5 @@ public class MainActivityOther extends AppCompatActivity {
     public void onActivityReenter(int resultCode, Intent data) {
         super.onActivityReenter(resultCode, data);
         bundle = new Bundle(data.getExtras());
-    }
-
-    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag("updateView")})
-    public void updateView(Integer integer) {
-        //此处使用rxbus通知对应的view重新显示出来，解决在滑动返回手指拖动的过程中，看到上一个页面点击的图片显示空白的问题
-//        View view = myAdapter.getViewByPosition(photosRv, integer, R.id.rv_item_fake_iv);
-//        if (view != null) {
-//            //以下代码已经没必要设置，因为demo中的动画效果已经全部设置在了rv_item_fake_iv上
-//            view.setAlpha(1f);
-//        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        RxBus.get().unregister(this);
     }
 }

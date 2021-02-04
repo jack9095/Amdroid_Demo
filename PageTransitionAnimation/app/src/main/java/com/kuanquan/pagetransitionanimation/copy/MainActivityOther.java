@@ -6,7 +6,6 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.kuanquan.pagetransitionanimation.MainFragment;
 import com.kuanquan.pagetransitionanimation.R;
 
 import java.util.List;

@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-import com.kuanquan.pagetransitionanimation.MainFragment;
 import com.kuanquan.pagetransitionanimation.R;
 
 import java.util.List;

@@ -6,7 +6,6 @@ import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import com.bumptech.glide.Glide
-import com.hwangjr.rxbus.RxBus
 import com.kuanquan.pagetransitionanimation.AnimationFrameLayout
 import com.kuanquan.pagetransitionanimation.R
 

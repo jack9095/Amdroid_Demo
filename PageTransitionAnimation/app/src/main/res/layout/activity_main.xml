@@ -18,7 +18,7 @@
 
 <!--    <fragment-->
 <!--        android:id="@+id/fragment1"-->
-<!--        android:name="com.kuanquan.pagetransitionanimation.MainFragment"-->
+<!--        android:name="com.kuanquan.pagetransitionanimation.copy.MainFragment"-->
 <!--        android:layout_width="wrap_content"-->
 <!--        android:layout_height="wrap_content"-->
 <!--         />-->
