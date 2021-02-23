@@ -1,0 +1,68 @@
+//task sayHello << {
+    println "hello world -》0"
+//}
+
+//task是一个任务，doLast 是一个action
+task helloWorld {
+    doFirst{
+        println 'hello World! do first'
+    }
+
+    println 'hello world!'
+
+    doLast {
+        println 'hello World! do last'
+    }
+}
+//
+////可以使用左移符号 << 来简单的代表doLast
+//task name << {
+//    println 'sososeen09'
+//}
+
+// 方法，可以在其他地方引用 dependencies { rootProject.allModuleDependencies(dependencies) }
+static def allModuleDependencies(DependencyHandler dependencyHandler) {
+    dependencyHandler.implementation "androidx.appcompat:appcompat:1.2.0"
+}
+ext.allModuleDependencies = this.&allModuleDependencies
+
+
+// 书写变量  def 可以省掉
+def int a = 1
+def String str0 = "hello"
+
+String str='hello groovy!'
+
+static String getStr(){
+
+    // Groovy默认是把最后一行的执行结果进行返回
+    'hello groovy!'
+}
+
+String str1='hello'
+String str2=' groovy!'
+println 'hello groovy!'
+println "hello groovy!"
+println "$str"
+println getStr()
+println "${str1+str2}"
+println 'hello $str2'  //单引号，直接打印内容
+
+println ''' aa
+bb
+
+cc
+'''
+
+//定义一个List
+def lists=['groovy','gradle','android']
+
+//打印集合size
+println lists.size
+
+assert lists[0]=='groovy'
+
+//打印集合中的数据
+lists.each{
+    list->println list
+}

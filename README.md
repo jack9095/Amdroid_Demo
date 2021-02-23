@@ -129,6 +129,14 @@ Glide的完美应用及监听滑动几屏的案例。
 
 各种动画的集合。
 
+### 33、 CustomGradlePlugin
+
+自定义 Gradle 插件。
+
+### 34、 SafetyInspectionApplication
+
+检测安卓是否有双开，是否是用模拟器，是否被root等安全工具类。
+
 
 
 

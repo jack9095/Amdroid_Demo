@@ -42,4 +42,9 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    rootProject.allModuleDependencies(dependencies)
+
+    // 简化反射的框架 https://github.com/jOOQ/jOOR
+    implementation 'org.jooq:joor:0.9.13'
 }
