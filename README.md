@@ -137,6 +137,10 @@ Glide的完美应用及监听滑动几屏的案例。
 
 检测安卓是否有双开，是否是用模拟器，是否被root等安全工具类。
 
+### 35、 HScrollRecyclerViewApplication
+
+BaseQuickAdapter开源库的使用案例。
+
 
 
 
