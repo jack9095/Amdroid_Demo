@@ -2,10 +2,13 @@ package com.kuanquan.panelemojikeyboard.emotion
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.Rect
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.Log
+import android.view.View
 import android.widget.EditText
+import androidx.annotation.NonNull
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseProviderMultiAdapter
@@ -72,6 +75,17 @@ class EmotionRecyclerView(context: Context, attrs: AttributeSet? = null) : Recyc
 
         }
 
+        val mSpacing = DisplayUtils.dip2px(context, 18f)
+        addItemDecoration(object : RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+                super.getItemOffsets(outRect, view, parent, state)
+                val position = parent.getChildAdapterPosition(view)
+                val column = position % sNumColumns
+//                outRect.left = column * mSpacing / sNumColumns
+//                outRect.right = mSpacing - (column + 1) * mSpacing / sNumColumns
+                outRect.top = mSpacing
+            }
+        })
 
 //        layoutManager = GridLayoutManager(context, sNumColumns)
         layoutManager = gridLayoutManager
@@ -113,7 +127,6 @@ class EmotionRecyclerView(context: Context, attrs: AttributeSet? = null) : Recyc
         val start = editText?.selectionStart ?: 0
         val editable = editText?.editableText
         val emotionSpannable = getEmojiStringByUnicode(unicode?.toInt() ?: 0)
-//        val emotionSpannable = unicode
         editable?.insert(start, emotionSpannable)
 
         saveEmotion()
@@ -165,7 +178,7 @@ class EmotionRecyclerView(context: Context, attrs: AttributeSet? = null) : Recyc
     inner class Adapter(val editText: EditText?, val width: Int, val height: Int) : BaseProviderMultiAdapter<EmotionBean>() {
         var headItemProvider = HeadItemProvider(editText, width, height)
         init {
-            addItemProvider(HeadItemProvider(editText, width, height))
+            addItemProvider(headItemProvider)
             addItemProvider(CommentItemProvider())
         }
 
