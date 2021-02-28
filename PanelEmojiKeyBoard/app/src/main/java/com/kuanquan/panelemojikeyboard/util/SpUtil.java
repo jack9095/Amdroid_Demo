@@ -51,4 +51,8 @@ public class SpUtil {
     public int getInt(String key, int defValue) {
         return mSp.getInt(key, defValue);
     }
+
+    public void clearAll() {
+        mSp.edit().clear();
+    }
 }

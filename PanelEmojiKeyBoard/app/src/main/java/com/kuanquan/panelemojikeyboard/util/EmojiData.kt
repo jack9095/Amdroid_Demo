@@ -11,7 +11,18 @@ class EmojiData {
         val split = emojiData.split(";")
         split.forEach {
             list.add(EmotionBean(it))
-            Log.e("EmojiData", "数据 -》$it")
+//            Log.e("EmojiData", "数据 -》$it")
+        }
+        return list
+    }
+    val aaaa = "128515;128516;128518;128517;128514;129315"
+
+    fun getData1(): MutableList<EmotionBean>{
+        val list = mutableListOf<EmotionBean>()
+        val split = aaaa.split(";")
+        split.forEach {
+            list.add(EmotionBean(it))
+//            Log.e("EmojiData", "数据 -》$it")
         }
         return list
     }

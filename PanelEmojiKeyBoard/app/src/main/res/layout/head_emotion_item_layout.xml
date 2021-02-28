@@ -3,6 +3,7 @@
     android:background="@color/white"
     android:orientation="vertical"
     android:paddingTop="5dp"
+    android:paddingBottom="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -19,7 +20,7 @@
         android:layout_marginStart="16dp" />
 
 
-    <com.kuanquan.panelemojikeyboard.emotion.EmotionRecyclerView
+    <com.kuanquan.panelemojikeyboard.emotion.LatelyEmotionRecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,7 +32,7 @@
         android:layout_width="wrap_content"
         android:gravity="center"
         android:layout_height="wrap_content"
-        android:text="所有表情"
+        android:text="全部表情"
         android:textColor="#666666"
         android:textSize="12sp"
         android:layout_marginStart="16dp" />
