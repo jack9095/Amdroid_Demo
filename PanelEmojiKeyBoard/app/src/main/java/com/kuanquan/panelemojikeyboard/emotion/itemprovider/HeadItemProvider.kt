@@ -8,24 +8,24 @@ import com.kuanquan.panelemojikeyboard.emotion.EmotionBean
 import com.kuanquan.panelemojikeyboard.emotion.LatelyEmotionRecyclerView
 
 class HeadItemProvider(val editText: EditText?, val width: Int, val height: Int) : BaseItemProvider<EmotionBean>() {
+    var mLatelyEmotionItemClickListener: LatelyEmotionRecyclerView.LatelyEmotionItemClickListener? = null
     override val itemViewType: Int
         get() = EmotionBean.TYPE_HEAD
     override val layoutId: Int
         get() = R.layout.head_emotion_item_layout
 
-    var recyclerView: LatelyEmotionRecyclerView? = null
-
     override fun convert(helper: BaseViewHolder, item: EmotionBean) {
-        recyclerView = helper.getView(R.id.recyclerView)
-        recyclerView?.buildEmotionViews(
+       val recyclerView = helper.getView<LatelyEmotionRecyclerView>(R.id.recyclerView)
+        recyclerView.buildEmotionViews(
             editText,
             item.childList,
             width, height
         )
+        recyclerView.setLatelyEmotionItemClickListener(mLatelyEmotionItemClickListener)
     }
 
     fun setLatelyEmotionItemClickListener(listener: LatelyEmotionRecyclerView.LatelyEmotionItemClickListener) {
-        recyclerView?.setLatelyEmotionItemClickListener(listener)
+        mLatelyEmotionItemClickListener = listener
     }
 
 }

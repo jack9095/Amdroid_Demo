@@ -79,11 +79,11 @@ class EmotionRecyclerView(context: Context, attrs: AttributeSet? = null) : Recyc
         addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
                 super.getItemOffsets(outRect, view, parent, state)
-                val position = parent.getChildAdapterPosition(view)
-                val column = position % sNumColumns
+//                val position = parent.getChildAdapterPosition(view)
+//                val column = position % sNumColumns
 //                outRect.left = column * mSpacing / sNumColumns
 //                outRect.right = mSpacing - (column + 1) * mSpacing / sNumColumns
-                outRect.top = mSpacing
+                outRect.bottom = mSpacing
             }
         })
 
@@ -97,9 +97,8 @@ class EmotionRecyclerView(context: Context, attrs: AttributeSet? = null) : Recyc
                     adapterItemClickEvent(emotion.unicode, mEditText)
                 }
             }
-
-            setLatelyEmotionItemClickListener(this@EmotionRecyclerView)
         }
+        mAdapter?.setLatelyEmotionItemClickListener(this)
         mAdapter?.setList(data)
         adapter = mAdapter
     }

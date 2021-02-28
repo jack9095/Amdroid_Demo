@@ -39,10 +39,10 @@ class LatelyEmotionRecyclerView(context: Context, attrs: AttributeSet? = null) :
 
                 mLatelyEmotionItemClickListener?.onItemClick(emotion.unicode)
 
-                val start = editText.selectionStart
-                val editable = editText.editableText
-                val emotionSpannable = getEmojiStringByUnicode(emotion.unicode?.toInt() ?: 0)
-                editable.insert(start, emotionSpannable)
+//                val start = editText.selectionStart
+//                val editable = editText.editableText
+//                val emotionSpannable = getEmojiStringByUnicode(emotion.unicode?.toInt() ?: 0)
+//                editable.insert(start, emotionSpannable)
             }
         }
         mAdapter?.setList(data)
@@ -70,7 +70,7 @@ class LatelyEmotionRecyclerView(context: Context, attrs: AttributeSet? = null) :
 
     private var mLatelyEmotionItemClickListener: LatelyEmotionItemClickListener? = null
 
-    fun setLatelyEmotionItemClickListener(listener: LatelyEmotionItemClickListener) {
+    fun setLatelyEmotionItemClickListener(listener: LatelyEmotionItemClickListener?) {
         mLatelyEmotionItemClickListener = listener
     }
 
