@@ -97,14 +97,6 @@ class ResetActivity : AppCompatActivity() {
 
         btn.setOnClickListener(View.OnClickListener {
             Log.e(TAG,"删除数据")
-//            val text = editView.text.toString()
-//            val subtext=text.substring(0,text.length - 1)
-//            editView.setText(subtext)
-
-//            deleteEditTextEmojiAndString(editView)
-
-//            editView.text.delete(getEditTextCursorIndex(editView)-2, getEditTextCursorIndex(editView))
-
             deleteEditTextEmojiAndStringSystem(editView)
         })
 
