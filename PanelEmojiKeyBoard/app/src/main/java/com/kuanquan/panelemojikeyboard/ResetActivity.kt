@@ -4,13 +4,19 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
-import android.view.*
-import android.widget.*
+import android.view.KeyEvent
+import android.view.View
+import android.view.Window
+import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.kuanquan.library.PanelSwitchHelper
 import com.kuanquan.library.view.panel.PanelView
-import com.kuanquan.panelemojikeyboard.emotion.*
-import com.kuanquan.panelemojikeyboard.util.*
+import com.kuanquan.panelemojikeyboard.emotion.EmotionBean
+import com.kuanquan.panelemojikeyboard.emotion.EmotionRecyclerView
+import com.kuanquan.panelemojikeyboard.util.EmojiData
+import com.kuanquan.panelemojikeyboard.util.SpUtil
+
 
 class ResetActivity : AppCompatActivity() {
     private var mHelper: PanelSwitchHelper? = null
@@ -33,6 +39,9 @@ class ResetActivity : AppCompatActivity() {
     private val add_btn: View
         get() = findViewById(R.id.add_btn)
 
+    private val btn: View
+        get() = findViewById(R.id.btn)
+
     private val editView: EditText
         get() = findViewById(R.id.edit_text)
 
@@ -40,7 +49,64 @@ class ResetActivity : AppCompatActivity() {
     private val emotionView: View
         get() = findViewById(R.id.emotion_btn)
 
+    /**获取EditText光标所在的位置 */
+    private fun getEditTextCursorIndex(mEditText: EditText): Int {
+        return mEditText.selectionStart
+    }
+
+    /**向EditText指定光标位置插入字符串 */
+    private fun insertText(mEditText: EditText, mText: String) {
+        mEditText.text.insert(getEditTextCursorIndex(mEditText), mText)
+    }
+
+    /**
+     * 删除表情和文字 -- 》 然而不好使
+     */
+    private fun deleteEditTextEmojiAndString(mEditText: EditText){
+        val selectionStart: Int = mEditText.getSelectionStart() // 获取光标的位置
+
+        if (selectionStart > 0) {
+            val body: String = mEditText.getText().toString()
+            if (!TextUtils.isEmpty(body)) {
+                val tempStr = body.substring(0, selectionStart)
+                val i = tempStr.lastIndexOf("[") // 获取最后一个表情的位置
+                if (i != -1) {
+                    val cs = tempStr.subSequence(i, selectionStart)
+                    if (cs == "[fac") { // 判断是不是一个表情
+                        mEditText.getEditableText().delete(i, selectionStart)
+                        return
+                    }
+                }
+                mEditText.getEditableText().delete(tempStr.length - 1, selectionStart)
+            }
+        }
+    }
+
+    /**
+     * 删除表情和文字 仿照系统键盘删除按钮 --->  完美实现
+     */
+    private fun deleteEditTextEmojiAndStringSystem(mEditText: EditText){
+        val keyCode = KeyEvent.KEYCODE_DEL
+        val keyEventDown = KeyEvent(KeyEvent.ACTION_DOWN, keyCode)
+        val keyEventUp = KeyEvent(KeyEvent.ACTION_UP, keyCode)
+        mEditText.onKeyDown(keyCode, keyEventDown)
+        mEditText.onKeyUp(keyCode, keyEventUp)
+    }
+
     private fun initView() {
+
+        btn.setOnClickListener(View.OnClickListener {
+            Log.e(TAG,"删除数据")
+//            val text = editView.text.toString()
+//            val subtext=text.substring(0,text.length - 1)
+//            editView.setText(subtext)
+
+//            deleteEditTextEmojiAndString(editView)
+
+//            editView.text.delete(getEditTextCursorIndex(editView)-2, getEditTextCursorIndex(editView))
+
+            deleteEditTextEmojiAndStringSystem(editView)
+        })
 
         sendView.setOnClickListener(View.OnClickListener {
             val content = editView.text.toString()
@@ -54,6 +120,7 @@ class ResetActivity : AppCompatActivity() {
         })
 
         add_btn.setOnClickListener {
+            Log.e(TAG,"点击加号")
             SpUtil.getInstace(recyclerView?.context).clearAll()
         }
     }
