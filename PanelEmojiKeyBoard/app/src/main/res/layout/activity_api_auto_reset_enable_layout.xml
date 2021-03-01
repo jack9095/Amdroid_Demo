@@ -116,7 +116,7 @@
                     android:id="@+id/panel_emotion"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:panel_layout="@layout/panel_emotion_layout"
+                    app:panel_layout="@layout/panel_emotion_layout_a"
                     app:panel_trigger="@id/emotion_btn" />
 
 <!--                增加更多的面板，包括视频，音频，发送图片-->

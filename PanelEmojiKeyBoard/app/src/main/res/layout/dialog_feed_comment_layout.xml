@@ -6,6 +6,10 @@
     android:layout_width="match_parent">
 
 
+    <TextView
+        android:background="@color/btn_reset_text"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
     <com.effective.android.panel.view.PanelSwitchLayout
         android:id="@+id/panel_switch_layout"
         android:layout_width="match_parent"
