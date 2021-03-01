@@ -24,13 +24,13 @@
             android:name="com.kuanquan.panelemojikeyboard.scene.chat.ChatActivity"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
 
-        <activity
-            android:name="com.kuanquan.panelemojikeyboard.scene.chat.ChatSuperActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
+<!--        <activity-->
+<!--            android:name="com.kuanquan.panelemojikeyboard.scene.chat.ChatSuperActivity"-->
+<!--            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>-->
 
-        <activity
-            android:name="com.kuanquan.panelemojikeyboard.scene.chat.ChatFragmentActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
+<!--        <activity-->
+<!--            android:name="com.kuanquan.panelemojikeyboard.scene.chat.ChatFragmentActivity"-->
+<!--            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>-->
 
 <!--        <activity-->
 <!--            android:name="com.kuanquan.panelemojikeyboard.scene.api.ContentActivity"-->
@@ -70,7 +70,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.kuanquan.panelemojikeyboard.scene.feed.FeedActivity" />
-        <activity android:name="com.kuanquan.panelemojikeyboard.scene.chat.ChatCusContentScrollActivity" />
+<!--        <activity android:name="com.kuanquan.panelemojikeyboard.scene.chat.ChatCusContentScrollActivity" />-->
     </application>
 
 </manifest>

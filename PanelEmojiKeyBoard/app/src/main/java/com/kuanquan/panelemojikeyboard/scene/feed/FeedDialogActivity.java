@@ -21,6 +21,7 @@ import com.kuanquan.panelemojikeyboard.systemui.StatusbarHelper;
 
 /**
  * 类微博/微信朋友圈信息流 Dialog 实现
+ * 致敬开源项目： https://github.com/YummyLau/PanelSwitchHelper
  */
 public class FeedDialogActivity extends AppCompatActivity {
 

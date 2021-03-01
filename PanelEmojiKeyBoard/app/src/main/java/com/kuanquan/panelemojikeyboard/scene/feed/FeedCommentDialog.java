@@ -2,11 +2,13 @@ package com.kuanquan.panelemojikeyboard.scene.feed;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.effective.android.panel.PanelSwitchHelper;
@@ -25,12 +27,13 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * 键盘和表情的弹窗实现
+ *
  */
 public class FeedCommentDialog extends PanelDialog implements DialogInterface.OnKeyListener {
 
     private static final String TAG = FeedCommentDialog.class.getSimpleName();
     private Activity activity;
-    private onDialogStatus status;
+//    private onDialogStatus status;
 
     @Override
     public int getDialogLayout() {
@@ -40,7 +43,7 @@ public class FeedCommentDialog extends PanelDialog implements DialogInterface.On
     public FeedCommentDialog(Activity activity, onDialogStatus status) {
         super(activity);
         this.activity = activity;
-        this.status = status;
+//        this.status = status;
         setOnKeyListener(this);
         ((EditText) rootView.findViewById(R.id.edit_text)).addTextChangedListener(new TextWatcher() {
             @Override
@@ -74,7 +77,9 @@ public class FeedCommentDialog extends PanelDialog implements DialogInterface.On
         if (helper == null) {
             helper = new PanelSwitchHelper.Builder(activity.getWindow(), rootView)
                     //可选
-                    .addKeyboardStateListener((visible, height) -> Log.d(TAG, "系统键盘是否可见 : " + visible + " 高度为：" + height))
+                    .addKeyboardStateListener((visible, height) -> {
+                        Log.d(TAG, "系统键盘是否可见 : " + visible + " 高度为：" + height);
+                    })
                     //可选
                     .addPanelChangeListener(new OnPanelChangeListener() {
 
@@ -94,6 +99,8 @@ public class FeedCommentDialog extends PanelDialog implements DialogInterface.On
                         @Override
                         public void onPanel(IPanelView view) {
                             Log.d(TAG, "唤起面板 : " + view);
+                            // TODO 这行代码很关键，解决表情键盘切换的问题
+                            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
                             if (view instanceof PanelView) {
                                 rootView.findViewById(R.id.emotion_btn).setSelected(((PanelView) view).getId() == R.id.panel_emotion ? true : false);
                             }
@@ -124,9 +131,9 @@ public class FeedCommentDialog extends PanelDialog implements DialogInterface.On
 
     @Override
     public void dismiss() {
-        if (status != null) {
-            status.onStatus(false, 0);
-        }
+//        if (status != null) {
+//            status.onStatus(false, 0);
+//        }
         super.dismiss();
     }
 

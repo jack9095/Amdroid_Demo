@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
 
     <com.effective.android.panel.view.PanelSwitchLayout
         android:id="@+id/panel_switch_layout"
@@ -26,65 +30,87 @@
                 android:layout_weight="1" />
 
             <LinearLayout
-                android:id="@+id/input_layout"
+                android:orientation="vertical"
+                android:background="@color/white"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_input_layout"
-                android:gravity="bottom"
-                android:minHeight="@dimen/dp_50"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/dp_10"
-                android:paddingRight="@dimen/dp_10"
-                android:paddingBottom="@dimen/dp_7.5">
+                android:layout_height="wrap_content">
 
-                <!-- 输入入口 -->
-                <EditText
-                    android:id="@+id/edit_text"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dp_10"
-                    android:layout_marginRight="@dimen/dp_10"
-                    android:layout_weight="1"
-                    android:background="@drawable/sh_wechat_comment_input"
-                    android:imeOptions="actionSearch"
-                    android:maxLines="5"
-                    android:minHeight="@dimen/dp_35"
-                    android:paddingLeft="@dimen/dp_5"
-                    android:paddingTop="@dimen/dp_7.5"
-                    android:paddingRight="@dimen/dp_5"
-                    android:paddingBottom="@dimen/dp_3"
-                    android:textCursorDrawable="@drawable/shape_edit_cursor"
-                    android:textSize="@dimen/sp_16" />
+                <TextView
+                    android:background="@color/black"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"/>
+
+                <TextView
+                    android:background="@color/btn_reset_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"/>
+
+                <TextView
+                    android:background="#ff0000"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"/>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/dp_35"
-                    android:orientation="horizontal">
+                    android:id="@+id/input_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_input_layout"
+                    android:gravity="bottom"
+                    android:minHeight="@dimen/dp_50"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_10"
+                    android:paddingBottom="@dimen/dp_7.5">
 
-                    <!-- 表情入口 -->
-                    <ImageView
-                        android:id="@+id/emotion_btn"
-                        android:layout_width="@dimen/dp_35"
-                        android:layout_height="@dimen/dp_35"
+                    <!-- 输入入口 -->
+                    <EditText
+                        android:id="@+id/edit_text"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/dp_10"
                         android:layout_marginRight="@dimen/dp_10"
-                        android:src="@drawable/selector_emotion_btn" />
+                        android:layout_weight="1"
+                        android:background="@drawable/sh_wechat_comment_input"
+                        android:imeOptions="actionSearch"
+                        android:maxLines="5"
+                        android:minHeight="@dimen/dp_35"
+                        android:paddingLeft="@dimen/dp_5"
+                        android:paddingTop="@dimen/dp_7.5"
+                        android:paddingRight="@dimen/dp_5"
+                        android:paddingBottom="@dimen/dp_3"
+                        android:textCursorDrawable="@drawable/shape_edit_cursor"
+                        android:textSize="@dimen/sp_16" />
 
-                    <TextView
-                        android:id="@+id/send"
-                        android:layout_width="60dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center_vertical"
-                        android:background="@drawable/se_wechat_comment_send"
-                        android:enabled="false"
-                        android:gravity="center"
-                        android:text="@string/send"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/sp_15" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/dp_35"
+                        android:orientation="horizontal">
+
+                        <!-- 表情入口 -->
+                        <ImageView
+                            android:id="@+id/emotion_btn"
+                            android:layout_width="@dimen/dp_35"
+                            android:layout_height="@dimen/dp_35"
+                            android:layout_marginEnd="@dimen/dp_10"
+                            android:layout_marginRight="@dimen/dp_10"
+                            android:src="@drawable/selector_emotion_btn" />
+
+                        <TextView
+                            android:id="@+id/send"
+                            android:layout_width="60dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center_vertical"
+                            android:background="@drawable/se_wechat_comment_send"
+                            android:enabled="false"
+                            android:gravity="center"
+                            android:text="@string/send"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/sp_15" />
+                    </LinearLayout>
+
                 </LinearLayout>
-
             </LinearLayout>
 
         </com.effective.android.panel.view.content.LinearContentContainer>
@@ -94,7 +120,7 @@
             android:id="@+id/panel_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/common_page_bg_color">
+            android:background="@color/white">
 
             <!-- 每一项面板 -->
             <!-- panel_layout 用于指定面板该 ID 对应的布局 ，必须项-->
@@ -110,4 +136,4 @@
         </com.effective.android.panel.view.panel.PanelContainer>
     </com.effective.android.panel.view.PanelSwitchLayout>
 
-</layout>
+</LinearLayout>
