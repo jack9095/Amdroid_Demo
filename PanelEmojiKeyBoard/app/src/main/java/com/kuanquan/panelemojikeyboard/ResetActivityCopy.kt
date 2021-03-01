@@ -9,8 +9,8 @@ import android.view.Window
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.kuanquan.library.PanelSwitchHelper
-import com.kuanquan.library.view.panel.PanelView
+import com.effective.android.panel.PanelSwitchHelper
+import com.effective.android.panel.view.panel.PanelView
 import com.kuanquan.panelemojikeyboard.emotion.EmotionBean
 import com.kuanquan.panelemojikeyboard.emotion.EmotionRecyclerView
 import com.kuanquan.panelemojikeyboard.util.EmojiData

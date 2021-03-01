@@ -39,4 +39,9 @@
         <attr name="auto_reset_area" />
     </declare-styleable>
 
+
+    <declare-styleable name="StatusBarView">
+        <attr name="status_bar_color" format="color" />
+    </declare-styleable>
+
 </resources>

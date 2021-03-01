@@ -16,12 +16,61 @@
         </activity>
 
         <activity android:name=".ResetActivity">
+
+        </activity>
+
+
+        <activity
+            android:name="com.kuanquan.panelemojikeyboard.scene.chat.ChatActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
+
+        <activity
+            android:name="com.kuanquan.panelemojikeyboard.scene.chat.ChatSuperActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
+
+        <activity
+            android:name="com.kuanquan.panelemojikeyboard.scene.chat.ChatFragmentActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
+
+<!--        <activity-->
+<!--            android:name="com.kuanquan.panelemojikeyboard.scene.api.ContentActivity"-->
+<!--            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>-->
+
+<!--        <activity-->
+<!--            android:name="com.kuanquan.panelemojikeyboard.scene.api.CusPanelActivity"-->
+<!--            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>-->
+
+<!--        <activity-->
+<!--            android:name="com.kuanquan.panelemojikeyboard.scene.api.DefaultHeightPanelActivity"-->
+<!--            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>-->
+
+        <activity
+            android:name="com.kuanquan.panelemojikeyboard.scene.video.BiliBiliSampleActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/VideoActivityTheme"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
+
+        <activity
+            android:name="com.kuanquan.panelemojikeyboard.scene.live.huya.PcHuyaLiveActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/VideoActivityTheme"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
+
+        <activity
+            android:name="com.kuanquan.panelemojikeyboard.scene.live.douyin.PhoneDouyinLiveActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/VideoActivityTheme"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
+
+        <activity android:name="com.kuanquan.panelemojikeyboard.scene.feed.FeedDialogActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.kuanquan.panelemojikeyboard.scene.feed.FeedActivity" />
+        <activity android:name="com.kuanquan.panelemojikeyboard.scene.chat.ChatCusContentScrollActivity" />
     </application>
 
 </manifest>

@@ -10,8 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.kuanquan.library.PanelSwitchHelper;
-import com.kuanquan.panelemojikeyboard.R;
+import com.effective.android.panel.PanelSwitchHelper;
 
 
 public class AutoHidePanelRecyclerView extends RecyclerView {

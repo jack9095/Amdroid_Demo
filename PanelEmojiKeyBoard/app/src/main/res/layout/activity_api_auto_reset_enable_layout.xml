@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.kuanquan.library.view.PanelSwitchLayout
+        <com.effective.android.panel.view.PanelSwitchLayout
             android:id="@+id/panel_switch_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -17,13 +17,13 @@
             <!-- 内容区域 -->
             <!-- edit_view 指定一个 EditText 用于输入 ，必须项-->
             <!-- empty_view 指定用户点击该 ID 对应的 View 时实现面板或者输入法隐藏，非必须项 -->
-            <com.kuanquan.library.view.content.RelativeContentContainer
+            <com.effective.android.panel.view.content.RelativeContentContainer
                 android:id="@+id/content_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:edit_view="@id/edit_text">
 
-<!--                <com.example.demo.scene.chat.view.AutoHidePanelRecyclerView-->
+<!--                <com.kuanquan.panelemojikeyboard.scene.chat.view.AutoHidePanelRecyclerView-->
 <!--                    android:visibility="gone"-->
 <!--                    android:id="@+id/recycler_view"-->
 <!--                    android:layout_width="wrap_content"-->
@@ -98,11 +98,11 @@
 
                 </LinearLayout>
 
-            </com.kuanquan.library.view.content.RelativeContentContainer>
+            </com.effective.android.panel.view.content.RelativeContentContainer>
 
 
             <!-- 面板区域，仅能包含PanelView-->
-            <com.kuanquan.library.view.panel.PanelContainer
+            <com.effective.android.panel.view.panel.PanelContainer
                 android:id="@+id/panel_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -112,7 +112,7 @@
                 <!-- panel_layout 用于指定面板该 ID 对应的布局 ，必须项-->
                 <!-- panel_trigger 用于用户点击该 ID 对应的 View 时切换到该面板 -->
                 <!-- panel_toggle  用于当该面板显示时 ，用户再次点击 panel_trigger 对应的 View 时是否回切输入法-->
-                <com.kuanquan.library.view.panel.PanelView
+                <com.effective.android.panel.view.panel.PanelView
                     android:id="@+id/panel_emotion"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -120,14 +120,14 @@
                     app:panel_trigger="@id/emotion_btn" />
 
 <!--                增加更多的面板，包括视频，音频，发送图片-->
-<!--                <com.kuanquan.library.view.panel.PanelView-->
+<!--                <com.effective.android.panel.view.panel.PanelView-->
 <!--                    android:id="@+id/panel_addition"-->
 <!--                    android:layout_width="match_parent"-->
 <!--                    android:layout_height="match_parent"-->
 <!--                    app:panel_layout="@layout/panel_add_layout"-->
 <!--                    app:panel_trigger="@id/add_btn" />-->
 
-            </com.kuanquan.library.view.panel.PanelContainer>
-        </com.kuanquan.library.view.PanelSwitchLayout>
+            </com.effective.android.panel.view.panel.PanelContainer>
+        </com.effective.android.panel.view.PanelSwitchLayout>
 
 </LinearLayout>
