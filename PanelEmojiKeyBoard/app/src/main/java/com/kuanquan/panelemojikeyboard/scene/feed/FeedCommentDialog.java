@@ -37,7 +37,7 @@ public class FeedCommentDialog extends PanelDialog implements DialogInterface.On
         return R.layout.dialog_feed_comment_layout;
     }
 
-    public FeedCommentDialog(Activity activity,onDialogStatus status) {
+    public FeedCommentDialog(Activity activity, onDialogStatus status) {
         super(activity);
         this.activity = activity;
         this.status = status;
