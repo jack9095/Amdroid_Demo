@@ -35,6 +35,7 @@
     <color name="btn_panel_text">#E91E63</color>
     <color name="btn_tip_text">#212121</color>
     <color name="btn_scroll_text">#00BCD4</color>
+    <color name="transparent">#00000000</color>
 
     <color name="video_input_text_hint">#5FFFFFFF</color>
 

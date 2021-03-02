@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.*;
 import com.effective.android.panel.utils.DisplayUtil;
 import com.kuanquan.panelemojikeyboard.R;
 import com.kuanquan.panelemojikeyboard.databinding.ActivityFeedDialogLayoutBinding;
+import com.kuanquan.panelemojikeyboard.scene.CustomDialogFragment;
 import com.kuanquan.panelemojikeyboard.systemui.StatusbarHelper;
 
 /**
@@ -113,7 +114,8 @@ public class FeedDialogActivity extends AppCompatActivity {
                     if (popup == null) {
                         popup = new FeedActionPopup(context, v1 -> {
                             itemView.getGlobalVisibleRect(selectedItemRect);
-                            new FeedCommentDialog((FeedDialogActivity) v1.getContext(), dialogStatusListener).show();
+                            CustomDialogFragment.newInstance().show(getSupportFragmentManager());
+//                            new FeedCommentDialog((FeedDialogActivity) v1.getContext(), dialogStatusListener).show();
                         });
                     }
                     if (popup.isShowing()) {
