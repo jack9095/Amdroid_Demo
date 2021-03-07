@@ -62,7 +62,9 @@
             android:theme="@style/VideoActivityTheme"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
 
-        <activity android:name="com.kuanquan.panelemojikeyboard.scene.feed.FeedDialogActivity" >
+        <activity android:name="com.kuanquan.panelemojikeyboard.scene.feed.FeedDialogActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
@@ -31,7 +32,28 @@ public abstract class BaseDialogFragment extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
+        Window window = getDialog().getWindow();
+        WindowManager.LayoutParams windowParams = window.getAttributes();
+        //这里设置透明度
+        windowParams.dimAmount = 0.3f;
+        window.setGravity(gravity());
+//        window.setBackgroundDrawableResource(R.color.transparent);
+        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//        window.setWindowAnimations(R.style.BottomEnterAnimation);
 
+//        if (needSetFullWidth()) {
+//            windowParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+//        }
+//
+//        if (needSetFullWidth80Percent()) {
+//            windowParams.width = (int) (ScreenUtil.getScreenWidth() * 0.8);
+//        }
+//
+//        if (needSetFullWidth90Percent()) {
+//            windowParams.width = (int) (ScreenUtil.getScreenWidth() * 0.9);
+//        }
+
+        window.setAttributes(windowParams);
     }
 
     protected int gravity() {

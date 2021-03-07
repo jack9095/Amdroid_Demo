@@ -36,6 +36,15 @@ public class FeedDialogActivity extends AppCompatActivity {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_feed_dialog_layout);
         mBinding.feedList.setLayoutManager(new LinearLayoutManager(this));
         mBinding.feedList.setAdapter(new FeedAdapter(this));
+
+        mBinding.rl.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                CustomDialogFragment.newInstance().show(getSupportFragmentManager());
+//                            new FeedCommentDialog((FeedDialogActivity) v1.getContext(), dialogStatusListener).show();
+            }
+        });
     }
 
     public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -140,20 +149,20 @@ public class FeedDialogActivity extends AppCompatActivity {
     public class FeedActionPopup extends PopupWindow {
 
         public FeedActionPopup(final Context context, View.OnClickListener clickListener) {
-            final View view = LayoutInflater.from(context).inflate(R.layout.pop_feed_action_layout, null, false);
-            setAnimationStyle(R.style.FeedActionPopup_anim_style);
-            setFocusable(true);
-            setWidth(DisplayUtil.dip2px(context, 150f));
-            setHeight(DisplayUtil.dip2px(context, 34f));
-            setOutsideTouchable(true);
-            ColorDrawable dw = new ColorDrawable(Color.TRANSPARENT);
-            setBackgroundDrawable(dw);
-            setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
-            setContentView(view);
-            view.findViewById(R.id.comment).setOnClickListener(v -> {
-                dismiss();
-                clickListener.onClick(v);
-            });
+//            final View view = LayoutInflater.from(context).inflate(R.layout.pop_feed_action_layout, null, false);
+//            setAnimationStyle(R.style.FeedActionPopup_anim_style);
+//            setFocusable(true);
+//            setWidth(DisplayUtil.dip2px(context, 150f));
+//            setHeight(DisplayUtil.dip2px(context, 34f));
+//            setOutsideTouchable(true);
+//            ColorDrawable dw = new ColorDrawable(Color.TRANSPARENT);
+//            setBackgroundDrawable(dw);
+//            setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
+//            setContentView(view);
+//            view.findViewById(R.id.comment).setOnClickListener(v -> {
+//                dismiss();
+//                clickListener.onClick(v);
+//            });
 
         }
 

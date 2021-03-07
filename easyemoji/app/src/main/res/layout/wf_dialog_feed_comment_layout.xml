@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/contentView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:background="@color/design_default_color_error"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"/>
+
+    <LinearLayout
+        android:id="@+id/input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_input_layout"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="bottom"
+        android:minHeight="@dimen/dp_50"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_7.5">
+
+        <!-- 输入入口 -->
+        <com.mumu.easyemoji.user.dialog.SoftEditText
+            android:id="@+id/edit_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_weight="1"
+            android:background="@drawable/sh_wechat_comment_input"
+            android:imeOptions="actionSearch"
+            android:maxLines="5"
+            android:minHeight="@dimen/dp_35"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_7.5"
+            android:paddingRight="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_3"
+            android:textCursorDrawable="@drawable/shape_edit_cursor"
+            android:textSize="@dimen/sp_16" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_35"
+            android:orientation="horizontal">
+
+            <!-- 表情入口 -->
+            <ImageView
+                android:id="@+id/emotion_btn"
+                android:layout_width="@dimen/dp_35"
+                android:layout_height="@dimen/dp_35"
+                android:layout_marginEnd="@dimen/dp_10"
+                android:layout_marginRight="@dimen/dp_10"
+                android:src="@drawable/selector_emotion_btn" />
+
+            <TextView
+                android:id="@+id/send"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/se_wechat_comment_send"
+                android:enabled="false"
+                android:gravity="center"
+                android:text="发送"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp_15" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <!--    表情面板布局-->
+    <LinearLayout
+        android:id="@+id/ll_face_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <com.mumu.easyemoji.user.EmotionRecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

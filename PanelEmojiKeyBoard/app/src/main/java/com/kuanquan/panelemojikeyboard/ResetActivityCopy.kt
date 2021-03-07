@@ -104,7 +104,7 @@ class ResetActivityCopy : AppCompatActivity() {
                     }
                 }
                 .addPanelChangeListener {
-                    onKeyboard {
+                    onKeyboard() {
                         Log.e(TAG, "唤起系统输入法")
                         emotionView.isSelected = false
                     }

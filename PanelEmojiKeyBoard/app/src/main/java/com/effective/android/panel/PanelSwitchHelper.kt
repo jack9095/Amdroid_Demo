@@ -32,13 +32,13 @@ class PanelSwitchHelper private constructor(builder: Builder, showKeyboard: Bool
     private val mPanelSwitchLayout: PanelSwitchLayout
 
     init {
-        Constants.DEBUG = builder.logTrack
-        if (builder.logTrack) {
-            builder.viewClickListeners.add(LogTracker)
-            builder.panelChangeListeners.add(LogTracker)
-            builder.keyboardStatusListeners.add(LogTracker)
-            builder.editFocusChangeListeners.add(LogTracker)
-        }
+//        Constants.DEBUG = builder.logTrack
+//        if (builder.logTrack) {
+//            builder.viewClickListeners.add(LogTracker)
+//            builder.panelChangeListeners.add(LogTracker)
+//            builder.keyboardStatusListeners.add(LogTracker)
+//            builder.editFocusChangeListeners.add(LogTracker)
+//        }
         mPanelSwitchLayout = builder.panelSwitchLayout!!
         mPanelSwitchLayout.setContentScrollOutsizeEnable(builder.contentScrollOutsideEnable)
         mPanelSwitchLayout.setScrollMeasurers(builder.contentScrollMeasurers)
@@ -48,6 +48,13 @@ class PanelSwitchHelper private constructor(builder: Builder, showKeyboard: Bool
         if (showKeyboard) {
             mPanelSwitchLayout.toKeyboardState(true)
         }
+    }
+
+    /**
+     * 显示键盘
+     */
+    fun showKeyboard(){
+        mPanelSwitchLayout.toKeyboardState(true)
     }
 
     fun addSecondaryInputView(editText: EditText){
@@ -101,6 +108,7 @@ class PanelSwitchHelper private constructor(builder: Builder, showKeyboard: Bool
      * 隐藏输入法或者面板
      */
     fun resetState() {
+//        mPanelSwitchLayout.checkoutPanel(Constants.PANEL_KEYBOARD)
         mPanelSwitchLayout.checkoutPanel(Constants.PANEL_NONE)
     }
 

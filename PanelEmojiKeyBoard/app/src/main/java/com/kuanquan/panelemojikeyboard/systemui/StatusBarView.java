@@ -40,15 +40,15 @@ public class StatusBarView extends LinearLayout {
     }
 
     private void initView(AttributeSet attrs, int defStyle) {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.view_status_bar_layout, this, true);
-        final TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.StatusBarView, defStyle, 0);
-        if (typedArray != null) {
-            mStatusBarColor = typedArray.getResourceId(R.styleable.StatusBarView_status_bar_color, R.color.colorPrimary);
-        } else {
-            mStatusBarColor = R.color.colorPrimary;
-        }
-        setBackgroundColor(ContextCompat.getColor(getContext(), mStatusBarColor));
-        view.findViewById(R.id.status_bar).setMinimumHeight(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ? getStatusBarHeight(getContext()) : 0);
+//        View view = LayoutInflater.from(getContext()).inflate(R.layout.view_status_bar_layout, this, true);
+//        final TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.StatusBarView, defStyle, 0);
+//        if (typedArray != null) {
+//            mStatusBarColor = typedArray.getResourceId(R.styleable.StatusBarView_status_bar_color, R.color.colorPrimary);
+//        } else {
+//            mStatusBarColor = R.color.colorPrimary;
+//        }
+//        setBackgroundColor(ContextCompat.getColor(getContext(), mStatusBarColor));
+//        view.findViewById(R.id.status_bar).setMinimumHeight(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ? getStatusBarHeight(getContext()) : 0);
     }
 
     public void setColor(@ColorRes int statusBarColor) {

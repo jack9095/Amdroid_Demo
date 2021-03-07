@@ -44,7 +44,7 @@ public class FeedCommentDialog extends PanelDialog implements DialogInterface.On
         super(activity);
         this.activity = activity;
 //        this.status = status;
-//        setOnKeyListener(this);
+        setOnKeyListener(this);
 //        ((EditText) rootView.findViewById(R.id.edit_text)).addTextChangedListener(new TextWatcher() {
 //            @Override
 //            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
