@@ -142,5 +142,6 @@ Glide的完美应用及监听滑动几屏的案例。
 BaseQuickAdapter开源库的使用案例。
 
 
+### 36、 表情软键盘和系统软键盘的切换
 
-
+PanelEmojiKeyBoard 和 demo
