@@ -145,3 +145,7 @@ BaseQuickAdapter开源库的使用案例。
 ### 36、 表情软键盘和系统软键盘的切换
 
 PanelEmojiKeyBoard 和 demo
+
+### 36、 表情软键盘和系统软键盘的切换
+
+ConstraintLayout2 的使用
