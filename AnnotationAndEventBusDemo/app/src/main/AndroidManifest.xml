@@ -16,6 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name="com.kuanquan.annotationandeventbusdemo.eventbus.TwoActivity"/>
+        <activity android:name="com.kuanquan.annotationandeventbusdemo.eventbus.OneActivity" />
     </application>
 
 </manifest>
