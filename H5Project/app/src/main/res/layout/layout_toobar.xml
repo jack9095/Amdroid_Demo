@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_rl"
+    android:layout_width="match_parent"
+    android:layout_height="44dp"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_width="@dimen/mar_40"
+        android:layout_height="@dimen/mar_40"
+        android:layout_centerVertical="true"
+        android:scaleType="centerInside"
+        android:layout_marginLeft="@dimen/mar_8"
+        android:padding="@dimen/mar_8" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textColor="@color/txt0"
+        android:textSize="@dimen/txt_16" />
+
+
+    <TextView
+        android:id="@+id/tv_right"
+        android:layout_width="50dp"
+        android:text="预定"
+        android:visibility="gone"
+        android:gravity="center"
+        android:layout_alignParentRight="true"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:textColor="@color/txt3"
+        android:textSize="@dimen/txt_16" />
+
+    <View
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#efefef"/>
+</RelativeLayout>

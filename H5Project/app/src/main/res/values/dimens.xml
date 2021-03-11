@@ -1,0 +1,86 @@
+<resources>
+    <!-- mar -->
+
+    <dimen name="mar_9">9dp</dimen>
+    <dimen name="mar_8">8dp</dimen>
+    <dimen name="mar_7">7dp</dimen>
+    <dimen name="mar_5">5dp</dimen>
+    <dimen name="mar_3">3dp</dimen>
+    <dimen name="mar_2">2dp</dimen>
+    <dimen name="mar_1">1dp</dimen>
+
+    <dimen name="mar_236">236dp</dimen>
+    <dimen name="mar_23">23dp</dimen>
+    <dimen name="mar_200">200dp</dimen>
+    <dimen name="mar_195">195dp</dimen>
+    <dimen name="mar_190">190dp</dimen>
+    <dimen name="mar_167">167dp</dimen>
+    <dimen name="mar_160">160dp</dimen>
+    <dimen name="mar_143">143dp</dimen>
+    <dimen name="mar_140">140dp</dimen>
+    <dimen name="mar_120">120dp</dimen>
+    <dimen name="mar_121">121dp</dimen>
+    <dimen name="mar_135">135dp</dimen>
+    <dimen name="mar_117">117dp</dimen>
+
+    <dimen name="mar_107">107dp</dimen>
+    <dimen name="mar_100">100dp</dimen>
+    <dimen name="mar_91">91dp</dimen>
+    <dimen name="mar_70">70dp</dimen>
+    <dimen name="mar_69">69dp</dimen>
+    <dimen name="mar_67">67dp</dimen>
+    <dimen name="mar_60">60dp</dimen>
+    <dimen name="mar_50">50dp</dimen>
+    <dimen name="mar_41">41dp</dimen>
+    <dimen name="mar_40">40dp</dimen>
+    <dimen name="mar_20">20dp</dimen>
+    <dimen name="mar_17">17dp</dimen>
+    <dimen name="mar_33">33dp</dimen>
+    <dimen name="mar_32">32dp</dimen>
+    <dimen name="mar_30">30dp</dimen>
+    <dimen name="mar_11">10dp</dimen>
+    <dimen name="mar_10">10dp</dimen>
+
+    <dimen name="mar_98">98dp</dimen>
+    <dimen name="mar_95">95dp</dimen>
+    <dimen name="mar_75">75dp</dimen>
+    <dimen name="mar_74">74dp</dimen>
+    <dimen name="mar_65">65dp</dimen>
+    <dimen name="mar_56">56dp</dimen>
+    <dimen name="mar_55">55dp</dimen>
+    <dimen name="mar_53">53dp</dimen>
+    <dimen name="mar_44">44dp</dimen>
+    <dimen name="mar_42">42dp</dimen>
+    <dimen name="mar_43">43dp</dimen>
+    <dimen name="mar_45">45dp</dimen>
+    <dimen name="mar_37">37dp</dimen>
+    <dimen name="mar_35">35dp</dimen>
+    <dimen name="mar_27">27dp</dimen>
+    <dimen name="mar_28">28dp</dimen>
+    <dimen name="mar_29">29dp</dimen>
+    <dimen name="mar_24">24dp</dimen>
+    <dimen name="mar_15">15dp</dimen>
+    <dimen name="mar_14">14dp</dimen>
+    <dimen name="mar_13">13dp</dimen>
+    <dimen name="mar_12">12dp</dimen>
+
+    <dimen name="mar_16">16dp</dimen>
+    <dimen name="mar_18">18dp</dimen>
+
+    <dimen name="mar_46">46dp</dimen>
+    <dimen name="mar_47">47dp</dimen>
+    <dimen name="mar_48">48dp</dimen>
+    <dimen name="mar_49">49dp</dimen>
+
+
+    <!-- TXT SIZE -->
+    <dimen name="txt_11">11sp</dimen>
+    <dimen name="txt_12">12sp</dimen>
+    <dimen name="txt_13">13sp</dimen>
+    <dimen name="txt_14">14sp</dimen>
+    <dimen name="txt_16">16sp</dimen>
+    <dimen name="txt_15">15sp</dimen>
+    <dimen name="txt_18">18sp</dimen>
+    <dimen name="txt_20">20sp</dimen>
+
+</resources>

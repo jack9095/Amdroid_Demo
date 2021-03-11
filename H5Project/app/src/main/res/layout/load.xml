@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="@dimen/mar_140"
+        android:layout_height="@dimen/mar_140"
+        android:layout_centerInParent="true"
+        android:background="@drawable/load_shape"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleInverse"
+            android:layout_width="@dimen/mar_40"
+            android:layout_height="@dimen/mar_40"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:indeterminateTint="#ffffff" />
+
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingTop="@dimen/mar_10"
+            android:text="发布中。。。"
+            android:textColor="#fff" />
+    </LinearLayout>
+</RelativeLayout>
