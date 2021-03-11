@@ -84,7 +84,7 @@ Gradle自定义插件
 
 基于接口，通过隔离层，实现解耦的网络请求、图片加载的简单Demo，主要是体验封装的流程、思想
 
-### 22、ViewBinder
+### 22、ViewBinder  APT
 
 基于APT实现的类似ButterKnife的控件绑定的简单Demo。
 
@@ -142,18 +142,18 @@ Glide的完美应用及监听滑动几屏的案例。
 BaseQuickAdapter开源库的使用案例。
 
 
-### 36、 表情软键盘和系统软键盘的切换
+### 36、 PanelEmojiKeyBoard 和 demo
 
-PanelEmojiKeyBoard 和 demo
+表情软键盘和系统软键盘的切换
 
-### 36、 表情软键盘和系统软键盘的切换
+### 36、 ConstraintLayout2
 
 ConstraintLayout2 的使用
 
-### 37、 Compose使用
+### 37、 jetpack-compose
 
-jetpack-compose 的使用
+compose 的使用
 
-### 37、 广播的使用
+### 37、 BroadcastReceiver
 
-BroadcastReceiver的使用
+广播的使用
