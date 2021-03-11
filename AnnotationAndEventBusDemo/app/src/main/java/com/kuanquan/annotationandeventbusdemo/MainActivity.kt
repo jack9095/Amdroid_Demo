@@ -1,4 +1,4 @@
-package com.kuanquan.handlerthread
+package com.kuanquan.annotationandeventbusdemo
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
