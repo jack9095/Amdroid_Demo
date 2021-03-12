@@ -173,3 +173,7 @@ compose 的使用
 ### 43、 CustomLayoutManager
 
 LayoutManager自定义，实现滑动卡片消失
+
+### 44、 OutApplication、PageTransitionAnimation
+
+Activity转场动画过渡元素及共享元素第二个页面滑动关闭
