@@ -166,6 +166,10 @@ compose 的使用
 
 编译时注解及自定义 EventBus 的简单demo
 
-### 41、 CardScrollPage
+### 42、 CardScrollPage
 
 层叠滑动 ViewPager
+
+### 43、 CustomLayoutManager
+
+LayoutManager自定义，实现滑动卡片消失
