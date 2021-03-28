@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.yupaopao.binder_service">
+    package="com.kuanquan.binder_service">
 
     <application
         android:allowBackup="true"
@@ -16,6 +16,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+<!--        android:exported="true"  这里使用的原因是需要跨进城通信-->
+        <service android:name=".FlyAidlService"
+            android:exported="true"/>
+
     </application>
 
 </manifest>
