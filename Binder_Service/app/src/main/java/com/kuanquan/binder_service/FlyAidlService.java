@@ -1,12 +1,12 @@
 package com.kuanquan.binder_service;
 
-import android.app.Person;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
 
 import androidx.annotation.Nullable;
+import com.kuanquan.binder_service.Person;
 
 import java.util.ArrayList;
 import java.util.List;
