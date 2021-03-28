@@ -37,7 +37,7 @@ public class Root {
 
     public boolean checkRootMethod2() {
         try {
-            File file = new File(" / system / app / Superuser.apk");
+            File file = new File("/system/app/Superuser.apk");
             if (file.exists()) {
                 return true;
             }

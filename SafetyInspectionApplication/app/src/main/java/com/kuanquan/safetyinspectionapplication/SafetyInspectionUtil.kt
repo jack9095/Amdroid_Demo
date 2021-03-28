@@ -2,6 +2,7 @@ package com.kuanquan.safetyinspectionapplication
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Build
 import android.util.Log
 import java.io.BufferedReader
 import java.io.DataOutputStream
@@ -10,79 +11,60 @@ import java.io.FileReader
 
 object SafetyInspectionUtil {
 
-//    private const val NEED_CHECK_FIELD = "needPathCheck"
-//    private const val NEED_CHECK_ABI = "needABICheck"
-//
-//    /**
-//     * 检测双开
-//     */
-//    fun check(context: Context?) {
-//        context?.apply {
-//            try {
-//                val needCheck = SPCacheService.getInstance().get(NEED_CHECK_FIELD, true)
-//                if (!needCheck) {
-//                    return
-//                }
-//                val filePath = filesDir?.absolutePath
-//                if (filePath?.length!! > 60) {
-//                    SPCacheService.getInstance().put(NEED_CHECK_FIELD, false)
-//                    Soraka.logi("container", "file_path", "file目录路径有问题", "当前路径:{$filePath}");
-//                }
-//                LogUtil.i("FilePathCheckUtil", "filePath:{$filePath}")
-//            } catch (ignore: Throwable) {
-//
-//            }
-//        }
-//    }
-//
-//    @JvmStatic
-//    fun getFilePath(): String? {
-//        return EnvironmentService.getInstance().context?.filesDir?.absolutePath
-//    }
-//
-//    /**
-//     * 检测是否是模拟器 x86 模拟器
-//     */
-//    @JvmStatic
-//    fun checkCpuABI(context: Context?) {
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-//            return
-//        }
-//        context?.apply {
-//            try {
-//                val needCheck = SPCacheService.getInstance().get(NEED_CHECK_ABI, true)
-//                if (!needCheck) {
-//                    return
-//                }
-//                val abiSb = StringBuffer()
-//                abiSb.append("abis:")
-//                if (Build.SUPPORTED_ABIS != null) {
-//                    for (abi in Build.SUPPORTED_ABIS) {
-//                        abiSb.append(abi).append(",")
-//                    }
-//                }
-//                abiSb.append("abis32:")
-//
-//                if (Build.SUPPORTED_32_BIT_ABIS != null) {
-//                    for (abi in Build.SUPPORTED_32_BIT_ABIS) {
-//                        abiSb.append(abi).append(",")
-//                    }
-//                }
-//                abiSb.append("abis64:")
-//                if (Build.SUPPORTED_64_BIT_ABIS != null) {
-//                    for (abi in Build.SUPPORTED_64_BIT_ABIS) {
-//                        abiSb.append(abi).append(",")
-//                    }
-//                }
-//
-//                Soraka.logi("container", "abis", abiSb.toString(), Build.FINGERPRINT)
-//                SPCacheService.getInstance().put(NEED_CHECK_ABI, false)
-//
-//            } catch (ignore: Throwable) {
-//
-//            }
-//        }
-//    }
+    /**
+     * 检测双开
+     */
+    fun check(context: Context?) {
+        context?.apply {
+            try {
+                val filePath = filesDir?.absolutePath
+                if (filePath?.length!! > 60) {
+                    Log.e("container", "file目录路径有问题 当前路径:{$filePath}");
+                }
+                Log.e("FilePathCheckUtil", "filePath:{$filePath}")
+            } catch (ignore: Throwable) {
+
+            }
+        }
+    }
+
+
+    /**
+     * 检测是否是模拟器 x86 模拟器
+     */
+    @JvmStatic
+    fun checkCpu(context: Context?) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            return
+        }
+        context?.apply {
+            try {
+                val abiSb = StringBuffer()
+                abiSb.append("abis:")
+                if (Build.SUPPORTED_ABIS != null) {
+                    for (abi in Build.SUPPORTED_ABIS) {
+                        abiSb.append(abi).append(",")
+                    }
+                }
+                abiSb.append("abis32:")
+
+                if (Build.SUPPORTED_32_BIT_ABIS != null) {
+                    for (abi in Build.SUPPORTED_32_BIT_ABIS) {
+                        abiSb.append(abi).append(",")
+                    }
+                }
+                abiSb.append("abis64:")
+                if (Build.SUPPORTED_64_BIT_ABIS != null) {
+                    for (abi in Build.SUPPORTED_64_BIT_ABIS) {
+                        abiSb.append(abi).append(",")
+                    }
+                }
+                Log.e("checkCpu", "检测是否是模拟器 CPU:{${abiSb.toString()}}")
+            } catch (ignore: Throwable) {
+
+            }
+        }
+    }
 
     /**
      * 查找设备安装目录中是否存在hook工具

@@ -17,6 +17,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.belowIv.setOnClickListener(object : View.OnClickListener, CustomListener{
+            override fun onClick(v: View?) {
+
+            }
+
+            override fun demo() {
+
+            }
+
+        })
+    }
+
+    interface CustomListener {
+        fun demo()
     }
 
     var mPath: AnimatorPath? = null

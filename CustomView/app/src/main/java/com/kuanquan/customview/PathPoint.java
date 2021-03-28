@@ -45,4 +45,5 @@ public class PathPoint {
     public static PathPoint lineTo(float x, float y) {
         return new PathPoint(LINE, x, y);
     }
+
 }

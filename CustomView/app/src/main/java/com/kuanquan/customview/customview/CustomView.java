@@ -14,6 +14,13 @@ import androidx.annotation.Nullable;
  * 演示贝塞尔曲线
  */
 public class CustomView extends View {
+
+    class Test {
+        private void setView(){
+
+        }
+    }
+
     public CustomView(Context context) {
         super(context);
         init();
@@ -43,6 +50,14 @@ public class CustomView extends View {
         mPaint.setStrokeWidth(7);
 
         mPath = new Path();
+
+        setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @Override
