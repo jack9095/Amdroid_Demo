@@ -177,3 +177,11 @@ LayoutManager自定义，实现滑动卡片消失
 ### 44、 OutApplication、PageTransitionAnimation
 
 Activity转场动画过渡元素及共享元素第二个页面滑动关闭
+
+### 45、 Binder_Client、Binder_Service
+
+Binder 进程间的通信 AIDL IPC
+
+### 46、 NineLuckPan
+
+九宫格抽奖
