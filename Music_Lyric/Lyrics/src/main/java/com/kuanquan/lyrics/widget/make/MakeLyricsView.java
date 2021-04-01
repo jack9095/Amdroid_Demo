@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.TreeMap;
 
 /**
- * @Description: 制作歌词
+ *  制作歌词
  **/
 public class MakeLyricsView extends View {
 

@@ -1,38 +1,44 @@
-package com.kuanquan.lyrics_demo.many;
+package com.kuanquan.lyrics_demo;
 
 import android.annotation.SuppressLint;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Handler;
+import android.os.*;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.kuanquan.lyrics.utils.TimeUtils;
-import com.kuanquan.lyrics_demo.R;
 import com.zml.libs.widget.MusicSeekBar;
 
-public abstract class BaseManyActivity extends AppCompatActivity {
+public abstract class BaseFloatActivity  extends AppCompatActivity implements Handler.Callback {
+    protected final String TAG = FloatActivity.class.getName();
+    /**
+     * 播放器
+     */
+    protected MediaPlayer mMediaPlayer;
 
     /**
      * 更新进度
      */
     protected final int UPDATE_PROGRESS = 0;
+
     /**
      * 额外歌词回调
      */
     protected final int EXTRALRCALLBACK = 1;
+
     /**
      * 播放歌曲
      */
     protected final int MUSIC_PLAY = 2;
+
     /**
      * 歌曲暂停
      */
     protected final int MUSIC_PAUSE = 3;
+
     /**
      * 歌曲初始
      */
@@ -49,17 +55,6 @@ public abstract class BaseManyActivity extends AppCompatActivity {
      * 歌曲唤醒
      */
     protected final int MUSIC_RESUME = 7;
-    
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-    /**
-     * 播放器
-     */
-    protected MediaPlayer mMediaPlayer;
     /**
      * 歌曲播放进度
      */
@@ -73,42 +68,75 @@ public abstract class BaseManyActivity extends AppCompatActivity {
      */
     protected TextView mSongDurationTV;
 
-    @SuppressLint("ObsoleteSdkInt")
-    protected void setViewOnClick(Handler mHandler){
-        //
-        mSongProgressTV = findViewById(R.id.songProgress);
-        mMusicSeekBar = findViewById(R.id.lrcseekbar);
-        mMusicSeekBar.setOnMusicListener(new MusicSeekBar.OnMusicListener() {
-            @Override
-            public String getTimeText() {
-                return TimeUtils.parseMMSSString(mMusicSeekBar.getProgress());
+    @Override
+    public boolean handleMessage(@NonNull Message msg) {
+        switch (msg.what) {
+            case UPDATE_PROGRESS:
+                mMusicSeekBar.setEnabled(true);
+                if (mMediaPlayer != null) {
+                    if (mMusicSeekBar.getMax() == 0) {
+                        mMusicSeekBar.setMax(mMediaPlayer.getDuration());
+                        mSongDurationTV.setText(TimeUtils.parseMMSSString(mMediaPlayer.getDuration()));
+                    }
+                    //
+                    mMusicSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
+                    mSongProgressTV.setText(TimeUtils.parseMMSSString(mMediaPlayer.getCurrentPosition()));
+                }
+                break;
+            case MUSIC_STOP:
+//                mFloatLyricsView.initLrcData();
+                //
+                mMusicSeekBar.setProgress(0);
+                mMusicSeekBar.setMax(0);
+                mMusicSeekBar.setEnabled(false);
+                //
+                mSongDurationTV.setText(TimeUtils.parseMMSSString(0));
+                mSongProgressTV.setText(TimeUtils.parseMMSSString(0));
+                break;
+        }
+        return false;
+    }
+
+    protected Handler mHandler = new Handler(Looper.getMainLooper(), this);
+
+    protected Runnable mPlayRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+                playRunnable();
             }
+        }
+    };
+
+    protected abstract void playRunnable();
+    protected abstract void loadLrcFile();
+    /**
+     * 加载歌词文件
+     */
+    @SuppressLint("StaticFieldLeak")
+    private void loadFile() {
+
+        new AsyncTask<String, Integer, String>() {
 
             @Override
-            public String getLrcText() {
+            protected String doInBackground(String... strings) {
+                loadLrcFile();
                 return null;
             }
+        }.execute("");
+    }
 
-            @Override
-            public void onProgressChanged(MusicSeekBar musicSeekBar) {
-
-            }
-
-            @Override
-            public void onTrackingTouchFinish(MusicSeekBar musicSeekBar) {
-                if (mMediaPlayer != null) {
-                    mMediaPlayer.seekTo(mMusicSeekBar.getProgress());
-                }
-            }
-        });
-
+    protected void setViewOnClick(Handler mHandler){
         mSongDurationTV = findViewById(R.id.songDuration);
-
+        mSongProgressTV = findViewById(R.id.songProgress);
+        mMusicSeekBar = findViewById(R.id.lrcseekbar);
         // 播放按钮
         findViewById(R.id.play).setOnClickListener(view -> {
 
             if (mMediaPlayer == null) {
+
                 mHandler.sendEmptyMessage(MUSIC_INIT);
+
                 //
                 mMediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.aiqingyu);
                 mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -117,6 +145,7 @@ public abstract class BaseManyActivity extends AppCompatActivity {
                     public void onCompletion(MediaPlayer mediaPlayer) {
                         mMediaPlayer.release();
                         mMediaPlayer = null;
+
                         mHandler.sendEmptyMessage(MUSIC_STOP);
                     }
                 });
@@ -159,37 +188,9 @@ public abstract class BaseManyActivity extends AppCompatActivity {
                 mMediaPlayer.release();
                 mMediaPlayer = null;
             }
+
             mHandler.sendEmptyMessage(MUSIC_STOP);
         });
-    }
-
-    protected Runnable mPlayRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
-                playRunnable();
-            }
-        }
-    };
-
-    protected abstract void playRunnable();
-
-    protected abstract void loadLrcFile();
-
-    /**
-     * 加载歌词文件
-     */
-    @SuppressLint("StaticFieldLeak")
-    private void loadFile() {
-
-        new AsyncTask<String, Integer, String>() {
-
-            @Override
-            protected String doInBackground(String... strings) {
-                loadLrcFile();
-                return null;
-            }
-        }.execute("");
     }
 
     @Override

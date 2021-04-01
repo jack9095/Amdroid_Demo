@@ -28,7 +28,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @Description: 网易歌词读取器
+ * 网易歌词读取器
  **/
 public class WYLyricsFileReader extends LyricsFileReader {
     /**

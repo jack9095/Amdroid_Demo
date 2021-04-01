@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * @Description: hrc歌词
+ * hrc歌词
  */
 
 public class HrcLyricsFileWriter extends LyricsFileWriter {

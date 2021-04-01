@@ -213,10 +213,6 @@ public class ManyLyricsView extends AbstractLrcView {
     /**
      * @throws
      * @Description: 初始
-     * @param:
-     * @return:
-     * @author: zhangliangming
-     * @date: 2018-04-21 9:08
      */
     private void init(Context context) {
 

@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * @Description: ksc歌词保存器
+ * ksc歌词保存器
  */
 public class KscLyricsFileWriter extends LyricsFileWriter {
 

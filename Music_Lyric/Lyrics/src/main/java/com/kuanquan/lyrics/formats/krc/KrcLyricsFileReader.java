@@ -22,7 +22,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @Description: krcs歌词读取器
+ * krcs歌词读取器
  */
 
 public class KrcLyricsFileReader extends LyricsFileReader {

@@ -19,14 +19,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Music_Lyric">
         <activity android:name=".main.MainActivity">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+
+        <activity android:name=".floata.FloatActivityCopy" />
+        <activity android:name=".FloatActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".FloatActivity" />
         <activity android:name=".many.ManyActivity"/>
     </application>
 

@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * @Description: krc歌词生成器, 不是生成官方的歌词文件
+ * krc歌词生成器, 不是生成官方的歌词文件
  */
 
 public class KrcLyricsFileWriter extends LyricsFileWriter {

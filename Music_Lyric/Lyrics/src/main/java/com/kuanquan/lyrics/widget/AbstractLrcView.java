@@ -1,5 +1,6 @@
 package com.kuanquan.lyrics.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -77,7 +78,6 @@ public abstract class AbstractLrcView extends View {
      * 翻译和音译歌词
      */
     public static final int EXTRALRCTYPE_BOTH = 3;
-
     /**
      * 初始
      */
@@ -86,7 +86,6 @@ public abstract class AbstractLrcView extends View {
      * 播放
      */
     public static final int LRCPLAYERSTATUS_PLAY = 1;
-
     /**
      * seekto
      */
@@ -188,7 +187,6 @@ public abstract class AbstractLrcView extends View {
      * 搜索歌词回调
      */
     private SearchLyricsListener mSearchLyricsListener;
-
     /**
      * 显示翻译歌词
      */
@@ -205,7 +203,6 @@ public abstract class AbstractLrcView extends View {
      * 默认只显示默认歌词
      */
     public int mExtraLrcStatus = EXTRALRCSTATUS_NOSHOWEXTRALRC;
-
     /**
      * 空行高度
      */
@@ -357,7 +354,8 @@ public abstract class AbstractLrcView extends View {
     /**
      * 处理ui任务
      */
-    private Handler mUIHandler = new Handler() {
+    @SuppressLint("HandlerLeak")
+    private final Handler mUIHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
             Context context = mActivityWR.get();
@@ -381,6 +379,7 @@ public abstract class AbstractLrcView extends View {
      *
      * @param delayMs
      */
+    @SuppressLint("StaticFieldLeak")
     public void executeTask(final long delayMs) {
         if (mUpdateTask != null) {
             mUpdateTask.cancel(true);
@@ -425,16 +424,9 @@ public abstract class AbstractLrcView extends View {
     }
 
     /**
-     * @throws
-     * @Description: 初始
-     * @param:
-     * @return:
-     * @author: zhangliangming
-     * @date: 2018-04-21 9:08
+     * 初始化
      */
     private void init(Context context) {
-
-//        RegisterHelper.verify();
 
         //初始默认数据
         mDefText = context.getString(R.string.def_text);
@@ -589,12 +581,7 @@ public abstract class AbstractLrcView extends View {
     }
 
     /**
-     * @throws
      * @Description: 刷新视图
-     * @param:
-     * @return:
-     * @author: zhangliangming
-     * @date: 2018-04-21 9:24
      */
     public synchronized void invalidateView() {
         if (Looper.getMainLooper() == Looper.myLooper()) {
@@ -675,8 +662,40 @@ public abstract class AbstractLrcView extends View {
      * @param paintColor       至少两种颜色
      * @param isInvalidateView 是否更新视图
      */
+    public void setPaintColor(int paintColor, boolean isInvalidateView) {
+        this.mPaintColors = new int[]{
+                paintColor,
+                paintColor
+        };
+        if (isInvalidateView) {
+            invalidateView();
+        }
+    }
+
+    /**
+     * 设置默认颜色
+     *
+     * @param paintColor       至少两种颜色
+     * @param isInvalidateView 是否更新视图
+     */
     public void setPaintColor(int[] paintColor, boolean isInvalidateView) {
         this.mPaintColors = paintColor;
+        if (isInvalidateView) {
+            invalidateView();
+        }
+    }
+
+    /**
+     * 设置高亮颜色
+     *
+     * @param paintHLColor     至少两种颜色
+     * @param isInvalidateView 是否更新视图
+     */
+    public void setPaintHLColor(int paintHLColor, boolean isInvalidateView) {
+        this.mPaintHLColors = new int[]{
+                paintHLColor,
+                paintHLColor
+        };
         if (isInvalidateView) {
             invalidateView();
         }

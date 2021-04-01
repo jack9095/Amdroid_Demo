@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * @Description: ksc歌词解析器
+ * ksc歌词解析器
  */
 public class KscLyricsFileReader extends LyricsFileReader {
     /**

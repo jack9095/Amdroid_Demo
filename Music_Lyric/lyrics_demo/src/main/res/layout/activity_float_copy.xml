@@ -10,7 +10,7 @@
     <com.kuanquan.lyrics.widget.FloatLyricsView
         android:id="@+id/floatlyricsview"
         android:layout_width="match_parent"
-        android:layout_height="100dp" />
+        android:layout_height="65dp" />
 
     <!-- 进度时间展示 -->
     <RelativeLayout
@@ -77,4 +77,30 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/font"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="字体" />
+
+        <Button
+            android:id="@+id/transliteration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="音译" />
+
+        <Button
+            android:id="@+id/translate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="翻译" />
+    </LinearLayout>
 </LinearLayout>

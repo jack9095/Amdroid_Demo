@@ -167,7 +167,6 @@ public class MakeLrcLineInfo extends MakeLrcInfo {
     /**
      * 单个歌词字时间实体类
      *
-     * @author zhangliangming
      */
     class WordDisInterval {
         /**
