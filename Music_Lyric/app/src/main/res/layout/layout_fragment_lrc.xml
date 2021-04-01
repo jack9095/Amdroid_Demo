@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/line"
+            android:background="#ffffff">
+
+
+            <com.zlm.hp.lyrics.widget.ManyLyricsView
+                android:id="@+id/lrcview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/hideTranslateImg"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:clickable="true"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/showTranslateImg"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:clickable="true"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/showTransliterationImg"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:clickable="true"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/hideTransliterationImg"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:clickable="true"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/showTTToTranslateImg"
+                android:layout_width="50dp"
+                android:layout_height="25dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:clickable="true"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/showTTToTransliterationImg"
+                android:layout_width="50dp"
+                android:layout_height="25dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:clickable="true"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/hideTTImg"
+                android:layout_width="50dp"
+                android:layout_height="25dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:clickable="true"
+                android:visibility="invisible" />
+        </RelativeLayout>
+
+        <com.kuanquan.music_lyric.widget.DividerView
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1.5dip"
+            android:layout_above="@+id/uselrcbtn" />
+
+        <com.kuanquan.music_lyric.widget.ButtonRelativeLayout
+            android:id="@+id/uselrcbtn"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:clickable="true">
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="8dp"
+                android:text="使用"
+                android:textColor="#fff" />
+
+
+        </com.kuanquan.music_lyric.widget.ButtonRelativeLayout>
+    </RelativeLayout>
+</LinearLayout>

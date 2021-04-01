@@ -1,0 +1,4 @@
+include ':lyrics_demo'
+include ':Lyrics'
+include ':app'
+rootProject.name = "Music_Lyric"
