@@ -20,9 +20,7 @@ import java.util.TreeMap;
 
 /**
  * @Description: 双行歌词，支持翻译（该歌词在这里只以动感歌词的形式显示）和音译歌词（注：不支持lrc歌词的显示）
- * @author: zhangliangming
- * @date: 2018-04-21 11:43
- **/
+ */
 public class FloatLyricsView extends AbstractLrcView {
 
     /**

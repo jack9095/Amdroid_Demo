@@ -18,8 +18,6 @@ import java.util.TreeMap;
 
 /**
  * @Description: 网易歌词生成器
- * @author: zhangliangming
- * @date: 2018-12-27 0:03
  **/
 public class WYLyricsFileWriter extends LyricsFileWriter {
     /**

@@ -11,8 +11,6 @@ import java.util.TreeMap;
 
 /**
  * @Description: trc歌词生成器
- * @author: zhangliangming
- * @date: 2020-02-26 20:35
  **/
 
 public class TrcLyricsFileWriter extends LyricsFileWriter {

@@ -29,8 +29,6 @@ import java.util.regex.Pattern;
 
 /**
  * @Description: 网易歌词读取器
- * @author: zhangliangming
- * @date: 2018-12-27 0:03
  **/
 public class WYLyricsFileReader extends LyricsFileReader {
     /**

@@ -4,7 +4,6 @@ import com.kuanquan.lyrics.model.LyricsLineInfo;
 
 /**
  * 制作歌词信息
- * Created by zhangliangming on 2018-04-01.
  */
 
 public class MakeLrcInfo {

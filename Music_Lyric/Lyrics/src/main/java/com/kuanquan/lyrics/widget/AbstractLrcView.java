@@ -27,11 +27,6 @@ import java.util.concurrent.Executors;
 
 /**
  * @Description: 歌词抽象视图
- * @param:
- * @return:
- * @throws
- * @author: zhangliangming
- * @date: 2018-04-21 9:06
  */
 public abstract class AbstractLrcView extends View {
 

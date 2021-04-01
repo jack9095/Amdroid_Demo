@@ -5,8 +5,6 @@ import java.text.DecimalFormat;
 
 /**
  * 
- * @author zhangliangming
- * 
  */
 public class FileUtils {
 	public static String getFileExt(File file) {

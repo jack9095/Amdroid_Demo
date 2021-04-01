@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.kuanquan.lyrics_demo.MainActivity">
+    tools:context="com.kuanquan.lyrics_demo.main.MainActivity">
 
     <Button
         android:id="@+id/float_btn"

@@ -1,25 +1,53 @@
-package com.kuanquan.lyrics_demo;
+package com.kuanquan.lyrics_demo.main;
 
 import android.annotation.SuppressLint;
-import android.content.ContentUris;
-import android.content.Context;
+import android.content.*;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Environment;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
-
+import android.os.*;
+import android.provider.*;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class BaseActivity extends AppCompatActivity {
+import com.kuanquan.lyrics_demo.FloatActivity;
+import com.kuanquan.lyrics_demo.many.ManyActivity;
+import com.kuanquan.lyrics_demo.R;
+
+public class BaseMainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    protected void setViewOnClick(){
+        // 进入双行歌词视图测试
+        findViewById(R.id.float_btn).setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), FloatActivity.class);
+            startActivity(intent);
+        });
+
+        // 进入多行歌词视图测试
+        findViewById(R.id.many_btn).setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), ManyActivity.class);
+            startActivity(intent);
+        });
+
+        // 选择歌词文件：LRC、KRC、KSC、HRC格式
+        findViewById(R.id.select_file).setOnClickListener(view -> {
+            Intent intent;
+            if (Build.VERSION.SDK_INT < 19) {
+                intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("file/*");
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+            } else {
+                intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                intent.setType("file/*");
+            }
+            startActivityForResult(intent, 1);
+        });
     }
 
 
@@ -28,7 +56,6 @@ public class BaseActivity extends AppCompatActivity {
         String[] proj = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
         if (null != cursor && cursor.moveToFirst()) {
-            ;
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             res = cursor.getString(column_index);
             cursor.close();
@@ -62,7 +89,7 @@ public class BaseActivity extends AppCompatActivity {
 
                 final String id = DocumentsContract.getDocumentId(uri);
                 final Uri contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+                        Uri.parse("content://downloads/public_downloads"), Long.parseLong(id));
 
                 return getDataColumn(context, contentUri, null, null);
             }

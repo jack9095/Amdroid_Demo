@@ -20,7 +20,6 @@ import java.util.TreeMap;
 
 /**
  * 歌词处理类
- * Created by zhangliangming on 2018-02-23.
  */
 
 public class LyricsUtils {

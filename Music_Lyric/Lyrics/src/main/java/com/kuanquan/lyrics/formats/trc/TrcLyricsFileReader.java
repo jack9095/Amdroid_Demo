@@ -17,8 +17,6 @@ import java.util.regex.Pattern;
 
 /**
  * @Description: trc歌词
- * @author: zhangliangming
- * @date: 2020-02-26 19:53
  **/
 public class TrcLyricsFileReader extends LyricsFileReader {
 

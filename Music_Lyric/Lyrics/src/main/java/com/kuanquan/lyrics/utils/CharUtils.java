@@ -2,8 +2,6 @@ package com.kuanquan.lyrics.utils;
 
 /**
  * 
- * @author zhangliangming
- * 
  */
 public class CharUtils {
 	/**

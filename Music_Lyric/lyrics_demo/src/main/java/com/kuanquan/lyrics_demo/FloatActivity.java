@@ -1,17 +1,11 @@
 package com.kuanquan.lyrics_demo;
 
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Message;
-import android.os.Bundle;
+import android.annotation.SuppressLint;
+import android.graphics.*;
+import android.media.*;
+import android.os.*;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -46,22 +40,6 @@ public class FloatActivity extends AppCompatActivity {
      * 歌曲长度
      */
     private TextView mSongDurationTV;
-    /**
-     * 播放按钮
-     */
-    private Button mPlayBtn;
-    /**
-     * 暂停按钮
-     */
-    private Button mPauseBtn;
-    /**
-     * 停止按钮
-     */
-    private Button mStopBtn;
-    /**
-     * 字体大小按钮
-     */
-    private Button mFontBtn;
     /**
      * 音译
      */
@@ -114,7 +92,8 @@ public class FloatActivity extends AppCompatActivity {
 
     private final String TAG = FloatActivity.class.getName();
 
-    private Handler mHandler = new Handler() {
+    @SuppressLint("HandlerLeak")
+    private final Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -164,7 +143,6 @@ public class FloatActivity extends AppCompatActivity {
                         mTransliterationBtn.setTextColor(Color.BLACK);
                     }
 
-
                     break;
 
                 case MUSIC_PLAY:
@@ -213,7 +191,6 @@ public class FloatActivity extends AppCompatActivity {
                     }
 
                     break;
-
             }
         }
     };
@@ -242,8 +219,7 @@ public class FloatActivity extends AppCompatActivity {
         mFloatLyricsView.setPaintHLColor(paintHLColors,false);
 
         //设置字体文件
-        Typeface typeFace = Typeface.createFromAsset(getAssets(),
-                "fonts/weiruanyahei14M.ttf");
+        Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/weiruanyahei14M.ttf");
         mFloatLyricsView.setTypeFace(typeFace,false);
         mFloatLyricsView.setExtraLyricsListener(new AbstractLrcView.ExtraLyricsListener() {
             @Override
@@ -296,7 +272,7 @@ public class FloatActivity extends AppCompatActivity {
             public void onTrackingTouchFinish(MusicSeekBar musicSeekBar) {
                 if (mMediaPlayer != null) {
                     if (mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC) {
-                        int seekToTime = 0;
+                        int seekToTime;
                         if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC)
                             //不显示额外歌词
                             seekToTime = mFloatLyricsView.getSplitLineLrcStartTime(mMusicSeekBar.getProgress());
@@ -309,139 +285,118 @@ public class FloatActivity extends AppCompatActivity {
                     } else {
                         mMediaPlayer.seekTo(mMusicSeekBar.getProgress());
                     }
-
                 }
             }
         });
-
 
         mSongDurationTV = findViewById(R.id.songDuration);
 
-        //
-        mPlayBtn = findViewById(R.id.play);
-        mPlayBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        /**
+         * 播放按钮
+         */
+        Button mPlayBtn = findViewById(R.id.play);
+        mPlayBtn.setOnClickListener(view -> {
 
-                if (mMediaPlayer == null) {
+            if (mMediaPlayer == null) {
 
-                    mHandler.sendEmptyMessage(MUSIC_INIT);
+                mHandler.sendEmptyMessage(MUSIC_INIT);
 
-                    //
-                    mMediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.aiqingyu);
-                    mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                    mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                        @Override
-                        public void onCompletion(MediaPlayer mediaPlayer) {
-                            mMediaPlayer.release();
-                            mMediaPlayer = null;
+                //
+                mMediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.aiqingyu);
+                mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mediaPlayer) {
+                        mMediaPlayer.release();
+                        mMediaPlayer = null;
 
-                            mHandler.sendEmptyMessage(MUSIC_STOP);
-                        }
-                    });
+                        mHandler.sendEmptyMessage(MUSIC_STOP);
+                    }
+                });
 
-                    //快进事件
-                    mMediaPlayer.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() {
-                        @Override
-                        public void onSeekComplete(MediaPlayer mediaPlayer) {
-                            mHandler.sendEmptyMessage(MUSIC_SEEKTO);
-                        }
-                    });
+                //快进事件
+                mMediaPlayer.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() {
+                    @Override
+                    public void onSeekComplete(MediaPlayer mediaPlayer) {
+                        mHandler.sendEmptyMessage(MUSIC_SEEKTO);
+                    }
+                });
 
-
-                    //异步加载歌词文件
-                    loadLrcFile();
-
-                    mMediaPlayer.start();
-                    mHandler.sendEmptyMessage(MUSIC_PLAY);
-                    mHandler.postDelayed(mPlayRunnable, 0);
-
-                    return;
-                }
-
-                if (mMediaPlayer.isPlaying()) return;
+                //异步加载歌词文件
+                loadLrcFile();
 
                 mMediaPlayer.start();
-                mHandler.sendEmptyMessage(MUSIC_RESUME);
+                mHandler.sendEmptyMessage(MUSIC_PLAY);
                 mHandler.postDelayed(mPlayRunnable, 0);
+
+                return;
             }
+
+            if (mMediaPlayer.isPlaying()) return;
+
+            mMediaPlayer.start();
+            mHandler.sendEmptyMessage(MUSIC_RESUME);
+            mHandler.postDelayed(mPlayRunnable, 0);
         });
 
-        mPauseBtn = findViewById(R.id.pause);
-        mPauseBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mMediaPlayer.pause();
-                mHandler.sendEmptyMessage(MUSIC_PAUSE);
-            }
+        // 暂停按钮
+        findViewById(R.id.pause).setOnClickListener(view -> {
+            mMediaPlayer.pause();
+            mHandler.sendEmptyMessage(MUSIC_PAUSE);
         });
 
-        mStopBtn = findViewById(R.id.stop);
-        mStopBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mMediaPlayer != null) {
-                    mMediaPlayer.stop();
-                    mMediaPlayer.release();
-                    mMediaPlayer = null;
-                }
-
-                mHandler.sendEmptyMessage(MUSIC_STOP);
-
+        // 停止按钮
+        findViewById(R.id.stop).setOnClickListener(view -> {
+            if (mMediaPlayer != null) {
+                mMediaPlayer.stop();
+                mMediaPlayer.release();
+                mMediaPlayer = null;
             }
+
+            mHandler.sendEmptyMessage(MUSIC_STOP);
         });
 
-        //字体大小
-        mFontBtn = findViewById(R.id.font);
-        mFontBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        // 字体大小按钮
+        findViewById(R.id.font).setOnClickListener(view -> {
 
-                int fontSize = mFloatLyricsView.getHeight() / 3;
-                int spaceLineHeight = fontSize / 2;
-                mFloatLyricsView.setSpaceLineHeight(spaceLineHeight, false);
-                mFloatLyricsView.setExtraLrcSpaceLineHeight(spaceLineHeight, false);
-                //有歌词，则重新分割歌词
-                mFloatLyricsView.setFontSize(fontSize, true);
+            int fontSize = mFloatLyricsView.getHeight() / 3;
+            int spaceLineHeight = fontSize / 2;
+            mFloatLyricsView.setSpaceLineHeight(spaceLineHeight, false);
+            mFloatLyricsView.setExtraLrcSpaceLineHeight(spaceLineHeight, false);
+            //有歌词，则重新分割歌词
+            mFloatLyricsView.setFontSize(fontSize, true);
 
-            }
         });
 
         //翻译按钮
         mTranslateBtn = findViewById(R.id.translate);
         mTranslateBtn.setEnabled(false);
-        mTranslateBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC) {
-                    if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLATELRC) {
-                        mTranslateBtn.setTextColor(Color.BLACK);
-                        mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
-                    } else {
-                        mTransliterationBtn.setTextColor(Color.BLACK);
-                        mTranslateBtn.setTextColor(Color.RED);
-                        mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLATELRC);
-                    }
-
+        mTranslateBtn.setOnClickListener(view -> {
+            if (mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC) {
+                if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLATELRC) {
+                    mTranslateBtn.setTextColor(Color.BLACK);
+                    mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
+                } else {
+                    mTransliterationBtn.setTextColor(Color.BLACK);
+                    mTranslateBtn.setTextColor(Color.RED);
+                    mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLATELRC);
                 }
+
             }
         });
 
         //音译按钮
         mTransliterationBtn = findViewById(R.id.transliteration);
         mTransliterationBtn.setEnabled(false);
-        mTransliterationBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC) {
-                    if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC) {
-                        mTransliterationBtn.setTextColor(Color.BLACK);
-                        mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
-                    } else {
-                        mTranslateBtn.setTextColor(Color.BLACK);
-                        mTransliterationBtn.setTextColor(Color.RED);
-                        mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC);
-                    }
+        mTransliterationBtn.setOnClickListener(view -> {
+            if (mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC) {
+                if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC) {
+                    mTransliterationBtn.setTextColor(Color.BLACK);
+                    mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
+                } else {
+                    mTranslateBtn.setTextColor(Color.BLACK);
+                    mTransliterationBtn.setTextColor(Color.RED);
+                    mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC);
                 }
             }
         });
@@ -450,6 +405,7 @@ public class FloatActivity extends AppCompatActivity {
     /**
      * 加载歌词文件
      */
+    @SuppressLint("StaticFieldLeak")
     private void loadLrcFile() {
 
         new AsyncTask<String, Integer, String>() {

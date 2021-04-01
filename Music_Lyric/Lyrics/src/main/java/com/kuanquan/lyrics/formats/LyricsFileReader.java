@@ -15,9 +15,6 @@ import java.nio.charset.Charset;
 
 /**
  * @Description: 歌词文件读取器
- * @Author: zhangliangming
- * @Date: 2017/12/25 16:08
- * @Version:
  */
 public abstract class LyricsFileReader {
     /**

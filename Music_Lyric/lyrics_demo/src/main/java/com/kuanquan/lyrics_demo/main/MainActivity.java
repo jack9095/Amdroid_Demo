@@ -1,4 +1,4 @@
-package com.kuanquan.lyrics_demo;
+package com.kuanquan.lyrics_demo.main;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -11,46 +11,22 @@ import com.kuanquan.lyrics.model.LyricsLineInfo;
 import com.kuanquan.lyrics.model.LyricsInfo;
 import com.kuanquan.lyrics.utils.FileUtils;
 import com.kuanquan.lyrics.utils.LyricsIOUtils;
+import com.kuanquan.lyrics_demo.R;
+
 import java.io.*;
 import java.util.TreeMap;
 
-public class MainActivity extends BaseActivity {
-    private TextView mLrcTextView;    // 歌词内容
+public class MainActivity extends BaseMainActivity {
 
-    @SuppressLint("ObsoleteSdkInt")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // 进入双行歌词视图测试
-        findViewById(R.id.float_btn).setOnClickListener(view -> {
-            Intent intent = new Intent(getApplicationContext(), FloatActivity.class);
-            startActivity(intent);
-        });
-
-        // 进入多行歌词视图测试
-        findViewById(R.id.many_btn).setOnClickListener(view -> {
-            Intent intent = new Intent(getApplicationContext(), ManyActivity.class);
-            startActivity(intent);
-        });
-
-        // 选择歌词文件：LRC、KRC、KSC、HRC格式
-        findViewById(R.id.select_file).setOnClickListener(view -> {
-            Intent intent;
-            if (Build.VERSION.SDK_INT < 19) {
-                intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("file/*");
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-            } else {
-                intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                intent.setType("file/*");
-            }
-            startActivityForResult(intent, 1);
-        });
+        setViewOnClick();
         mLrcTextView = findViewById(R.id.lrc_com);
     }
 
+    private TextView mLrcTextView;    // 歌词内容
     // 按照升序存储每一行的歌词
     private TreeMap<Integer, LyricsLineInfo> mLyricsInfoLyricsLineInfoTreeMap;
 

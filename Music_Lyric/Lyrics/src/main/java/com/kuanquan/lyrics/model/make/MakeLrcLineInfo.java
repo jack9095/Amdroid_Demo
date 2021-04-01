@@ -6,7 +6,6 @@ import java.util.TreeMap;
 
 /**
  * 制作歌词行数据
- * Created by zhangliangming on 2018-03-29.
  */
 
 public class MakeLrcLineInfo extends MakeLrcInfo {

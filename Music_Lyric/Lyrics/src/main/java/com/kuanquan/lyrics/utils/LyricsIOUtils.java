@@ -22,8 +22,7 @@ import java.util.List;
 
 /**
  * 歌词io操作
- * @author zhangliangming
- * 
+ *
  */
 public class LyricsIOUtils {
 	private static ArrayList<LyricsFileReader> readers;

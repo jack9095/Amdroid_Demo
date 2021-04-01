@@ -6,11 +6,13 @@
     android:orientation="vertical"
     tools:context="com.kuanquan.lyrics_demo.FloatActivity">
 
+    <!-- 歌词展示 -->
     <com.kuanquan.lyrics.widget.FloatLyricsView
         android:id="@+id/floatlyricsview"
         android:layout_width="match_parent"
         android:layout_height="65dp" />
 
+    <!-- 进度时间展示 -->
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="20dp"

@@ -3,8 +3,6 @@ package com.kuanquan.lyrics.model;
 /**
  * 歌词标签
  * 
- * @author zhangliangming
- * 
  */
 public class LyricsTag {
 	/**

@@ -1,7 +1,6 @@
 package com.kuanquan.lyrics.utils;
 
 /**
- * Created by zhangliangming on 2018-02-23.
  */
 
 public class StringUtils {

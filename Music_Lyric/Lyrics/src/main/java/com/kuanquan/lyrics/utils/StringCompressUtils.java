@@ -10,8 +10,6 @@ import java.util.zip.InflaterInputStream;
 
 /**
  * 字符串解压和压缩
- *
- * @author zhangliangming
  */
 public class StringCompressUtils {
 

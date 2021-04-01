@@ -4,7 +4,6 @@ import android.text.TextUtils;
 
 /**
  * 翻译行歌词
- * Created by zhangliangming on 2017/9/11.
  */
 
 public class TranslateLrcLineInfo {

@@ -13,7 +13,6 @@ import com.kuanquan.lyrics.utils.LyricsUtils;
 
 /**
  * 歌词制作预览视图
- * Created by zhangliangming on 2018-03-25.
  */
 
 public class MakeLrcPreView extends View {

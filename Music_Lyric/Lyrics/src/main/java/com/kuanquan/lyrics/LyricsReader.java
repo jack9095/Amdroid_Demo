@@ -16,7 +16,6 @@ import java.util.TreeMap;
 
 /**
  * 歌词读管理器
- * Created by zhangliangming on 2018-02-25.
  */
 
 public class LyricsReader {

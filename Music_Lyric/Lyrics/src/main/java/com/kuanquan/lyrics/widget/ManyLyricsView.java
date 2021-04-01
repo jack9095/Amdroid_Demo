@@ -36,11 +36,6 @@ import java.util.TreeMap;
 
 /**
  * @Description: 多行歌词:歌词行号和view所在位置关联,Scroller只做动画处理，不去移动view
- * @param:
- * @return:
- * @throws
- * @author: zhangliangming
- * @date: 2018-04-21 20:28
  */
 public class ManyLyricsView extends AbstractLrcView {
 

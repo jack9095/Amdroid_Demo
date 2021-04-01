@@ -30,8 +30,6 @@ import java.util.TreeMap;
 
 /**
  * @Description: 制作歌词
- * @author: zhangliangming
- * @date: 2018-12-23 17:08
  **/
 public class MakeLyricsView extends View {
 

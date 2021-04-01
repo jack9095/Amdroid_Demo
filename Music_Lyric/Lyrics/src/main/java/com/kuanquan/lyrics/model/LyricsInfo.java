@@ -10,8 +10,6 @@ import java.util.TreeMap;
 
 /**
  * 歌词数据
- *
- * @author zhangliangming
  */
 public class LyricsInfo {
     /**

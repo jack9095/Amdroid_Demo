@@ -3,7 +3,6 @@ package com.kuanquan.lyrics.model.make;
 
 /**
  * 制作额外歌词行数据
- * Created by zhangliangming on 2018-03-29.
  */
 
 public class MakeExtraLrcLineInfo extends MakeLrcInfo {

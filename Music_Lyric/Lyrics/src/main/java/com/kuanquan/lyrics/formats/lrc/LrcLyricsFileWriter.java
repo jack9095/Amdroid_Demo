@@ -14,7 +14,6 @@ import java.util.TreeMap;
 
 /**
  * lrc歌词生成器
- * Created by zhangliangming on 2018-02-24.
  */
 
 public class LrcLyricsFileWriter extends LyricsFileWriter {
