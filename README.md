@@ -189,3 +189,11 @@ Binder 进程间的通信 AIDL IPC
 ### 47、 Music_Lyric
 
 音乐播放歌词控件像卡拉OK那样一个字一个字的高亮显示
+
+### 48、 koin
+
+Koin 注入框架在 kotlin 中的使用
+
+### 49、 Projection
+
+Projection 安卓被投屏
