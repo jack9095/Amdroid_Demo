@@ -39,6 +39,7 @@ public enum ServerInstance {
     }
 
     public void start(ServerParams params) {
+        Log.e("ServerInstance", "开启 ServerAsyncEvent");
         EventBus.getDefault().register(this);
         ServerAsyncEvent event = new ServerAsyncEvent(ServerAsyncEvent.EVENT_START);
         event.setParam(params);
@@ -77,6 +78,7 @@ public enum ServerInstance {
 
     private void startAsync(ServerAsyncEvent event) {
         if (mState == State.IDLE) {
+            Log.e("ServerInstance", "开启 startAsync");
             Object param = event.getParam();
             if (param != null && param instanceof ServerParams) {
                 ServerParams serverParam = (ServerParams) param;

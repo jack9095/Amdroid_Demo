@@ -196,4 +196,4 @@ Koin 注入框架在 kotlin 中的使用
 
 ### 49、 Projection
 
-Projection 安卓被投屏
+微光app一样把哔哩哔哩的视频投影到微光

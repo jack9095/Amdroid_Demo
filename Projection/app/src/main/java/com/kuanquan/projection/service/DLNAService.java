@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.IBinder;
+import android.util.Log;
 
 import com.kuanquan.projection.R;
 import com.kuanquan.projection.activity.MainActivity;
@@ -19,6 +20,7 @@ import com.plutinosoft.platinum.ServerParams;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by huzongyao on 2018/6/7.
@@ -68,6 +70,7 @@ public class DLNAService extends Service {
         if (intent != null) {
             ServerParams params = intent.getParcelableExtra(EXTRA_SERVER_PARAMS);
             if (params != null) {
+                Log.e("DLNAService", "开启服务");
                 ServerInstance.INSTANCE.start(params);
                 NotificationHelper.INSTANCE.notify(mNotification);
             }
@@ -77,9 +80,11 @@ public class DLNAService extends Service {
 
     @SuppressWarnings("UnusedDeclaration")
     @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
-    public void onServerStateChange(NativeAsyncEvent event) {
+    public void onServerStateChange(@NotNull NativeAsyncEvent event) {
         switch (event.type) {
             case CallbackTypes.CALLBACK_EVENT_ON_PLAY:
+                Log.e("DLNAService", "开始播放");
+                Log.e("DLNAService", event.mediaInfo.toString());
                 MediaUtils.startPlayMedia(this, event.mediaInfo);
                 break;
             default:

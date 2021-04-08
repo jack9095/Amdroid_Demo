@@ -46,4 +46,14 @@ public class MediaInfo implements Parcelable {
             return new MediaInfo[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "MediaInfo{" +
+                "mediaType=" + mediaType +
+                ", title='" + title + '\'' +
+                ", url='" + url + '\'' +
+                ", albumArtURI='" + albumArtURI + '\'' +
+                '}';
+    }
 }

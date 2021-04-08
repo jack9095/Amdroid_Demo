@@ -16,6 +16,6 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Utils.init(this);
-        MediaUtils.configureExoMedia(this);
+//        MediaUtils.configureExoMedia(this);
     }
 }

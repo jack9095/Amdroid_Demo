@@ -31,6 +31,7 @@ public enum CallbackInstance {
                     + "\nparam3: " + param3);
             switch (type) {
                 case CallbackTypes.CALLBACK_EVENT_ON_PLAY:
+                    Log.e("CallbackInstance", "开启 startAsync");
                     startPlayMedia(type, param1, param2);
                     break;
                 case CallbackTypes.CALLBACK_EVENT_ON_PAUSE:
@@ -44,7 +45,7 @@ public enum CallbackInstance {
     private void startPlayMedia(int type, String url, String meta) {
         MediaInfo mediaInfo = DLNAUtils.getMediaInfo(url, meta);
         if (mediaInfo.mediaType == MediaType.TYPE_UNKNOWN) {
-            Log.w(TAG, "Media Type Unknown!");
+            Log.e(TAG, "Media Type Unknown!");
             return;
         }
         NativeAsyncEvent event = new NativeAsyncEvent(type, mediaInfo);
