@@ -1,2 +1,4 @@
+include ':platinum'
+//include ':lib-dlna'
 include ':app'
 rootProject.name = "Projection"
