@@ -164,4 +164,51 @@ public class MainActivity extends AppCompatActivity {
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
+
+    /************************************************  跳转第三方APP  ********************************************************/
+    public void aiqiyi(View view) {
+        startAPP("com.qiyi.video");
+    }
+
+    public void TencentVideo(View view) {
+        startAPP("com.tencent.qqlive");
+    }
+
+    public void youku(View view) {
+        startAPP("com.youku.phone");
+    }
+
+    public void bilibili(View view) {
+        startAPP("tv.danmaku.bili");
+    }
+
+    public void souhu(View view) {
+        startAPP("com.sohu.sohuvideo");
+    }
+
+    public void haokan(View view) {
+        startAPP("com.baidu.haokan");
+    }
+
+    public void xigua(View view) {
+        startAPP("com.ss.android.article.video");
+    }
+
+    public void mangguo(View view) {
+        startAPP("com.hunantv.imgo.activity");
+    }
+
+    public void hanju(View view) {
+        startAPP("com.babycloud.hanju");
+    }
+
+    public void renren(View view) {
+        startAPP("com.zhongduomei.rrmj.society");
+    }
+
+    private void startAPP(String packageName){
+        // 获取目标应用安装包的 Intent
+        Intent intent = getPackageManager().getLaunchIntentForPackage(packageName);
+        startActivity(intent);
+    }
 }

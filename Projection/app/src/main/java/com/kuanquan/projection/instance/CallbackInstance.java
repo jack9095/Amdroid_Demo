@@ -49,6 +49,7 @@ public enum CallbackInstance {
             return;
         }
         NativeAsyncEvent event = new NativeAsyncEvent(type, mediaInfo);
+        Log.e("CallbackInstance", "开启 startAsync  -- 》 发送EventBus");
         EventBus.getDefault().post(event);
     }
 

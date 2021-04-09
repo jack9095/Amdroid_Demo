@@ -23,6 +23,82 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:text="爱奇艺"
+                android:onClick="aiqiyi"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+            <Button
+                android:text="腾讯视频"
+                android:onClick="TencentVideo"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+            <Button
+                android:text="优酷视频"
+                android:onClick="youku"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+            <Button
+                android:text="哔哩哔哩"
+                android:onClick="bilibili"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+            <Button
+                android:text="搜狐视频"
+                android:onClick="souhu"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+            <Button
+                android:text="好看视频"
+                android:onClick="haokan"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+            <Button
+                android:text="西瓜视频"
+                android:onClick="xigua"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+            <Button
+                android:text="芒果TV"
+                android:onClick="mangguo"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+            <Button
+                android:text="韩剧TV"
+                android:onClick="hanju"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+            <Button
+                android:text="人人视频"
+                android:onClick="renren"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+        </LinearLayout>
+
     </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

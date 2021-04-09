@@ -3,6 +3,7 @@ package com.kuanquan.projection.media;
 import android.content.Context;
 import android.content.Intent;
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import com.kuanquan.projection.activity.AudioActivity;
 import com.kuanquan.projection.activity.ImageActivity;
@@ -35,12 +36,15 @@ public class MediaUtils {
         Intent intent = new Intent();
         switch (mediaInfo.mediaType) {
             case TYPE_VIDEO:
+                Log.e("MediaUtils", "跳转视频播放页面");
                 intent.setClass(context, VideoActivity.class);
                 break;
             case TYPE_AUDIO:
+                Log.e("MediaUtils", "跳转音频播放页面");
                 intent.setClass(context, AudioActivity.class);
                 break;
             case TYPE_IMAGE:
+                Log.e("MediaUtils", "跳转图片显示页面");
                 intent.setClass(context, ImageActivity.class);
                 break;
             default:
