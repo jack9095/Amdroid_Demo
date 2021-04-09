@@ -6,13 +6,12 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.blankj.utilcode.util.SnackbarUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.kuanquan.projection.BaseMAinActivity;
 import com.kuanquan.projection.R;
 import com.kuanquan.projection.event.ServerStateEvent;
 import com.kuanquan.projection.instance.ServerInstance;
@@ -25,7 +24,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseMAinActivity {
 
     Toolbar mToolbar;
     FloatingActionButton mFab;
@@ -163,52 +162,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
         super.onDestroy();
-    }
-
-    /************************************************  跳转第三方APP  ********************************************************/
-    public void aiqiyi(View view) {
-        startAPP("com.qiyi.video");
-    }
-
-    public void TencentVideo(View view) {
-        startAPP("com.tencent.qqlive");
-    }
-
-    public void youku(View view) {
-        startAPP("com.youku.phone");
-    }
-
-    public void bilibili(View view) {
-        startAPP("tv.danmaku.bili");
-    }
-
-    public void souhu(View view) {
-        startAPP("com.sohu.sohuvideo");
-    }
-
-    public void haokan(View view) {
-        startAPP("com.baidu.haokan");
-    }
-
-    public void xigua(View view) {
-        startAPP("com.ss.android.article.video");
-    }
-
-    public void mangguo(View view) {
-        startAPP("com.hunantv.imgo.activity");
-    }
-
-    public void hanju(View view) {
-        startAPP("com.babycloud.hanju");
-    }
-
-    public void renren(View view) {
-        startAPP("com.zhongduomei.rrmj.society");
-    }
-
-    private void startAPP(String packageName){
-        // 获取目标应用安装包的 Intent
-        Intent intent = getPackageManager().getLaunchIntentForPackage(packageName);
-        startActivity(intent);
     }
 }

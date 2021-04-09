@@ -1,12 +1,11 @@
-package com.kuanquan.projection
+package com.kuanquan.demo
 
 import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.kuanquan.projection.instance.ServerInstance
-import com.kuanquan.projection.service.DLNAService
-import com.kuanquan.projection.utils.UUIDUtils
+import com.kuanquan.demo.base.BaseMAinActivity
 import com.plutinosoft.platinum.ServerParams
+import java.util.*
 
 class MainActivity : BaseMAinActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +24,8 @@ class MainActivity : BaseMAinActivity() {
     // Start the server
     private fun startServerService() {
         val intent = Intent(this, DLNAService::class.java)
-        intent.putExtra(DLNAService.EXTRA_SERVER_PARAMS, ServerParams("Platinum", true, UUIDUtils.getRandomUUID()))
+        intent.putExtra(DLNAService.EXTRA_SERVER_PARAMS, ServerParams("demo", true,
+            UUID.randomUUID().toString()))
         startService(intent)
     }
 

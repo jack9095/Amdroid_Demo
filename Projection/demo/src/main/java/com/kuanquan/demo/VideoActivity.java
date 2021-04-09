@@ -1,4 +1,4 @@
-package com.kuanquan.projection.activity;
+package com.kuanquan.demo;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,13 +9,12 @@ import androidx.annotation.Nullable;
 import com.devbrackets.android.exomedia.ui.widget.VideoControls;
 import com.devbrackets.android.exomedia.ui.widget.VideoControlsCore;
 import com.devbrackets.android.exomedia.ui.widget.VideoView;
-import com.kuanquan.projection.R;
+import com.kuanquan.demo.base.BasePlayActivity;
 
 /**
  * Created by huzongyao on 2018/6/29.
  * To play video media
  */
-
 public class VideoActivity extends BasePlayActivity {
 
     VideoView mVideoView;
@@ -37,7 +36,7 @@ public class VideoActivity extends BasePlayActivity {
     }
 
     @Override
-    void setCurrentMediaAndPlay() {
+    protected void setCurrentMediaAndPlay() {
         if (mMediaInfo != null) {
             VideoControlsCore videoControls = mVideoView.getVideoControlsCore();
             if (videoControls instanceof VideoControls) {
