@@ -197,3 +197,6 @@ Koin 注入框架在 kotlin 中的使用
 ### 49、 Projection
 
 微光app一样把哔哩哔哩的视频投影到微光
+
+### 50、NotificationToast
+像QQ、微信一样横幅展示通知消息
