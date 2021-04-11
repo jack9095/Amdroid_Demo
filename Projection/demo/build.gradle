@@ -49,7 +49,15 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    implementation 'org.greenrobot:eventbus:3.2.0'
+//    implementation 'org.greenrobot:eventbus:3.2.0'
+
+    // rx系列
+    implementation ('io.reactivex.rxjava2:rxandroid:2.1.1'){
+        exclude group: 'com.android.support'
+    }
+    implementation ('io.reactivex.rxjava2:rxjava:2.2.15'){
+        exclude group: 'com.android.support'
+    }
 
     // xml 解析库
     implementation('org.simpleframework:simple-xml:2.7.1') {

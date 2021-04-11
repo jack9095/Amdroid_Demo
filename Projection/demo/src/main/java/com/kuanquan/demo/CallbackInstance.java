@@ -1,18 +1,19 @@
 package com.kuanquan.demo;
 
+import android.content.Intent;
 import android.util.Log;
 
 import com.kuanquan.demo.event.NativeAsyncEvent;
 import com.plutinosoft.platinum.CallbackTypes;
 import com.plutinosoft.platinum.DLNACallback;
 
-import org.greenrobot.eventbus.EventBus;
+//import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by huzongyao on 2018/6/21.
- * To receive the messages from native
+ * 接收 native 传递上来的消息
+ * 枚举单例
  */
-
 public enum CallbackInstance {
 
     INSTANCE;
@@ -49,7 +50,14 @@ public enum CallbackInstance {
         }
         NativeAsyncEvent event = new NativeAsyncEvent(type, mediaInfo);
         Log.e("CallbackInstance", "开启 startAsync  -- 》 发送EventBus");
-        EventBus.getDefault().post(event);
+//        EventBus.getDefault().post(event);
+        Log.e("DLNAService", event.mediaInfo.toString());
+        Log.e("MediaUtils", "跳转视频播放页面");
+        Intent intent = new Intent();
+        intent.setClass(WorkApplication.currentActivity, VideoActivity.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("EXTRA_MEDIA_INFO", event.mediaInfo);
+        WorkApplication.currentActivity.startActivity(intent);
     }
 
     public DLNACallback getCallback() {

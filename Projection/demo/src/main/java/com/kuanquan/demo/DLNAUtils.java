@@ -9,7 +9,6 @@ import org.simpleframework.xml.core.Persister;
 /**
  * Created by huzongyao on 2018/6/29.
  */
-
 public class DLNAUtils {
 
     public static final String BASE_TYPE_VIDEO = "video";
@@ -30,6 +29,11 @@ public class DLNAUtils {
         return mediaInfo;
     }
 
+    /**
+     * 通过 meta 获取多媒体数据信息
+     * @param meta 元从 native 回掉出来的
+     * @return 多媒体信息
+     */
     private static MediaInfo getMediaInfoFromMeta(String meta) {
         MediaInfo mediaInfo = new MediaInfo();
         MediaType mediaType = MediaType.TYPE_UNKNOWN;
@@ -57,6 +61,11 @@ public class DLNAUtils {
         return mediaInfo;
     }
 
+    /**
+     * 通过解析 url 获取从其他APP 投屏过来的信息
+     * @param url 从  native（从其他APP 投屏过来的信息） 回掉过来的数据
+     * @return 返回投屏过来的类型
+     */
     private static MediaType guessTypeFromURL(String url) {
         MediaType mediaType = MediaType.TYPE_UNKNOWN;
         String ext = MimeTypeMap.getFileExtensionFromUrl(url);

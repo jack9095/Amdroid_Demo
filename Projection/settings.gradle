@@ -1,5 +1,5 @@
 include ':demo'
 include ':platinum'
 //include ':lib-dlna'
-include ':app'
+//include ':app'
 rootProject.name = "Projection"

@@ -1,21 +1,21 @@
 package com.kuanquan.demo;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 import com.kuanquan.demo.event.ServerAsyncEvent;
-import com.kuanquan.demo.event.ServerStateEvent;
 import com.plutinosoft.platinum.DLNABridge;
 import com.plutinosoft.platinum.ServerParams;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by huzongyao on 2018/6/10.
  * the server instance
+ * 枚举单例
  */
-
 public enum ServerInstance {
 
     INSTANCE;
@@ -33,22 +33,37 @@ public enum ServerInstance {
         return mState;
     }
 
-    public void start(String friendlyName, boolean showIp, String uuid) {
-        ServerParams params = new ServerParams(friendlyName, showIp, uuid);
-        start(params);
-    }
-
+    @SuppressLint("CheckResult")
     public void start(ServerParams params) {
         Log.e("ServerInstance", "开启 ServerAsyncEvent");
-        EventBus.getDefault().register(this);
         ServerAsyncEvent event = new ServerAsyncEvent(ServerAsyncEvent.EVENT_START);
         event.setParam(params);
-        EventBus.getDefault().post(event);
+
+        Observable.create(emitter -> {
+            // 子线程
+//                emitter.onNext("哈哈"); // 把数据发射出去
+//                emitter.onComplete();
+            startAsync(event);
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        //                LogUtil.e(TAG,"subscribe   " + Thread.currentThread().getName());
+                    }
+                });
     }
 
+    @SuppressLint("CheckResult")
     public void stop() {
-        ServerAsyncEvent event = new ServerAsyncEvent(ServerAsyncEvent.EVENT_STOP);
-        EventBus.getDefault().post(event);
+        Observable.create(emitter -> {
+            // 子线程
+            stopAsync();
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(o -> { });
     }
 
     public enum State {
@@ -58,46 +73,27 @@ public enum ServerInstance {
         STOPPING
     }
 
-    @SuppressWarnings("UnusedDeclaration")
-    @Subscribe(threadMode = ThreadMode.ASYNC)
-    public void startAsyncTask(ServerAsyncEvent event) {
-        switch (event.getType()) {
-            case ServerAsyncEvent.EVENT_START:
-                startAsync(event);
-                break;
-            case ServerAsyncEvent.EVENT_STOP:
-                stopAsync();
-                break;
-        }
-    }
-
-    private void setState(State state) {
-        mState = state;
-        EventBus.getDefault().post(new ServerStateEvent(state));
-    }
-
     private void startAsync(ServerAsyncEvent event) {
         if (mState == State.IDLE) {
             Log.e("ServerInstance", "开启 startAsync");
             Object param = event.getParam();
             if (param != null && param instanceof ServerParams) {
                 ServerParams serverParam = (ServerParams) param;
-                setState(State.STARTING);
+                mState = State.STARTING;
                 mDLNAServer = new DLNABridge();
                 mDLNAServer.setCallback(CallbackInstance.INSTANCE.getCallback());
                 mDLNAServer.start(serverParam);
-                setState(State.RUNNING);
+                mState = State.RUNNING;
             }
         }
     }
 
     private void stopAsync() {
         if (mState == State.RUNNING) {
-            setState(State.STOPPING);
+            mState = State.STOPPING;
             mDLNAServer.stop();
             mDLNAServer.destroy();
-            setState(State.IDLE);
-            EventBus.getDefault().unregister(this);
+            mState = State.IDLE;
         }
     }
 }

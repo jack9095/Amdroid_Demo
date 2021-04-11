@@ -15,9 +15,9 @@ import com.kuanquan.demo.MediaInfo;
 import com.kuanquan.demo.event.NativeAsyncEvent;
 import com.plutinosoft.platinum.CallbackTypes;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+//import org.greenrobot.eventbus.EventBus;
+//import org.greenrobot.eventbus.Subscribe;
+//import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Created by huzongyao on 2018/7/4.
@@ -33,12 +33,12 @@ public abstract class BasePlayActivity extends AppCompatActivity
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         parseIntent(getIntent());
-        EventBus.getDefault().register(this);
+//        EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onDestroy() {
-        EventBus.getDefault().unregister(this);
+//        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 
@@ -53,22 +53,22 @@ public abstract class BasePlayActivity extends AppCompatActivity
         mMediaInfo = intent.getParcelableExtra("EXTRA_MEDIA_INFO");
     }
 
-    @SuppressWarnings("UnusedDeclaration")
-    @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
-    public void onServerStateChange(NativeAsyncEvent event) {
-        switch (event.type) {
-            case CallbackTypes.CALLBACK_EVENT_ON_PAUSE:
-                onMediaPause();
-                break;
-            case CallbackTypes.CALLBACK_EVENT_ON_PLAY:
-                break;
-            case CallbackTypes.CALLBACK_EVENT_ON_SET_VOLUME:
-                Log.e("TAG", "" + event.param1);
-                break;
-            default:
-                break;
-        }
-    }
+//    @SuppressWarnings("UnusedDeclaration")
+//    @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
+//    public void onServerStateChange(NativeAsyncEvent event) {
+//        switch (event.type) {
+//            case CallbackTypes.CALLBACK_EVENT_ON_PAUSE:
+//                onMediaPause();
+//                break;
+//            case CallbackTypes.CALLBACK_EVENT_ON_PLAY:
+//                break;
+//            case CallbackTypes.CALLBACK_EVENT_ON_SET_VOLUME:
+//                Log.e("TAG", "" + event.param1);
+//                break;
+//            default:
+//                break;
+//        }
+//    }
 
     protected void onMediaPause() {
     }
