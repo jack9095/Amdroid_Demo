@@ -3,11 +3,11 @@ package com.kuanquan.demo;
 import android.content.Intent;
 import android.util.Log;
 
+import com.kuanquan.demo.app.WorkApplication;
+import com.kuanquan.demo.enum_p.MediaType;
 import com.kuanquan.demo.event.NativeAsyncEvent;
 import com.plutinosoft.platinum.CallbackTypes;
 import com.plutinosoft.platinum.DLNACallback;
-
-//import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by huzongyao on 2018/6/21.
@@ -50,7 +50,6 @@ public enum CallbackInstance {
         }
         NativeAsyncEvent event = new NativeAsyncEvent(type, mediaInfo);
         Log.e("CallbackInstance", "开启 startAsync  -- 》 发送EventBus");
-//        EventBus.getDefault().post(event);
         Log.e("DLNAService", event.mediaInfo.toString());
         Log.e("MediaUtils", "跳转视频播放页面");
         Intent intent = new Intent();

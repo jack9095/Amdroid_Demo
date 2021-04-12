@@ -1,12 +1,16 @@
-package com.kuanquan.demo;
+package com.kuanquan.demo.copy;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
 
+import com.kuanquan.demo.CallbackInstance;
 import com.kuanquan.demo.enum_p.State;
-import com.plutinosoft.platinum.*;
+import com.plutinosoft.platinum.DLNABridge;
+import com.plutinosoft.platinum.ServerParams;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -14,26 +18,34 @@ import io.reactivex.schedulers.Schedulers;
  * the server instance
  * 枚举单例
  */
-public enum ServerInstance {
+public enum ServerInstanceCopy {
 
-    // 枚举单例
     INSTANCE;
-    ServerInstance() {
+    ServerInstanceCopy() {
         Log.e(TAG, "Init! ->>>>> ");
     }
 
     private static final String TAG = "ServerInstance";
 
     public volatile State mState = State.IDLE;
-    private DLNABridge mDLNABridge;
+    private DLNABridge mDLNAServer;
 
     @SuppressLint("CheckResult")
     public void start(ServerParams params) {
+        Log.e(TAG, "开启 ServerAsyncEvent");
         Observable.create(emitter -> {
+            // 子线程
+//                emitter.onNext("哈哈"); // 把数据发射出去
+//                emitter.onComplete();
             startAsync(params); // 异步开启
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(o -> {});
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        //                LogUtil.e(TAG,"subscribe   " + Thread.currentThread().getName());
+                    }
+                });
     }
 
     private void startAsync(Object param) {
@@ -42,9 +54,9 @@ public enum ServerInstance {
             if (param instanceof ServerParams) {
                 ServerParams serverParam = (ServerParams) param;
                 mState = State.STARTING;
-                mDLNABridge = new DLNABridge();
-                mDLNABridge.setCallback(CallbackInstance.INSTANCE.getCallback());
-                mDLNABridge.start(serverParam);
+                mDLNAServer = new DLNABridge();
+                mDLNAServer.setCallback(CallbackInstance.INSTANCE.getCallback());
+                mDLNAServer.start(serverParam);
                 mState = State.RUNNING;
             }
         }
@@ -64,8 +76,8 @@ public enum ServerInstance {
     private void stopAsync() {
         if (mState == State.RUNNING) {
             mState = State.STOPPING;
-            mDLNABridge.stop();
-            mDLNABridge.destroy();
+            mDLNAServer.stop();
+            mDLNAServer.destroy();
             mState = State.IDLE;
         }
     }

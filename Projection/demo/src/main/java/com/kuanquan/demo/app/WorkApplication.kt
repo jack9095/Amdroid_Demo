@@ -1,9 +1,12 @@
-package com.kuanquan.demo
+package com.kuanquan.demo.app
 
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 
+/**
+ * 这里的 Application 的目的主要是为了获取 当前栈顶的 Activity
+ */
 class WorkApplication : Application() {
 
     companion object {

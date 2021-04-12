@@ -3,11 +3,13 @@ package com.kuanquan.demo;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
 
+import com.kuanquan.demo.enum_p.MediaType;
+
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
 /**
- * Created by huzongyao on 2018/6/29.
+ * 获取投屏视频信息的工具类
  */
 public class DLNAUtils {
 
@@ -16,6 +18,7 @@ public class DLNAUtils {
 
     /**
      * Get media info from url and meta
+     * 通过 URL 和 元 获取多媒体数据信息
      * @param url url
      * @param meta meta
      * @return MediaInfo

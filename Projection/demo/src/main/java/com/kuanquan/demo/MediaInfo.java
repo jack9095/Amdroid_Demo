@@ -3,16 +3,18 @@ package com.kuanquan.demo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.kuanquan.demo.enum_p.MediaType;
+
 /**
  * Created by huzongyao on 2018/6/29.
  */
 
 public class MediaInfo implements Parcelable {
 
-    public MediaType mediaType;
-    public String title;
-    public String url;
-    public String albumArtURI;
+    public MediaType mediaType; // 投屏过来的类型 一般有视频、音频、图片等等，这里主要是视屏
+    public String title;  // 视屏标题
+    public String url;    // 视屏播放链接
+    public String albumArtURI; // 专辑图片链接
 
     public MediaInfo() {
     }
