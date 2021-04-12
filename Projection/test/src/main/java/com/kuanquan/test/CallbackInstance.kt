@@ -4,6 +4,7 @@ import android.content.Intent
 import android.util.Log
 import com.kuanquan.test.app.WorkApplication
 import com.kuanquan.test.enum_p.MediaType
+import com.kuanquan.test.util.DLNAUtils
 import com.plutinosoft.platinum.CallbackTypes
 import com.plutinosoft.platinum.DLNACallback
 

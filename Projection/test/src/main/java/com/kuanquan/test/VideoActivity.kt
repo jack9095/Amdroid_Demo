@@ -1,12 +1,17 @@
 package com.kuanquan.test
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.devbrackets.android.exomedia.listener.*
-import com.devbrackets.android.exomedia.ui.widget.*
+import com.devbrackets.android.exomedia.listener.OnBufferUpdateListener
+import com.devbrackets.android.exomedia.listener.OnCompletionListener
+import com.devbrackets.android.exomedia.listener.OnPreparedListener
+import com.devbrackets.android.exomedia.ui.widget.VideoControls
+import com.devbrackets.android.exomedia.ui.widget.VideoView
+
 
 /**
  * To play video media
@@ -29,6 +34,11 @@ class VideoActivity : AppCompatActivity(), OnPreparedListener, OnCompletionListe
         }
         mMediaInfo = intent.getSerializableExtra(CallbackInstance.JUMP_VIDEO_PARAMS_KEY) as? MediaInfo?
         setCurrentMediaAndPlay()
+
+        mVideoView?.setOnPreparedListener {
+            val duration = mVideoView?.duration
+            Log.e("VideoActivity", "视频时长 = $duration")
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -37,6 +47,7 @@ class VideoActivity : AppCompatActivity(), OnPreparedListener, OnCompletionListe
         setCurrentMediaAndPlay()
     }
 
+    @SuppressLint("CheckResult")
     private fun setCurrentMediaAndPlay() {
         if (mMediaInfo != null) {
             val videoControls = mVideoView?.videoControlsCore
@@ -46,6 +57,24 @@ class VideoActivity : AppCompatActivity(), OnPreparedListener, OnCompletionListe
             val uri = Uri.parse(mMediaInfo?.url)
             Log.e("VideoActivity", "uri ->$uri")
             mVideoView?.setVideoURI(uri)
+
+//            VideoDurationUtil.getRingDuring(mMediaInfo?.url)
+//            val mediaPlayer = MediaPlayer()
+//            mediaPlayer.setDataSource(mMediaInfo?.url)
+//            mediaPlayer.prepare()
+//            val duration = mediaPlayer.duration
+//            Log.e("VideoDurationUtil", "视频时长 = $duration")
+
+//            Observable.create { emitter: ObservableEmitter<File?>? ->
+//                val tempFile = VideoDurationUtil.getFileByUrl(mMediaInfo?.url)
+//                emitter?.onNext(tempFile) // 把数据发射出去
+//                emitter?.onComplete()
+//            }.subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe {
+//                    val videoDuration = VideoDurationUtil.getDuration(it)
+//                    Log.e("VideoDurationUtil", "视频时长 = $videoDuration")
+//                }
         }
     }
 
