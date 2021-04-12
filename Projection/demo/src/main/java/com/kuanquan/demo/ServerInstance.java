@@ -38,7 +38,7 @@ public enum ServerInstance {
 
     private void startAsync(Object param) {
         if (mState == State.IDLE) {
-            Log.e(TAG, "开启 startAsync");
+            Log.e(TAG, "开启 native 与 本地数据交互的桥");
             if (param instanceof ServerParams) {
                 ServerParams serverParam = (ServerParams) param;
                 mState = State.STARTING;

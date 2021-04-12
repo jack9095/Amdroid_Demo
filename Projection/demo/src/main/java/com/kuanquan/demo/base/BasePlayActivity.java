@@ -12,7 +12,7 @@ import com.devbrackets.android.exomedia.listener.OnBufferUpdateListener;
 import com.devbrackets.android.exomedia.listener.OnCompletionListener;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.kuanquan.demo.MediaInfo;
-import com.kuanquan.demo.event.NativeAsyncEvent;
+//import com.kuanquan.demo.event.NativeAsyncEvent;
 import com.plutinosoft.platinum.CallbackTypes;
 
 //import org.greenrobot.eventbus.EventBus;

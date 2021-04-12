@@ -1,23 +1,29 @@
 package com.kuanquan.demo;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
+import com.devbrackets.android.exomedia.listener.OnBufferUpdateListener;
+import com.devbrackets.android.exomedia.listener.OnCompletionListener;
+import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.ui.widget.VideoControls;
 import com.devbrackets.android.exomedia.ui.widget.VideoControlsCore;
 import com.devbrackets.android.exomedia.ui.widget.VideoView;
-import com.kuanquan.demo.base.BasePlayActivity;
 
 /**
- * Created by huzongyao on 2018/6/29.
  * To play video media
+ * TODO 5
  */
-public class VideoActivity extends BasePlayActivity {
+public class VideoActivity extends AppCompatActivity implements OnPreparedListener, OnCompletionListener,
+        OnBufferUpdateListener {
 
-    VideoView mVideoView;
+    private VideoView mVideoView;
+    private MediaInfo mMediaInfo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -25,7 +31,19 @@ public class VideoActivity extends BasePlayActivity {
         setContentView(R.layout.activity_video);
         mVideoView = findViewById(R.id.video_view);
         initVideoPlayer();
+        parseIntent(getIntent());
         setCurrentMediaAndPlay();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        parseIntent(intent);
+        setCurrentMediaAndPlay();
+    }
+
+    private void parseIntent(Intent intent) {
+        mMediaInfo = intent.getParcelableExtra("EXTRA_MEDIA_INFO");
     }
 
     private void initVideoPlayer() {
@@ -35,7 +53,6 @@ public class VideoActivity extends BasePlayActivity {
         mVideoView.setOnBufferUpdateListener(this);
     }
 
-    @Override
     protected void setCurrentMediaAndPlay() {
         if (mMediaInfo != null) {
             VideoControlsCore videoControls = mVideoView.getVideoControlsCore();
@@ -48,7 +65,6 @@ public class VideoActivity extends BasePlayActivity {
         }
     }
 
-    @Override
     protected void onMediaPause() {
         if(mVideoView.isPlaying()){
             mVideoView.pause();
@@ -65,5 +81,10 @@ public class VideoActivity extends BasePlayActivity {
     @Override
     public void onCompletion() {
         mVideoView.seekTo(0);
+    }
+
+    @Override
+    public void onBufferingUpdate(int percent) {
+
     }
 }

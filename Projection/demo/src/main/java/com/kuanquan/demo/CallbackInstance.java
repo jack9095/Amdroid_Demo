@@ -5,14 +5,12 @@ import android.util.Log;
 
 import com.kuanquan.demo.app.WorkApplication;
 import com.kuanquan.demo.enum_p.MediaType;
-import com.kuanquan.demo.event.NativeAsyncEvent;
-import com.plutinosoft.platinum.CallbackTypes;
-import com.plutinosoft.platinum.DLNACallback;
+import com.plutinosoft.platinum.*;
 
 /**
- * Created by huzongyao on 2018/6/21.
- * 接收 native 传递上来的消息
+ * 接收 native 传递上来的消息回调实例
  * 枚举单例
+ * TODO 4
  */
 public enum CallbackInstance {
 
@@ -25,13 +23,12 @@ public enum CallbackInstance {
 
     CallbackInstance() {
         mCallback = (type, param1, param2, param3) -> {
-            Log.d(TAG, "type: " + type
+            Log.e(TAG, "type: " + type
                     + "\nparam1: " + param1
                     + "\nparam2: " + param2
                     + "\nparam3: " + param3);
             switch (type) {
                 case CallbackTypes.CALLBACK_EVENT_ON_PLAY:
-                    Log.e("CallbackInstance", "开启 startAsync");
                     startPlayMedia(type, param1, param2);
                     break;
                 case CallbackTypes.CALLBACK_EVENT_ON_PAUSE:
@@ -48,14 +45,11 @@ public enum CallbackInstance {
             Log.e(TAG, "Media Type Unknown!");
             return;
         }
-        NativeAsyncEvent event = new NativeAsyncEvent(type, mediaInfo);
-        Log.e("CallbackInstance", "开启 startAsync  -- 》 发送EventBus");
-        Log.e("DLNAService", event.mediaInfo.toString());
-        Log.e("MediaUtils", "跳转视频播放页面");
+        Log.e(TAG, "跳转视频播放页面 \n" + mediaInfo.toString());
         Intent intent = new Intent();
         intent.setClass(WorkApplication.currentActivity, VideoActivity.class);
 //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("EXTRA_MEDIA_INFO", event.mediaInfo);
+        intent.putExtra("EXTRA_MEDIA_INFO", mediaInfo);
         WorkApplication.currentActivity.startActivity(intent);
     }
 
