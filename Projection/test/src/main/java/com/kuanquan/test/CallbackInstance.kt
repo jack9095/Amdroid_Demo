@@ -49,10 +49,10 @@ object CallbackInstance {
 
     private fun startPlayMedia(type: Int, url: String, meta: String) {
         val mediaInfo: MediaInfo? = DLNAUtils.getMediaInfo(url, meta)
-        if (mediaInfo?.mediaType === MediaType.TYPE_UNKNOWN) {
-            Log.e(TAG, "Media Type Unknown!")
-            return
-        }
+//        if (mediaInfo?.mediaType === MediaType.TYPE_UNKNOWN) {
+//            Log.e(TAG, "Media Type Unknown!")
+//            return
+//        }
 
         Log.e(
             TAG, """
