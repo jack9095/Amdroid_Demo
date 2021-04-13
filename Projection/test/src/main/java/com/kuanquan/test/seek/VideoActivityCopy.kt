@@ -1,4 +1,4 @@
-package com.kuanquan.test
+package com.kuanquan.test.seek
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -15,17 +15,21 @@ import com.devbrackets.android.exomedia.listener.OnCompletionListener
 import com.devbrackets.android.exomedia.listener.OnPreparedListener
 import com.devbrackets.android.exomedia.ui.widget.VideoControls
 import com.devbrackets.android.exomedia.ui.widget.VideoView
+import com.kuanquan.test.CallbackInstance
+import com.kuanquan.test.MediaInfo
+import com.kuanquan.test.R
+import com.kuanquan.test.seek.CustomSeekBar
+import com.kuanquan.test.seek.MusicSeekBar
 
 /**
  * To play video media
  * TODO 5
  */
-class VideoActivity : AppCompatActivity(), OnPreparedListener, OnCompletionListener, OnBufferUpdateListener {
+class VideoActivityCopy : AppCompatActivity(), OnPreparedListener, OnCompletionListener, OnBufferUpdateListener {
 
     private var mVideoView: VideoView? = null
     private var mMediaInfo: MediaInfo? = null
     private var mSeekBar: SeekBar? = null
-    private var mCountDownTimer : CountDownTimer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,18 +37,26 @@ class VideoActivity : AppCompatActivity(), OnPreparedListener, OnCompletionListe
         mVideoView = findViewById(R.id.video_view)
         mVideoView?.run {
             setHandleAudioFocus(false)
-            setOnPreparedListener(this@VideoActivity)
-            setOnCompletionListener(this@VideoActivity)
-            setOnBufferUpdateListener(this@VideoActivity)
+            setOnPreparedListener(this@VideoActivityCopy)
+            setOnCompletionListener(this@VideoActivityCopy)
+            setOnBufferUpdateListener(this@VideoActivityCopy)
         }
         mMediaInfo = intent.getSerializableExtra(CallbackInstance.JUMP_VIDEO_PARAMS_KEY) as? MediaInfo?
         setCurrentMediaAndPlay()
 
+        // 自定义View的进度条
+        customSeekBar()
+
         // 系统原生进度条，推荐使用
         seekBar()
 
+//        mVideoView?.setOnPreparedListener {
+//            val duration = mVideoView?.duration
+//            Log.e("VideoActivity", "视频时长 = $duration")
+//        }
+
         // 第一个参数是总共时间，第二个参数是间隔触发时间
-        val timer = object : CountDownTimer(mVideoView?.duration!!, 1000) {
+        val timer = object : CountDownTimer(10000, 1000) {
             override fun onFinish() {
                 Log.e("VideoActivity", "onfinish...." + "结束了")
             }
@@ -57,12 +69,57 @@ class VideoActivity : AppCompatActivity(), OnPreparedListener, OnCompletionListe
         timer.start()
     }
 
+    private fun customSeekBar() {
+        //普通进度条
+        val mCustomSeekBar = findViewById<CustomSeekBar>(R.id.customSeekBar)
+        mCustomSeekBar.setEnabled(true)
+        mCustomSeekBar.setMax(100)
+        mCustomSeekBar.setProgress(0)
+        mCustomSeekBar.setOnChangeListener(object : CustomSeekBar.OnChangeListener {
+            override fun onProgressChanged(seekBar: CustomSeekBar?) {
+                Log.e("VideoActivity", """
+                    mCustomSeekBar:progress = ${seekBar?.progress}
+                """.trimIndent())
+            }
+
+            override fun onTrackingTouchFinish(seekBar: CustomSeekBar?) {
+                Log.e("VideoActivity", "onTrackingTouchFinish >>> ")
+            }
+        })
+
+        //音乐进度条
+        val mMusicSeekBar = findViewById<MusicSeekBar>(R.id.musicSeekBar)
+        mMusicSeekBar.setEnabled(true)
+        mMusicSeekBar.setMax(100)
+        mMusicSeekBar.setProgress(0)
+        mMusicSeekBar.setOnMusicListener(object : MusicSeekBar.OnMusicListener {
+            override fun onProgressChanged(seekBar: MusicSeekBar?) {
+                Log.e("VideoActivity", """
+                    mMusicSeekBar:progress = ${seekBar?.progress}
+                """.trimIndent())
+            }
+
+            override fun getLrcText(): String {
+                return "爱就一个字"
+            }
+
+            override fun onTrackingTouchFinish(seekBar: MusicSeekBar?) {
+                Log.e("VideoActivity", "MusicSeekBar >>> onTrackingTouchFinish >>> ")
+            }
+
+            override fun getTimeText(): String {
+                return "00:11"
+            }
+        })
+    }
+
     var isDrag = false  // 是否是手动拖动
     private fun seekBar() {
 
         val tv_sb = findViewById<TextView>(R.id.tv_sb)
         mSeekBar = findViewById<SeekBar>(R.id.sb)
         mSeekBar?.max = 100;
+//        mSeekBar.setMin(10);
         //SeekBar的监听事件
         mSeekBar?.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             // 监听点击时
@@ -86,6 +143,7 @@ class VideoActivity : AppCompatActivity(), OnPreparedListener, OnCompletionListe
             // 监听停止时
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 Log.d("VideoActivity", "结束")
+//                tv_sb.text = "结束"
                 isDrag = false
             }
         })
@@ -105,6 +163,8 @@ class VideoActivity : AppCompatActivity(), OnPreparedListener, OnCompletionListe
         val videoUrl = "http://ips.ifeng.com/video19.ifeng.com/video09/2014/06/16/1989823-102-086-0009.mp4"
         mVideoView?.setVideoPath(videoUrl)
 
+        mVideoView?.currentPosition
+
         if (mMediaInfo != null) {
             val videoControls = mVideoView?.videoControlsCore
             if (videoControls is VideoControls) {
@@ -113,6 +173,25 @@ class VideoActivity : AppCompatActivity(), OnPreparedListener, OnCompletionListe
             val uri = Uri.parse(mMediaInfo?.url)
             Log.e("VideoActivity", "uri ->$uri")
             mVideoView?.setVideoURI(uri)
+
+
+
+//            val mediaPlayer = MediaPlayer()
+//            mediaPlayer.setDataSource(mMediaInfo?.url)
+//            mediaPlayer.prepare()
+//            val duration = mediaPlayer.duration
+//            Log.e("VideoDurationUtil", "视频时长 = $duration")
+
+//            Observable.create { emitter: ObservableEmitter<File?>? ->
+//                val tempFile = VideoDurationUtil.getFileByUrl(mMediaInfo?.url)
+//                emitter?.onNext(tempFile) // 把数据发射出去
+//                emitter?.onComplete()
+//            }.subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe {
+//                    val videoDuration = VideoDurationUtil.getDuration(it)
+//                    Log.e("VideoDurationUtil", "视频时长 = $videoDuration")
+//                }
         }
     }
 
@@ -121,28 +200,7 @@ class VideoActivity : AppCompatActivity(), OnPreparedListener, OnCompletionListe
         if (!mVideoView!!.isPlaying) {
             mVideoView?.start()
             findViewById<TextView>(R.id.tv_total).text = generateTime(mVideoView?.duration ?: 0L)
-
-            Log.e("VideoActivity", "看看走几次")
-
-            // 第一个参数是总共时间，第二个参数是间隔触发时间
-            mCountDownTimer = object : CountDownTimer(mVideoView?.duration!!, 1000) {
-                override fun onFinish() {
-                    Log.e("VideoActivity", "onFinish...." + "结束了")
-                }
-
-                override fun onTick(millisUntilFinished: Long) {
-                    findViewById<TextView>(R.id.tv_progress).text = generateTime(mVideoView?.currentPosition!!)
-                    Log.e("VideoActivity", "onTick...." + millisUntilFinished / 1000 + "s后结束")
-                }
-            }
-            mCountDownTimer?.start()
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        // 防止内存泄漏
-        mCountDownTimer?.cancel()
     }
 
     // 播放完成
@@ -155,6 +213,9 @@ class VideoActivity : AppCompatActivity(), OnPreparedListener, OnCompletionListe
         Log.e("VideoActivity", "进度回掉 = $percent")
         if (!isDrag) {
             mSeekBar?.progress = percent
+
+//            val currentTime = percent.toLong() * mVideoView?.duration!! / 100
+//            findViewById<TextView>(R.id.tv_progress).text = generateTime(currentTime)
         }
     }
 
