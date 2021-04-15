@@ -3,18 +3,14 @@ package com.kuanquan.test
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
-import android.os.CountDownTimer
+import android.os.*
 import android.util.Log
-import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
+import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.devbrackets.android.exomedia.listener.OnBufferUpdateListener
-import com.devbrackets.android.exomedia.listener.OnCompletionListener
-import com.devbrackets.android.exomedia.listener.OnPreparedListener
-import com.devbrackets.android.exomedia.ui.widget.VideoControls
-import com.devbrackets.android.exomedia.ui.widget.VideoView
+import com.devbrackets.android.exomedia.listener.*
+import com.devbrackets.android.exomedia.ui.widget.*
 
 /**
  * To play video media
@@ -60,7 +56,6 @@ class VideoActivity : AppCompatActivity(), OnPreparedListener, OnCompletionListe
     var isDrag = false  // 是否是手动拖动
     private fun seekBar() {
 
-        val tv_sb = findViewById<TextView>(R.id.tv_sb)
         mSeekBar = findViewById<SeekBar>(R.id.sb)
         mSeekBar?.max = 100;
         //SeekBar的监听事件
@@ -68,7 +63,6 @@ class VideoActivity : AppCompatActivity(), OnPreparedListener, OnCompletionListe
             // 监听点击时
             override fun onStartTrackingTouch(seekBar: SeekBar) {
                 Log.e("VideoActivity", "开始")
-                tv_sb.text = "开始"
                 isDrag = true
             }
 
@@ -76,7 +70,6 @@ class VideoActivity : AppCompatActivity(), OnPreparedListener, OnCompletionListe
             @SuppressLint("SetTextI18n")
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 Log.e("VideoActivity", "变化${progress.toLong()}")
-                tv_sb.text = "进度条${progress.toLong()}"
                 if (isDrag) {
                     val currentTime = progress.toLong() * mVideoView?.duration!! / 100
                     mVideoView?.seekTo(currentTime)

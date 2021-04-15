@@ -33,7 +33,7 @@ class VideoActivityCopy : AppCompatActivity(), OnPreparedListener, OnCompletionL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_video)
+        setContentView(R.layout.activity_video_copy)
         mVideoView = findViewById(R.id.video_view)
         mVideoView?.run {
             setHandleAudioFocus(false)

@@ -1,3 +1,4 @@
+include ':customevideoplayer'
 include ':test'
 //include ':demo'
 include ':platinum'
