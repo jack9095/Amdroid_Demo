@@ -21,6 +21,7 @@ import java.io.IOException;
 
 /**
  * Created by Administrator on 2017/6/5.
+ * https://blog.csdn.net/qq_18242391/article/details/73201570
  * 视频播放
  */
 public class VideoPlayer extends FrameLayout implements TextureView.SurfaceTextureListener,
@@ -77,7 +78,6 @@ public class VideoPlayer extends FrameLayout implements TextureView.SurfaceTextu
     }
 
     public VideoPlayer(@NonNull Context context, @Nullable AttributeSet attrs) {
-
         this(context, attrs, 0);
     }
 

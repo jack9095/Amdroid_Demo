@@ -30,24 +30,24 @@ public class VideoPlayerController extends FrameLayout implements
 
     private Context mContext;
 
-    private ImageView mImage;
-    private ImageView mCenterStart;
-    private LinearLayout mTop;
-    private ImageView mBack;
-    private TextView mTitle;
-    private LinearLayout mBottom;
-    private ImageView mRestartPause;
-    private TextView mPosition;
-    private TextView mDuration;
-    private SeekBar mSeek;
-    private ImageView mFullScreen;
-    private LinearLayout mLoading;
-    private TextView mLoadText;
-    private LinearLayout mError;
-    private TextView mRetry;
-    private LinearLayout mCompleted;
-    private TextView mReplay;
-    private TextView mShare;
+    private ImageView mImage; // 封面图
+    private ImageView mCenterStart;  // 中间播放按钮
+    private LinearLayout mTop;  // 顶部布局
+    private ImageView mBack;   // 顶部布局左上角返回按键
+    private TextView mTitle;   // 视频标题
+    private LinearLayout mBottom;   // 底部布局
+    private ImageView mRestartPause; // 底部布局 左下角 播放、暂停控件
+    private TextView mPosition;   // 当前播放时间点
+    private TextView mDuration;   // 视频总时长
+    private SeekBar mSeek;     // 视频播放进度拖动条
+    private ImageView mFullScreen;  // 横竖屏切换控件
+    private LinearLayout mLoading;  // 加载视频的布局
+    private TextView mLoadText;   // 加载视频布局的文案
+    private LinearLayout mError;  // 视频加载错误的布局
+    private TextView mRetry;      // 点击重试
+    private LinearLayout mCompleted;  // 视频播放完成现实的布局
+    private TextView mReplay;  // 重新播放
+    private TextView mShare;   // 分享
 
     private boolean topBottomVisible = false;
 
@@ -192,7 +192,7 @@ public class VideoPlayerController extends FrameLayout implements
                 mTop.setVisibility(GONE);
                 mBottom.setVisibility(GONE);
                 break;
-            case VideoPlayer.STATE_PREPARED:
+            case VideoPlayer.STATE_PREPARED: // 播放准备就绪
                 startUpdateProgress();
                 break;
             case VideoPlayer.STATE_BUFFERING_PLAYING: //播放时缓冲
@@ -319,8 +319,10 @@ public class VideoPlayerController extends FrameLayout implements
     @Override
     public boolean onTouch(View v, MotionEvent event) {
 
+        // 不是小窗口
         if(!mVideoPlayerControl.isTinyScreen()) return super.onTouchEvent(event);
 
+        // 是小窗口  拖动小窗口的代码
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
                 startX = event.getRawX();
