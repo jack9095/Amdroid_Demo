@@ -18,7 +18,6 @@ class VideoPlayerController: FrameLayout, View.OnClickListener, OnSeekBarChangeL
         initView(context)
     }
 
-    private var mImage: ImageView? = null // 封面图
     private var mCenterStart: ImageView? = null // 中间播放按钮
     private var mTop: LinearLayout? = null // 顶部布局
     private var mBack: ImageView? = null // 顶部布局左上角返回按键
@@ -37,13 +36,9 @@ class VideoPlayerController: FrameLayout, View.OnClickListener, OnSeekBarChangeL
     private var mReplay: TextView? = null // 重新播放
     private var mShare: TextView? = null // 分享
 
-    private val screenWidth: Int by lazy {
-        context.resources.displayMetrics.widthPixels
-    }
+    private val screenWidth: Int by lazy { context.resources.displayMetrics.widthPixels }
 
-    private val screenHeight: Int by lazy {
-        context.resources.displayMetrics.heightPixels
-    }
+    private val screenHeight: Int by lazy { context.resources.displayMetrics.heightPixels }
 
     private var topBottomVisible = false // 播放器底部和顶部状态栏隐藏和显示
 
@@ -65,7 +60,7 @@ class VideoPlayerController: FrameLayout, View.OnClickListener, OnSeekBarChangeL
     }
 
     /**
-     * 取消更新
+     * 取消更新，在开始拖动进度的时候掉用
      */
     private fun cancelUpdateProgress() {
         handler.removeMessages(MSG_ID)
@@ -75,7 +70,6 @@ class VideoPlayerController: FrameLayout, View.OnClickListener, OnSeekBarChangeL
         View.inflate(context, R.layout.video_palyer_controller, this)
 
         mCenterStart = findViewById(R.id.center_start)
-        mImage = findViewById(R.id.image)
 
         mTop = findViewById(R.id.top)
         mBack = findViewById(R.id.back)
@@ -121,32 +115,39 @@ class VideoPlayerController: FrameLayout, View.OnClickListener, OnSeekBarChangeL
     }
 
     override fun onClick(v: View?) {
-        if (v === mCenterStart) {
+        when(v) {
+            mCenterStart -> {
 
-        } else if (v === this) { // 点击隐藏和显示顶部和底部导航栏用的
+            }
+            this -> { // 点击隐藏和显示顶部和底部导航栏用的
 //            if (mVideoPlayerControl.isPlaying()
 //                    || mVideoPlayerControl.isPaused()
 //                    || mVideoPlayerControl.isBufferingPlaying()
 //                    || mVideoPlayerControl.isBufferingPaused()) {
                 setTopBottomVisible(!topBottomVisible)
 //            }
-        } else if (v === mReplay) { // 重新播放
+            }
+            mReplay -> { // 重新播放
+                mCompleted?.visibility = View.GONE
+            }
+            mShare -> {
+                Toast.makeText(context, "分享", Toast.LENGTH_SHORT).show()
+            }
+            mRestartPause -> {  // 暂停或者播放
 
-            mCompleted?.visibility = View.GONE
-        } else if (v === mShare) {
-            Toast.makeText(context, "分享", Toast.LENGTH_SHORT).show()
-        } else if (v === mRestartPause) {  // 暂停或者播放
-
-        } else if (v === mFullScreen) { // 横竖屏切换控件
+            }
+            mFullScreen -> { // 横竖屏切换控件
 //            if (mVideoPlayerControl.isNormalScreen()) {
 //                mVideoPlayerControl.enterFullScreen()
 //            } else if (mVideoPlayerControl.isFullScreen()) {
 //                mVideoPlayerControl.exitFullScreen()
 //            }
-        } else if (v === mBack) {
+            }
+            mBack -> {
 //            if (mVideoPlayerControl.isFullScreen()) {
 //                mVideoPlayerControl.exitFullScreen()
 //            }
+            }
         }
     }
 
@@ -180,7 +181,7 @@ class VideoPlayerController: FrameLayout, View.OnClickListener, OnSeekBarChangeL
 
         // 3秒显示还没有关闭就自动关闭
         if (topBottomVisible) {
-            postDelayed({
+            handler.postDelayed({
                 mTop?.visibility = View.INVISIBLE
                 mBottom?.visibility = View.INVISIBLE
                 this.topBottomVisible = false
@@ -188,4 +189,7 @@ class VideoPlayerController: FrameLayout, View.OnClickListener, OnSeekBarChangeL
         }
     }
 
+   fun destroy(){
+        handler.removeCallbacksAndMessages(null)
+    }
 }
