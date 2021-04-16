@@ -200,3 +200,6 @@ Koin 注入框架在 kotlin 中的使用
 
 ### 50、NotificationToast
 像QQ、微信一样横幅展示通知消息
+
+### 51、SuperPlayer_Android-master
+腾讯云的超级播放器，包含手势调整音量、亮度、倍速、硬件加速、镜像、屏幕截图、视频线路来源、弹幕等等功能

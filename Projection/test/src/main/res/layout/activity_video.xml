@@ -55,4 +55,35 @@
             android:text="20:21" />
     </LinearLayout>
 
+
+    <!-- 垂直进度条 -->
+    <com.kuanquan.test.seek.VerticalSeekBar
+        android:id="@+id/vertical_Seekbar"
+        android:layout_width="wrap_content"
+        android:maxWidth="1dp"
+        android:maxHeight="1dp"
+        android:thumb="@drawable/shape_progress_indicator"
+        android:progressDrawable="@drawable/seek_progress"
+        android:layout_marginStart="50dp"
+        android:splitTrack="false"
+        android:layout_height="200dp"
+        />
+
+
+
+    <SeekBar
+        android:layout_width="222dp"
+        android:layout_gravity="right"
+        android:layout_height="2dp"
+        android:paddingStart="0dp"
+        android:visibility="gone"
+        android:paddingEnd="0dp"
+        android:progress="0"
+        android:maxWidth="222dp"
+        android:maxHeight="2dp"
+        android:progressDrawable="@drawable/shape_seekbar_calculator_layer"
+        android:rotation="-90"
+        android:thumb="@drawable/shape_progress_indicator" />
+
+<!--    android:thumb="@null"-->
 </FrameLayout>

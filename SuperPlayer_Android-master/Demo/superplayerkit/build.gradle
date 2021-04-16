@@ -24,8 +24,8 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-//    compile project(':liteav_sdk')
-    compile rootProject.ext.liteavSdk
-    compile 'com.github.ctiao:DanmakuFlameMaster:0.5.3'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+//    implementation project(':liteav_sdk')
+    implementation rootProject.ext.liteavSdk
+    implementation 'com.github.ctiao:DanmakuFlameMaster:0.5.3'
 }
