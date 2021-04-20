@@ -25,8 +25,8 @@ import okhttp3.Response;
 /**
  * Created by liyuejiao on 2018/7/3.
  * 获取点播信息
+ * 获取点播信息接口
  */
-
 public class SuperVodListLoader {
 
     private static final String TAG = "SuperVodListLoader";

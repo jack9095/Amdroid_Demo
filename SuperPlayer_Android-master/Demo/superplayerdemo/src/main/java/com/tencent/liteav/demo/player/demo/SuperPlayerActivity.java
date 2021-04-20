@@ -57,7 +57,6 @@ import static android.view.View.VISIBLE;
  * Created by liyuejiao on 2018/7/3.
  * 超级播放器主Activity
  */
-
 public class SuperPlayerActivity extends Activity implements View.OnClickListener,
         SuperVodListLoader.OnVodInfoLoadListener, SuperPlayerView.OnSuperPlayerViewCallback,
         TCVodPlayerListAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
@@ -83,13 +82,14 @@ public class SuperPlayerActivity extends Activity implements View.OnClickListene
     private RelativeLayout      mRelativeMaskTwo;
     private ImageView           mImageBack;
     private ImageView           mBtnScan;
-    private ImageView           mImageAdd;
+    private ImageView           mImageAdd;  // 添加播放的视屏按钮 在页面最底部
     private ImageButton         mImageLink;
     private View                mTitleMask;
     private View                mListMask;
     private TextView            mTextOne;
     private TextView            mTextTwo;
     private SwipeRefreshLayout  mSwipeRefreshLayout;
+
     //超级播放器View
     private SuperPlayerView     mSuperPlayerView;
     //播放列表

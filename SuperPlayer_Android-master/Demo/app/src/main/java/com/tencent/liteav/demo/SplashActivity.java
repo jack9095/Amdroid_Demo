@@ -30,6 +30,8 @@ public class SplashActivity extends Activity {
 
     private void navigation() {
         Intent intent = getIntent();
+
+        // Web 端播放器 Web 端超级播放器基于 video.js 框架开发
         if (!TextUtils.isEmpty(intent.getScheme())) {
             navigationWebData();
         } else {

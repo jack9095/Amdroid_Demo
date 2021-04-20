@@ -29,6 +29,9 @@ import me.dm7.barcodescanner.core.IViewFinder;
 import me.dm7.barcodescanner.core.ViewFinderView;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
+/**
+ * 二维码扫描
+ */
 public class QRCodeScanActivity extends Activity implements ZXingScannerView.ResultHandler {
 
     private ZXingScannerView mScannerView;

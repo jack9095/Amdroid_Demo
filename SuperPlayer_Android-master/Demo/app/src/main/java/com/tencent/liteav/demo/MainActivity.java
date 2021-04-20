@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 
 import com.tencent.liteav.demo.common.widget.expandableadapter.BaseExpandableRecyclerViewAdapter;
+import com.tencent.liteav.demo.player.demo.CustomSuperPlayerActivity;
 import com.tencent.liteav.demo.player.demo.SuperPlayerActivity;
 import com.tencent.rtmp.TXLiveBase;
 
@@ -55,6 +56,8 @@ public class MainActivity extends Activity {
         mTvVersion.setText("超级播放器版本 v" + TXLiveBase.getSDKVersionStr()+"(8.5.677)");
 
         mMainTitle = (TextView) findViewById(R.id.main_title);
+
+        // 标题长按分享
         mMainTitle.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -136,7 +139,10 @@ public class MainActivity extends Activity {
 
         // 初始化播放器
         List<ChildBean> playerChildList = new ArrayList<>();
+        // TODO 超级播放器所在的 activity SuperPlayerActivity
+//        playerChildList.add(new ChildBean("超级播放器", R.drawable.play, 3, SuperPlayerActivity.class));
         playerChildList.add(new ChildBean("超级播放器", R.drawable.play, 3, SuperPlayerActivity.class));
+        playerChildList.add(new ChildBean("点播播放器", R.drawable.play, 3, CustomSuperPlayerActivity.class));
         if (playerChildList.size() != 0) {
             GroupBean playerGroupBean = new GroupBean("播放器 Player", R.drawable.composite, playerChildList);
             groupList.add(playerGroupBean);
