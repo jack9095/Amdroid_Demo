@@ -16,6 +16,9 @@ import com.tencent.rtmp.ui.TXCloudVideoView;
 
 import java.io.File;
 
+/**
+ * 播放器的实现类
+ */
 public class SuperPlayerImpl implements SuperPlayer, ITXVodPlayListener {
 
     private static final String TAG = "SuperPlayerImpl";

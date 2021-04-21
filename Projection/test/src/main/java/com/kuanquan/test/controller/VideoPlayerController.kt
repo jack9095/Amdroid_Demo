@@ -18,6 +18,9 @@ import com.kuanquan.test.projection.DLNAUtils
 import com.kuanquan.test.seek.VerticalSeekBar
 import com.tencent.rtmp.ui.TXCloudVideoView
 
+/**
+ * 播放器界面上的控制面板布局
+ */
 class VideoPlayerController : FrameLayout, View.OnClickListener, OnSeekBarChangeListener, LifecycleObserver {
 
     constructor(context: Context) : super(context) {
@@ -145,6 +148,17 @@ class VideoPlayerController : FrameLayout, View.OnClickListener, OnSeekBarChange
         mTitle?.text = title
     }
 
+    /**
+     * 制定播放的位置
+     */
+    fun setSeek(currentDuration: Long){
+        mSuperPlayer?.seek(currentDuration.toInt())
+    }
+
+    fun resume(){
+        mSuperPlayer?.resume()
+    }
+
     override fun onClick(v: View?) {
         when (v) {
             this -> { // 点击隐藏和显示顶部和底部导航栏用的
@@ -171,7 +185,7 @@ class VideoPlayerController : FrameLayout, View.OnClickListener, OnSeekBarChange
                 }
             }
             mBack, mFullScreen -> {
-                mPageFinishListener?.onFinish()
+                mPageFinishListener?.onScreenIcon(currentDuration)
             }
         }
     }
@@ -192,6 +206,7 @@ class VideoPlayerController : FrameLayout, View.OnClickListener, OnSeekBarChange
     }
 
     private var totalDuration = 0L // 视屏总时长
+    private var currentDuration = 0L // 当前播放的时间点
 
     /**
      * 播放器状态回掉
@@ -200,6 +215,7 @@ class VideoPlayerController : FrameLayout, View.OnClickListener, OnSeekBarChange
         override fun onPlayProgress(current: Long, duration: Long) {
             super.onPlayProgress(current, duration)
             totalDuration = duration
+            currentDuration = current
             mPositionTv?.text = DLNAUtils.formattedTime(current)
             mDurationTv?.text = DLNAUtils.formattedTime(duration)
 
@@ -267,7 +283,7 @@ class VideoPlayerController : FrameLayout, View.OnClickListener, OnSeekBarChange
 
     private var mPageFinishListener: PageFinishListener? = null
     interface PageFinishListener {
-        fun onFinish()
+        fun onScreenIcon(currentDuration: Long)
     }
 
 }

@@ -2,6 +2,7 @@ package com.kuanquan.test.projection
 
 import android.content.Intent
 import android.util.Log
+import com.kuanquan.test.activity.LiteAvVideoActivity
 import com.kuanquan.test.activity.VideoActivity
 import com.kuanquan.test.app.WorkApplication
 import com.plutinosoft.platinum.CallbackTypes
@@ -9,6 +10,7 @@ import com.plutinosoft.platinum.DLNACallback
 
 /**
  * 接收 native 传递上来的消息回调实例
+ * 书写跳转播放器的页面的代码
  * 枚举单例
  * TODO 4
  */
@@ -64,9 +66,10 @@ object CallbackInstance {
                  """.trimIndent()
         )
 
+        // TODO 跳转播放页面
         if (WorkApplication.currentActivity != null) {
             val intent = Intent()
-            intent.setClass(WorkApplication.currentActivity!!, VideoActivity::class.java)
+            intent.setClass(WorkApplication.currentActivity!!, LiteAvVideoActivity::class.java)
             intent.putExtra(JUMP_VIDEO_PARAMS_KEY, mediaInfo)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             WorkApplication.currentActivity?.startActivity(intent)
