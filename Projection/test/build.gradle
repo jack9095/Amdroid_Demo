@@ -68,6 +68,8 @@ dependencies {
     implementation('com.devbrackets.android:exomedia:4.3.0'){
         exclude group: 'com.android.support'
     }
+
+    implementation 'com.tencent.liteav:LiteAVSDK_Player:8.5.10028'
     implementation(name:'platinum-release',ext:'aar')
 }
 

@@ -15,11 +15,9 @@ import com.devbrackets.android.exomedia.listener.OnCompletionListener
 import com.devbrackets.android.exomedia.listener.OnPreparedListener
 import com.devbrackets.android.exomedia.ui.widget.VideoControls
 import com.devbrackets.android.exomedia.ui.widget.VideoView
-import com.kuanquan.test.CallbackInstance
-import com.kuanquan.test.MediaInfo
+import com.kuanquan.test.projection.CallbackInstance
+import com.kuanquan.test.projection.MediaInfo
 import com.kuanquan.test.R
-import com.kuanquan.test.seek.CustomSeekBar
-import com.kuanquan.test.seek.MusicSeekBar
 
 /**
  * To play video media

@@ -1,10 +1,9 @@
-package com.kuanquan.test
+package com.kuanquan.test.projection
 
 import android.content.Intent
 import android.util.Log
+import com.kuanquan.test.activity.VideoActivity
 import com.kuanquan.test.app.WorkApplication
-import com.kuanquan.test.enum_p.MediaType
-import com.kuanquan.test.util.DLNAUtils
 import com.plutinosoft.platinum.CallbackTypes
 import com.plutinosoft.platinum.DLNACallback
 
@@ -38,7 +37,11 @@ object CallbackInstance {
             )
 
             when (type) {
-                CallbackTypes.CALLBACK_EVENT_ON_PLAY -> startPlayMedia(type, param1, param2)
+                CallbackTypes.CALLBACK_EVENT_ON_PLAY -> startPlayMedia(
+                    type,
+                    param1,
+                    param2
+                )
                 CallbackTypes.CALLBACK_EVENT_ON_PAUSE -> {
                 }
                 CallbackTypes.CALLBACK_EVENT_ON_SEEK -> {

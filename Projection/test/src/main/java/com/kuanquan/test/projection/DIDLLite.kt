@@ -1,4 +1,4 @@
-package com.kuanquan.test
+package com.kuanquan.test.projection
 
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.Root

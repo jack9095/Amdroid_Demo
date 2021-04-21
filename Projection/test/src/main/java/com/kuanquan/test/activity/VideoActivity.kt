@@ -1,4 +1,4 @@
-package com.kuanquan.test
+package com.kuanquan.test.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -11,6 +11,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.devbrackets.android.exomedia.listener.*
 import com.devbrackets.android.exomedia.ui.widget.*
+import com.kuanquan.test.projection.CallbackInstance
+import com.kuanquan.test.projection.MediaInfo
+import com.kuanquan.test.R
 
 /**
  * To play video media

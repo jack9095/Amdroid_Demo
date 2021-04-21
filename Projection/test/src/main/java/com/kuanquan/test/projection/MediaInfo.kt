@@ -1,4 +1,4 @@
-package com.kuanquan.test
+package com.kuanquan.test.projection
 
 import com.kuanquan.test.enum_p.MediaType
 import java.io.Serializable

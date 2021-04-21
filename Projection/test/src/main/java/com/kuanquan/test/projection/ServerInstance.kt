@@ -1,4 +1,4 @@
-package com.kuanquan.test
+package com.kuanquan.test.projection
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -37,7 +37,9 @@ object ServerInstance {
             if (param is ServerParams) {
                 mState = State.STARTING
                 mDLNABridge = DLNABridge()
-                mDLNABridge?.setCallback(CallbackInstance.getDLNACallback())
+                mDLNABridge?.setCallback(
+                    CallbackInstance.getDLNACallback()
+                )
                 mDLNABridge?.start(param)
                 mState = State.RUNNING
             }

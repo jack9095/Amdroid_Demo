@@ -70,8 +70,11 @@ public class CustomSuperPlayerActivity extends Activity implements CustomSuperPl
 
         SuperPlayerModel model = new SuperPlayerModel();
         model.title = "测试数据";
-        model.url = "http://ips.ifeng.com/video19.ifeng.com/video09/2014/06/16/1989823-102-086-0009.mp4";
-        mSuperPlayerView.playWithModel(model);
+//        model.url = "http://ips.ifeng.com/video19.ifeng.com/video09/2014/06/16/1989823-102-086-0009.mp4";
+//        String url = "http://ips.ifeng.com/video19.ifeng.com/video09/2014/06/16/1989823-102-086-0009.mp4";
+        String url = "http://200024424.vod.myqcloud.com/200024424_709ae516bdf811e6ad39991f76a4df69.f20.mp4";
+        mSuperPlayerView.play(url);
+        mSuperPlayerView.updateTitle("测试数据");
 
         mSuperPlayerView.setPlayerViewCallback(this);
     }
@@ -132,23 +135,7 @@ public class CustomSuperPlayerActivity extends Activity implements CustomSuperPl
     }
 
     @Override
-    public void onClickFloatCloseBtn() {
-        // 点击悬浮窗关闭按钮，那么结束整个播放
-        mSuperPlayerView.resetPlayer();
-        finish();
-    }
-
-    @Override
     public void onClickSmallReturnBtn() {
         // 点击小窗模式下返回按钮，开始悬浮播放
-    }
-
-    @Override
-    public void onStartFloatWindowPlay() {
-        // 开始悬浮播放后，直接返回到桌面，进行悬浮播放
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        startActivity(intent);
     }
 }

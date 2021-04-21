@@ -2,9 +2,12 @@ package com.kuanquan.test.app
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.kuanquan.test.activity.LiteAvFullScreenActivity
+import com.kuanquan.test.activity.LiteAvVideoActivity
 
 open class BaseMainActivity: AppCompatActivity() {
 
@@ -47,6 +50,14 @@ open class BaseMainActivity: AppCompatActivity() {
 
     fun renren(view: View?) {
         startAPP("com.zhongduomei.rrmj.society")
+    }
+
+    fun screen(view: View) {
+        startActivity(Intent(this, LiteAvFullScreenActivity::class.java))
+    }
+
+    fun portrait(view: View) {
+        startActivity(Intent(this, LiteAvVideoActivity::class.java))
     }
 
     private fun startAPP(packageName: String) {

@@ -1,9 +1,7 @@
-package com.kuanquan.test.util
+package com.kuanquan.test.projection
 
 import android.text.TextUtils
 import android.webkit.MimeTypeMap
-import com.kuanquan.test.DIDLLite
-import com.kuanquan.test.MediaInfo
 import com.kuanquan.test.enum_p.MediaType
 import org.simpleframework.xml.Serializer
 import org.simpleframework.xml.core.Persister
@@ -81,5 +79,50 @@ object DLNAUtils {
             mediaType = MediaType.TYPE_VIDEO
         }
         return mediaType
+    }
+
+    /**
+     * 将秒数转换为hh:mm:ss的格式
+     *
+     * @param second
+     * @return
+     */
+    fun formattedTime(second: Long): String? {
+        val formatTime: String
+        val h: Long
+        val m: Long
+        val s: Long
+        h = second / 3600
+        m = second % 3600 / 60
+        s = second % 3600 % 60
+        formatTime = if (h == 0L) {
+            asTwoDigit(m) + ":" + asTwoDigit(s)
+        } else {
+            asTwoDigit(h) + ":" + asTwoDigit(m) + ":" + asTwoDigit(s)
+        }
+        return formatTime
+    }
+
+    private fun asTwoDigit(digit: Long): String {
+        var value = ""
+        if (digit < 10) {
+            value = "0"
+        }
+        value += digit.toString()
+        return value
+    }
+
+    /**
+     * 将毫秒转时分秒
+     *
+     * @param time
+     * @return
+     */
+    private fun generateTime(time: Long): String? {
+        val totalSeconds = (time / 1000).toInt()
+        val seconds = totalSeconds % 60
+        val minutes = totalSeconds / 60 % 60
+        val hours = totalSeconds / 3600
+        return if (hours > 0) String.format("%02dh%02dm%02ds", hours, minutes, seconds) else String.format("%02dm%02ds", minutes, seconds)
     }
 }

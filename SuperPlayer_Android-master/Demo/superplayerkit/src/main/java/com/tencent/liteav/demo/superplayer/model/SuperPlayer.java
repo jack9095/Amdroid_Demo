@@ -86,18 +86,38 @@ public interface SuperPlayer {
      */
     void switchPlayMode(SuperPlayerDef.PlayerMode playerMode);
 
+    /**
+     * 是否开启硬解 true 硬解
+     * @param enable
+     */
     void enableHardwareDecode(boolean enable);
 
     void setPlayerView(TXCloudVideoView videoView);
 
     void seek(int position);
 
+    /**
+     * 截屏
+     * @param
+     */
     void snapshot(TXLivePlayer.ITXSnapshotListener listener);
 
+    /**
+     * 倍速
+     * @param
+     */
     void setRate(float speedLevel);
 
+    /**
+     * 镜像
+     * @param isMirror
+     */
     void setMirror(boolean isMirror);
 
+    /**
+     * 切换分辨率 流畅、清晰、高清、超清
+     * @param quality
+     */
     void switchStream(VideoQuality quality);
 
     String getPlayURL();

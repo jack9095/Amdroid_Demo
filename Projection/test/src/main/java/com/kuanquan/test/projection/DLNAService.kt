@@ -1,4 +1,4 @@
-package com.kuanquan.test
+package com.kuanquan.test.projection
 
 import android.app.Service
 import android.content.*
