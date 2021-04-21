@@ -12,7 +12,6 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/customevideoplayer" />
             <option value="$PROJECT_DIR$/platinum" />
             <option value="$PROJECT_DIR$/test" />
           </set>
