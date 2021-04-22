@@ -2,13 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/black"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity">
 
     <FrameLayout
         android:id="@+id/fl"
+        android:background="@color/black"
         android:layout_width="match_parent"
         android:layout_height="210dp">
 
@@ -22,5 +22,92 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </FrameLayout>
+
+    <ScrollView
+        android:layout_below="@+id/fl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:text="爱奇艺"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+            <Button
+                android:text="腾讯视频"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+            <Button
+                android:text="优酷视频"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+            <Button
+                android:text="哔哩哔哩"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+            <Button
+                android:text="搜狐视频"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+            <Button
+                android:text="好看视频"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+            <Button
+                android:text="西瓜视频"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+            <Button
+                android:text="芒果TV"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+            <Button
+                android:text="韩剧TV"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+            <Button
+                android:text="人人视频"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+
+            <Button
+                android:text="横屏播放器"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+            <Button
+                android:text="竖屏播放器"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+        </LinearLayout>
+
+    </ScrollView>
 
 </RelativeLayout>

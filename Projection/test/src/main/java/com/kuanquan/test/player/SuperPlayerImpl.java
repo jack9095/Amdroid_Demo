@@ -55,25 +55,35 @@ public class SuperPlayerImpl implements SuperPlayer, ITXVodPlayListener {
             TXCLog.d(TAG, playEventLog);
         }
         switch (event) {
-            case TXLiveConstants.PLAY_EVT_VOD_PLAY_PREPARED://视频播放开始
-                updatePlayerState(SuperPlayerDef.PlayerState.PLAYING);
+            case TXLiveConstants.PLAY_EVT_CONNECT_SUCC://播放视频连接成功
+                Log.e("SuperPlayerImpl", " 播放视频连接成功");
                 break;
-            case TXLiveConstants.PLAY_EVT_RCV_FIRST_I_FRAME:
+            case TXLiveConstants.PLAY_EVT_PLAY_LOADING://播放视频播放加载
+                Log.e("SuperPlayerImpl", " 播放视频播放加载");
+                break;
+            case TXLiveConstants.PLAY_EVT_VOD_PLAY_PREPARED://播放视频
+                Log.e("SuperPlayerImpl", " 播放视频");
+                updatePlayerState(SuperPlayerDef.PlayerState.START);
+                break;
+            case TXLiveConstants.PLAY_EVT_RCV_FIRST_I_FRAME: // 播放第一帧
+                Log.e("SuperPlayerImpl", " 播放第一帧");
                 if (mChangeHWAcceleration) { //切换软硬解码器后，重新seek位置
                     TXCLog.i(TAG, "seek pos:" + mSeekPos);
                     seek(mSeekPos);
                     mChangeHWAcceleration = false;
                 }
                 break;
-            case TXLiveConstants.PLAY_EVT_PLAY_END:
+            case TXLiveConstants.PLAY_EVT_PLAY_END: // 播放结束
+                Log.e("SuperPlayerImpl", " 播放结束");
                 updatePlayerState(SuperPlayerDef.PlayerState.END);
                 break;
-            case TXLiveConstants.PLAY_EVT_PLAY_PROGRESS:
+            case TXLiveConstants.PLAY_EVT_PLAY_PROGRESS:  // 播放视频播放进度
                 int progress = param.getInt(TXLiveConstants.EVT_PLAY_PROGRESS_MS); // 当前播放进度 毫秒
                 int duration = param.getInt(TXLiveConstants.EVT_PLAY_DURATION_MS); // 视频总时长 毫秒
                 updatePlayProgress(progress / 1000, duration / 1000);
                 break;
-            case TXLiveConstants.PLAY_EVT_PLAY_BEGIN:
+            case TXLiveConstants.PLAY_EVT_PLAY_BEGIN: // 开始播放
+                Log.e("SuperPlayerImpl", " 开始播放");
                 updatePlayerState(SuperPlayerDef.PlayerState.PLAYING);
                 break;
             default:
@@ -148,7 +158,7 @@ public class SuperPlayerImpl implements SuperPlayer, ITXVodPlayListener {
         mCurrentPlayVideoURL = url;
         if (mVodPlayer != null) {
             mVodPlayer.setStartTime(0);
-            mVodPlayer.setAutoPlay(true);
+//            mVodPlayer.setAutoPlay(true);
             mVodPlayer.setVodListener(this);
             String drmType = "plain";
             mVodPlayer.setToken(null);
@@ -221,6 +231,9 @@ public class SuperPlayerImpl implements SuperPlayer, ITXVodPlayListener {
             return;
         }
         switch (playState) {
+            case START:
+                mObserver.onPlayStart(getPlayName());
+                break;
             case PLAYING:
                 mObserver.onPlayBegin(getPlayName());
                 break;

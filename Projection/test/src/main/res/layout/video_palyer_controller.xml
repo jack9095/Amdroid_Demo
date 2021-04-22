@@ -213,7 +213,7 @@
         android:layout_marginEnd="40dp"
         android:visibility="gone"
         android:max="100"
-        android:progress="50"
+        android:progress="10"
         android:maxWidth="1dp"
         android:maxHeight="1dp"
         android:thumb="@drawable/shape_progress_indicator"

@@ -9,6 +9,12 @@ public abstract class SuperPlayerObserver {
      * 开始播放
      * @param name 当前视频名称
      */
+    public void onPlayStart(String name) {}
+
+    /**
+     * 开始再次播放
+     * @param name 当前视频名称
+     */
     public void onPlayBegin(String name) {}
 
     /**

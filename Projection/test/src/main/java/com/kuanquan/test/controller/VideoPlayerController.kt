@@ -1,8 +1,12 @@
 package com.kuanquan.test.controller
 
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.*
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.lifecycle.Lifecycle
@@ -149,14 +153,108 @@ class VideoPlayerController : FrameLayout, View.OnClickListener, OnSeekBarChange
     }
 
     /**
-     * 制定播放的位置
+     * 恢复播放
      */
-    fun setSeek(currentDuration: Long){
-        mSuperPlayer?.seek(currentDuration.toInt())
-    }
-
     fun resume(){
         mSuperPlayer?.resume()
+    }
+
+    /**
+     * 开始播放
+     */
+    fun startPlayer(){
+        mSuperPlayer?.play(videoUrl)
+    }
+
+    /**
+     * 暂停播放
+     */
+    fun pausePlayer(){
+        mSuperPlayer?.pause()
+    }
+
+    /**
+     * 停止播放
+     */
+    fun stopPlayer(){
+        mSuperPlayer?.stop()
+    }
+
+    /**
+     * 硬解
+     */
+    fun enableHardwareDecode(){
+        mSuperPlayer?.enableHardwareDecode(true)
+    }
+
+    /**
+     * 隐藏播放器中间的播放按钮
+     */
+   fun hideView(){
+       mCenterStart?.visibility = View.GONE
+    }
+
+    /**
+     * 指定播放的位置
+     */
+    fun setSeekJump(jDuration: Long){
+        jumpDuration = jDuration
+    }
+
+    /**
+     * 指定播放的位置
+     */
+    fun setSeek(jDuration: Long){
+        mSuperPlayer?.seek(jDuration.toInt())
+    }
+
+    private var totalDuration = 0L // 视屏总时长
+    private var currentDuration = 0L // 当前播放的时间点
+    private var jumpDuration = 0L // 跳转到指定地方播放
+
+    /**
+     * 播放器状态回掉
+     */
+    private val mSuperPlayerObserver = object : SuperPlayerObserver() {
+        override fun onPlayProgress(current: Long, duration: Long) {
+            super.onPlayProgress(current, duration)
+            totalDuration = duration
+            currentDuration = current
+            mPositionTv?.text = DLNAUtils.formattedTime(current)
+            mDurationTv?.text = DLNAUtils.formattedTime(duration)
+
+            if (totalDuration > 0) {
+                mSeekBar?.progress = (current * 100 / totalDuration).toInt()
+            }
+        }
+
+        override fun onPlayStart(name: String?) {
+            super.onPlayStart(name)
+            Log.e("VideoPlayerController", "onPlayStart -》 onPlayStart ")
+            if (jumpDuration > 0) {
+                mSuperPlayer?.seek(jumpDuration.toInt())
+                mSuperPlayer?.resume()
+            }
+            mCompleted?.visibility = View.GONE
+            mRestartPause?.setImageResource(R.drawable.ic_player_pause)
+        }
+
+        override fun onPlayBegin(name: String?) {
+            super.onPlayBegin(name)
+            Log.e("VideoPlayerController", "onPlayBegin -》 onPlayBegin ")
+            mCompleted?.visibility = View.GONE
+            mRestartPause?.setImageResource(R.drawable.ic_player_pause)
+        }
+
+        override fun onPlayPause() {
+            super.onPlayPause()
+            mRestartPause?.setImageResource(R.drawable.ic_player_start)
+        }
+
+        override fun onPlayStop() {
+            super.onPlayStop()
+            mCompleted?.visibility = View.VISIBLE
+        }
     }
 
     override fun onClick(v: View?) {
@@ -184,8 +282,11 @@ class VideoPlayerController : FrameLayout, View.OnClickListener, OnSeekBarChange
                     mSuperPlayer?.resume()
                 }
             }
-            mBack, mFullScreen -> {
+            mBack -> {
                 mPageFinishListener?.onScreenIcon(currentDuration)
+            }
+            mFullScreen -> {
+                mPageFinishListener?.onScreenIcon(0)
             }
         }
     }
@@ -203,42 +304,6 @@ class VideoPlayerController : FrameLayout, View.OnClickListener, OnSeekBarChange
         val currentTime = seekBar.progress * totalDuration / 100
         mSuperPlayer?.seek(currentTime.toInt())
         mSuperPlayer?.resume()
-    }
-
-    private var totalDuration = 0L // 视屏总时长
-    private var currentDuration = 0L // 当前播放的时间点
-
-    /**
-     * 播放器状态回掉
-     */
-    private val mSuperPlayerObserver = object : SuperPlayerObserver() {
-        override fun onPlayProgress(current: Long, duration: Long) {
-            super.onPlayProgress(current, duration)
-            totalDuration = duration
-            currentDuration = current
-            mPositionTv?.text = DLNAUtils.formattedTime(current)
-            mDurationTv?.text = DLNAUtils.formattedTime(duration)
-
-            if (totalDuration > 0) {
-                mSeekBar?.progress = (current * 100 / totalDuration).toInt()
-            }
-        }
-
-        override fun onPlayBegin(name: String?) {
-            super.onPlayBegin(name)
-            mCompleted?.visibility = View.GONE
-            mRestartPause?.setImageResource(R.drawable.ic_player_pause)
-        }
-
-        override fun onPlayPause() {
-            super.onPlayPause()
-            mRestartPause?.setImageResource(R.drawable.ic_player_start)
-        }
-
-        override fun onPlayStop() {
-            super.onPlayStop()
-            mCompleted?.visibility = View.VISIBLE
-        }
     }
 
     private fun reset() {
