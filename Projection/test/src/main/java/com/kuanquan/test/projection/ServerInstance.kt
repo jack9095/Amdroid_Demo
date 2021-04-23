@@ -38,7 +38,7 @@ object ServerInstance {
                 mState = State.STARTING
                 mDLNABridge = DLNABridge()
                 mDLNABridge?.setCallback(
-                    CallbackInstance.getDLNACallback()
+                        CallbackInstance.getDLNACallback()
                 )
                 mDLNABridge?.start(param)
                 mState = State.RUNNING
