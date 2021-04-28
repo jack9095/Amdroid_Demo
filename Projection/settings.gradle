@@ -1,6 +1,6 @@
-//include ':customevideoplayer'
+include ':customevideoplayer'
 include ':test'
-//include ':demo'
+include ':demo'
 include ':platinum'
 //include ':lib-dlna'
 //include ':app'

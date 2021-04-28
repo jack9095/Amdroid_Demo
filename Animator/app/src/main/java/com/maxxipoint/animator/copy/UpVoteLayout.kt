@@ -274,7 +274,7 @@ class UpVoteLayout : FrameLayout {
     companion object {
         private class LikeLayoutHandler(view: UpVoteLayout) : Handler() {
             private val mView = WeakReference(view)
-            override fun handleMessage(msg: Message?) {
+            override fun handleMessage(msg: Message) {
                 super.handleMessage(msg)
                 when(msg?.what){
                     0-> mView.get()?.pauseClick()
