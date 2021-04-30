@@ -8,10 +8,11 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
-import android.view.animation.LinearInterpolator
+import android.view.animation.ScaleAnimation
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+
 
 class DemoActivity: AppCompatActivity() {
 
@@ -92,7 +93,7 @@ class DemoActivity: AppCompatActivity() {
             }
 
             override fun onAnimationEnd(animation: Animator?) {
-                animSet.start() // 间接达到循环播放的效果
+                animSet.start() // 间接达到循环播放的效果，这样会造成页面卡顿，建议不要这么使用
             }
 
             override fun onAnimationCancel(animation: Animator?) {
@@ -117,6 +118,30 @@ class DemoActivity: AppCompatActivity() {
 
     fun click(view: View) {
 //        animator()
-        animatorScale()
+//        animatorScale()
+        imageView?.startAnimation(scaleAnimation())
+    }
+
+    /**
+     * 图片自动循环缩放
+     * 参数：第1~4：表示x/y缩放数据
+     *      第5/7：表示缩放缩放的位置相对控件自身还是父容器
+     *      第6/8：表示缩放的位置
+     *      PS: 第5/7设置Animation.RELATIVE_TO_SELF，第6/8设置0.5f，表示相对控件自身中心点进行缩放
+     * @return
+     *
+     * 使用：
+     *      开始动画：imageView.startAnimation(scaleAnimation())
+     *      停止动画：imageView.clearAnimation()
+     */
+    private fun scaleAnimation(): ScaleAnimation? {
+        val scaleAnimation = ScaleAnimation(
+            1.0f, 0.8f, 1.0f, 0.8f,
+            Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f
+        )
+        scaleAnimation.duration = 900 //动画执行时间
+        scaleAnimation.repeatCount = -1 //-1表示重复执行动画
+        scaleAnimation.repeatMode = Animation.REVERSE //重复 缩小和放大效果
+        return scaleAnimation
     }
 }
