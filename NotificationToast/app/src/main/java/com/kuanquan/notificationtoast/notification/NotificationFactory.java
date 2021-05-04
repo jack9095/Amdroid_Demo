@@ -45,11 +45,11 @@ public class NotificationFactory {
                 .getActivity(mContext, id.hashCode(), intentClick,
                         PendingIntent.FLAG_ONE_SHOT);
 
-        Intent intentDelete = new Intent(mContext, PushResultActivity.class);
-        intentDelete.setAction(PushResultActivity.ACTION_CANCEL);
-        PendingIntent pendingIntentDelete = PendingIntent
-                .getActivity(mContext, id.hashCode(), intentDelete,
-                        PendingIntent.FLAG_ONE_SHOT);
+//        Intent intentDelete = new Intent(mContext, PushResultActivity.class);
+//        intentDelete.setAction(PushResultActivity.ACTION_CANCEL);
+//        PendingIntent pendingIntentDelete = PendingIntent
+//                .getActivity(mContext, id.hashCode(), intentDelete,
+//                        PendingIntent.FLAG_ONE_SHOT);
 
         Notification.Builder notificationBuilder = new Notification
                 .Builder(mContext)
@@ -65,7 +65,7 @@ public class NotificationFactory {
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setSound(MediaStore.Audio.Media.INTERNAL_CONTENT_URI)
                 .setContentIntent(pendingIntentClick)
-                .setDeleteIntent(pendingIntentDelete)
+//                .setDeleteIntent(pendingIntentDelete)
                 .setAutoCancel(true);
 
         if (VERSION.SDK_INT > VERSION_CODES.JELLY_BEAN) {
@@ -119,4 +119,50 @@ public class NotificationFactory {
         mNotificationManager = null;
     }
 
+
+    public Notification createNotificationNew(String id, String title, String content) {
+        long[] vibrate = {0, 40, 20, 40, 20, 40, 20, 40, 20, 40, 20, 40};
+
+        // 点击通知跳转的页面
+        Intent intentClick = new Intent(mContext, PushResultActivity.class);
+        intentClick.setAction(PushResultActivity.ACTION_CLICK);
+        PendingIntent pendingIntentClick = PendingIntent
+                .getActivity(mContext, id.hashCode(), intentClick,
+                        PendingIntent.FLAG_ONE_SHOT);
+
+        Notification.Builder notificationBuilder = new Notification
+                .Builder(mContext)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(getAppIcon(mContext))
+//                .setLargeIcon(getAppBitmap(mContext))
+                .setVibrate(vibrate)
+                .setTicker(title)
+//        .setPriority(Notification.PRIORITY_MAX)
+                .setPriority(Notification.PRIORITY_DEFAULT)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setSound(MediaStore.Audio.Media.INTERNAL_CONTENT_URI)
+                .setContentIntent(pendingIntentClick)
+//                .setDeleteIntent(pendingIntentDelete)
+                .setAutoCancel(true);
+
+        if (VERSION.SDK_INT > VERSION_CODES.JELLY_BEAN) {
+            notificationBuilder.setShowWhen(true);
+        }
+        if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
+            notificationBuilder.setCategory(Notification.CATEGORY_STATUS);
+        }
+        if (VERSION.SDK_INT >= VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("channel_id_push",
+                    mContext.getPackageName(),
+                    NotificationManager.IMPORTANCE_HIGH);
+            channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+            mNotificationManager.createNotificationChannel(channel);
+            notificationBuilder.setChannelId(channel.getId());
+            notificationBuilder.setSmallIcon(Icon.createWithResource(mContext, getAppIcon(mContext)));
+//            notificationBuilder.setLargeIcon(Icon.createWithResource(mContext, getAppIcon(mContext)));
+        }
+        return notificationBuilder.build();
+    }
 }

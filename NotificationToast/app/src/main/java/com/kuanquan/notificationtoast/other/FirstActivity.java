@@ -19,7 +19,7 @@ import com.kuanquan.notificationtoast.notification.NotificationFactory;
 import com.kuanquan.notificationtoast.other.SecondActivity;
 //import com.kuanquan.notificationtoast.toast.NotificationToast;
 
-public class SplashActivity extends AppCompatActivity {
+public class FirstActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

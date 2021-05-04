@@ -71,7 +71,8 @@ class MainActivity : AppCompatActivity() {
         val notificationId = 0x1001
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val factory = NotificationFactory(applicationContext, manager)
-        val notification = factory.createNotification("id1", "通知标题", "通知内容")
+//        val notification = factory.createNotification("id1", "通知标题", "通知内容")
+        val notification = factory.createNotificationNew("id1", "通知标题", "通知内容")
         factory.clear()
         manager.notify(notificationId, notification)
     }
