@@ -3,6 +3,44 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-android-extensions'
 }
+// TODO 优化编译速度 start
+static String getDate() {
+    Date date = new Date()
+    return "\"" + date.format("yyyyMMdd.HHmmss", TimeZone.getTimeZone("GMT+8")) + "\""
+}
+
+def devVersionCode = "1"
+def devDate = '\"20210603.182346\"'
+def isDev = false
+Properties properties = new Properties()
+try {
+    def file = rootProject.file("local.properties")
+    properties.load(new FileInputStream(file))
+    def environmentType = properties.get("environmentType")
+    if (environmentType == "debug") {
+        def localVersion = properties.get("devVersionCode")
+        def localDate = properties.get("devDate")
+        def localEnvironmentType = properties.get("environmentType")
+        if (localVersion != null) {
+            devVersionCode = localVersion
+        }
+        if (localDate != null) {
+            devDate = localDate
+        }
+        if (localEnvironmentType == "debug") {
+            isDev = true
+        }
+        println("------------------------ " + "gradle 加速")
+    } else {
+        devVersionCode = getVersion()
+        devDate = getDate()
+        println("------------------------ " + "gradle 正常编译")
+    }
+} catch (Exception e) {
+    devVersionCode = getVersion()
+    devDate = getDate()
+}
+// TODO 优化编译速度 end
 
 android {
     compileSdkVersion 30
@@ -15,6 +53,12 @@ android {
         versionCode 1
         versionName "1.0"
 
+//        if (isDev) { // TODO 如果当前最小版本小于 21的话判断，会加快编译速度
+//            minSdkVersion 21
+//        } else {
+//            minSdkVersion 21
+//        }
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -22,6 +66,20 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            // TODO 优化编译速度 start
+//            signingConfig signingConfigs.debug
+//            ext.alwaysUpdateBuildId = false
+
+            if (isDev) {
+                buildConfigField("String", "BUILD_TIME", devDate)
+            } else {
+                buildConfigField("String", "BUILD_TIME", getDate())
+            }
+            println("------------------------ Date " + getDate())
+            // TODO 优化编译速度 end
         }
     }
     compileOptions {
@@ -31,7 +89,62 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    // 本地编译配置 TODO 优化编译速度 start
+    aaptOptions {
+        cruncherEnabled = false
+    }
+
+    dexOptions {
+        javaMaxHeapSize "6g"
+        jumboMode true
+        // 打开dex增量编译
+        incremental true
+        preDexLibraries true
+    }
+
+    flavorDimensions "api"
+    productFlavors {
+        development {
+            minSdkVersion '21'
+            dimension "api"
+            // 我们在开发环境下只引入英文资源和xxhdpi下的资源，减小打包时间，大概能减少1秒
+//            resConfigs("zn", "xxhdpi")
+        }
+//        minApi21 {
+//            minSdkVersion '21'
+//            dimension "api"
+//        }
+        production {
+            dimension "api"
+        }
+    }
+
+    // 本地编译配置 TODO 优化编译速度 end
 }
+
+//if (isLocalBuild()) {
+//    aaptOptions {
+//        cruncherEnabled = false
+//    }
+//}
+//
+//dexOptions {
+//    javaMaxHeapSize "2g"
+//    jumboMode true
+//    incremental true
+//    preDexLibraries true
+//}
+//
+//if (isLocalBuild()) {
+//    flavorDimensions "api"
+//    productFlavors {
+//        minApi21 {
+//            minSdkVersion '21'
+//            dimension "api"
+//        }
+//    }
+//}
 
 dependencies {
 
