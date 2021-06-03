@@ -73,8 +73,8 @@ dependencies {
 //    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.1'
 //    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
 
-//    implementation project(':platinum')
-    implementation(name:'platinum-release',ext:'aar')
+    implementation project(':platinum')
+//    implementation(name:'platinum-release',ext:'aar')
 }
 
 repositories{

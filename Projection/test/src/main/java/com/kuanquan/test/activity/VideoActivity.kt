@@ -103,15 +103,15 @@ class VideoActivity : AppCompatActivity(), OnPreparedListener, OnCompletionListe
         val videoUrl = "http://ips.ifeng.com/video19.ifeng.com/video09/2014/06/16/1989823-102-086-0009.mp4"
         mVideoView?.setVideoPath(videoUrl)
 
-        if (mMediaInfo != null) {
-            val videoControls = mVideoView?.videoControlsCore
-            if (videoControls is VideoControls) {
-                videoControls.setTitle(mMediaInfo!!.title)
-            }
-            val uri = Uri.parse(mMediaInfo?.url)
-            Log.e("VideoActivity", "uri ->$uri")
-            mVideoView?.setVideoURI(uri)
-        }
+//        if (mMediaInfo != null) {
+//            val videoControls = mVideoView?.videoControlsCore
+//            if (videoControls is VideoControls) {
+//                videoControls.setTitle(mMediaInfo!!.title)
+//            }
+//            val uri = Uri.parse(mMediaInfo?.url)
+//            Log.e("VideoActivity", "uri ->$uri")
+//            mVideoView?.setVideoURI(uri)
+//        }
     }
 
     // 准备好开始播放

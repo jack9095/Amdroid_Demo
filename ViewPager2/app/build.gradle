@@ -3,7 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-android-extensions'
 }
-// TODO 优化编译速度 start
+ // TODO 优化编译速度 start
 static String getDate() {
     Date date = new Date()
     return "\"" + date.format("yyyyMMdd.HHmmss", TimeZone.getTimeZone("GMT+8")) + "\""
@@ -40,7 +40,7 @@ try {
     devVersionCode = getVersion()
     devDate = getDate()
 }
-// TODO 优化编译速度 end
+ // TODO 优化编译速度 end
 
 android {
     compileSdkVersion 30
@@ -73,12 +73,12 @@ android {
 //            signingConfig signingConfigs.debug
 //            ext.alwaysUpdateBuildId = false
 
-            if (isDev) {
-                buildConfigField("String", "BUILD_TIME", devDate)
-            } else {
-                buildConfigField("String", "BUILD_TIME", getDate())
-            }
-            println("------------------------ Date " + getDate())
+//            if (isDev) {
+//                buildConfigField("String", "BUILD_TIME", devDate)
+//            } else {
+//                buildConfigField("String", "BUILD_TIME", getDate())
+//            }
+//            println("------------------------ Date " + getDate())
             // TODO 优化编译速度 end
         }
     }

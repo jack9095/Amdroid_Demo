@@ -1,21 +1,19 @@
 plugins {
-    id 'java-library'
-    id 'kotlin'
+    id 'com.android.library'
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+android {
+    compileSdkVersion 30
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 30
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'com.android.tools.lint:lint-api:27.1.1'
-    implementation 'com.android.tools.lint:lint-checks:27.1.1'
-}
-
-jar {
-    manifest {
-        attributes 'Lint-Registry-v2': 'com.kuanquan.lintlibrary.Register'
-    }
+    lintPublish project(':lint_rules')
 }

@@ -90,6 +90,7 @@ public class SuperPlayerImpl implements SuperPlayer, ITXVodPlayListener {
                 break;
         }
         if (event < 0) {  // 播放点播文件失败
+            Log.e("SuperPlayerImpl", "播放失败" + event);
             mVodPlayer.stopPlay(true);
             updatePlayerState(SuperPlayerDef.PlayerState.PAUSE);
             onError(SuperPlayerCode.VOD_PLAY_FAIL, param.getString(TXLiveConstants.EVT_DESCRIPTION));

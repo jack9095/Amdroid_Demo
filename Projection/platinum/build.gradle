@@ -17,6 +17,16 @@ android {
             }
         }
     }
+//    buildTypes {
+//        debug {
+//            externalNativeBuild {
+//                cmake {
+//                    cppFlags.add('-DNPT_CONFIG_ENABLE_LOGGING -DNPT_DEBUG')
+//                }
+//            }
+//        }
+//    }
+
     buildTypes {
         debug {
             externalNativeBuild {
@@ -24,6 +34,15 @@ android {
                     cppFlags.add('-DNPT_CONFIG_ENABLE_LOGGING -DNPT_DEBUG')
                 }
             }
+            ndk.abiFilters 'arm64-v8a', 'armeabi-v7a'
+        }
+        release {
+//            externalNativeBuild {
+//                cmake {
+//                    cppFlags.add('-DNPT_CONFIG_ENABLE_LOGGING -DNPT_DEBUG')
+//                }
+//            }
+            ndk.abiFilters 'arm64-v8a', 'armeabi-v7a'
         }
     }
     externalNativeBuild {

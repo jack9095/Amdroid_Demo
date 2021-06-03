@@ -1,5 +1,6 @@
 package com.kuanquan.notificationtoast
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -23,6 +24,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.VISIBILITY_SECRET
 import com.kuanquan.notificationtoast.other.FirstActivity
 import com.kuanquan.notificationtoast.other.PushResultActivity
+import com.kuanquan.notificationtoast.service.NotificationDisplayService
 import java.util.*
 
 
@@ -38,7 +40,10 @@ class SplashActivity : AppCompatActivity() {
         createNotification("比心APP","点击进入与好友一起看视频", this)
     }
     fun progress_notifiction(view: View) {
-        showNotificationProgress(this)
+//        showNotificationProgress(this)
+
+        val startNotificationServiceIntent = Intent(this, NotificationDisplayService::class.java)
+        startService(startNotificationServiceIntent)
     }
     fun suspended_notifiction(view: View) {
         showFullScreen(this)
@@ -126,16 +131,23 @@ class SplashActivity : AppCompatActivity() {
      * 显示一个悬挂式的通知
      *   悬挂式,部分系统厂商可能不支持
      */
+    @SuppressLint("WrongConstant")
     private fun showFullScreen(context: Context) {
 //        val builder = NotificationCompat.Builder(context)
         val builder = getNotificationBuilder(context)!!
         val mIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://blog.csdn.net/linglongxin24"))
         val pendingIntent = PendingIntent.getActivity(context, 0, mIntent, 0)
         builder.setContentIntent(pendingIntent)
+        builder.setCategory("${Notification.FLAG_ONGOING_EVENT}")
+        builder.setVisibility(Notification.VISIBILITY_PUBLIC)
+        val intent2 = Intent()
+        val pi = PendingIntent.getBroadcast(this, 0, intent2, 0)
+        builder.setFullScreenIntent(pi, true)
         builder.setSmallIcon(R.mipmap.ic_launcher)
         builder.setLargeIcon(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
         builder.setAutoCancel(true)
         builder.setContentTitle("悬挂式通知")
+        builder.setPriority(NotificationManager.IMPORTANCE_HIGH)
         //设置点击跳转
         val hangIntent = Intent()
         hangIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -210,6 +222,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
 
+    @SuppressLint("WrongConstant")
     private fun createNotification(title: String?, content: String?, mContext: Context) {
         val vibrate = longArrayOf(0, 40, 20, 40, 20, 40, 20, 40, 20, 40, 20, 40)
         val notificationId = 0x1001
@@ -219,18 +232,22 @@ class SplashActivity : AppCompatActivity() {
         val pendingIntentClick = PendingIntent
                 .getActivity(mContext, notificationId.hashCode(), intentClick,
                         PendingIntent.FLAG_ONE_SHOT)
-        val notificationBuilder: Notification.Builder = Notification.Builder(mContext)
+//        val notificationBuilder: Notification.Builder = Notification.Builder(mContext)
+        val notificationBuilder: NotificationCompat.Builder = NotificationCompat.Builder(mContext)
                 .setContentTitle(title)
                 .setContentText(content)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setVibrate(vibrate)
                 .setTicker(title)
-                .setPriority(Notification.PRIORITY_DEFAULT)
+                .setColor(resources.getColor(R.color.colorAccent))
+//                .setPriority(Notification.PRIORITY_DEFAULT)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setSound(MediaStore.Audio.Media.INTERNAL_CONTENT_URI)
                 .setContentIntent(pendingIntentClick)
                 .setAutoCancel(true)
+                .setStyle(NotificationCompat.BigTextStyle().bigText("text"))
         if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
             notificationBuilder.setCategory(Notification.CATEGORY_STATUS)
         }
@@ -242,7 +259,7 @@ class SplashActivity : AppCompatActivity() {
             channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
             mNotificationManager.createNotificationChannel(channel)
             notificationBuilder.setChannelId(channel.id)
-            notificationBuilder.setSmallIcon(Icon.createWithResource(mContext, R.mipmap.ic_launcher))
+//            notificationBuilder.setSmallIcon(Icon.createWithResource(mContext, R.mipmap.ic_launcher))
         }
 
         mNotificationManager.notify(notificationId, notificationBuilder.build())

@@ -145,11 +145,16 @@ public class MainActivity extends BaseMAinActivity {
         if (!mPreference.contains(key)) {
             mPreference.edit().putString(key, name).apply();
         }
+
+        // IP 地址
         key = getString(R.string.pref_if_show_ip_key);
         boolean showIp = mPreference.getBoolean(key, true);
         if (!mPreference.contains(key)) {
             mPreference.edit().putBoolean(key, showIp).apply();
         }
+
+
+        // UUID
         key = getString(R.string.pref_uuid_key);
         String uuid = mPreference.getString(key, UUIDUtils.getRandomUUID());
         if (!mPreference.contains(key)) {
