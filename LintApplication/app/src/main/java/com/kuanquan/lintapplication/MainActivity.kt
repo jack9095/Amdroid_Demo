@@ -12,8 +12,8 @@ import android.util.Log
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-//        Log.e("wf", "test")
+        setContentView(R.layout.a_a_layout)
+        Log.e("wf", "test")
         val s = "lint"
     }
 

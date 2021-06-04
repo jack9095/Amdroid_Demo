@@ -1,4 +1,4 @@
-package com.kuanquan.lint_rules
+package com.kuanquan.lint_rules.detector
 
 import com.android.tools.lint.client.api.UElementHandler
 import com.android.tools.lint.detector.api.*
@@ -72,7 +72,8 @@ class LogDetector: Detector(), Detector.UastScanner {
                      * 参数4：此警告的消息
                      * 参数5：传递到IDE供快速修复程序使用的可选数据
                      */
-                    context.report(ISSUE, node,
+                    context.report(
+                        ISSUE, node,
                         context.getLocation(node),
                         ISSUE.getExplanation(TextFormat.TEXT))
                 }

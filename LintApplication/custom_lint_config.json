@@ -1,0 +1,77 @@
+{
+  "avoid_usage_api": {
+    "method": [
+      {
+        "name_regex": "android\\.content\\.(Context|ContextWrapper)\\.getSharedPreferences",
+        "message": "禁止直接调用getSharedPreferences方法获取sp，建议使用SpUtils",
+        "exclude": [
+          "com.rocketzly.androidlint.Test"
+        ],
+        "severity": "error"
+      },
+      {
+        "name": "android.widget.Toast.show",
+        "message": "禁止直接使用Toast，建议使用xxxUtils",
+        "severity": "error"
+      },
+      {
+        "name": "kotlin.text.StringsKt__StringNumberConversionsJVMKt.toInt",
+        "message": "禁止直接使用Kt提供的String.toInt扩展方法，建议使用xxx.toInt",
+        "severity": "error"
+      },
+      {
+        "name_regex": "android\\.util\\.Log\\.(v|d|i|w|e)",
+        "message": "禁止直接使用android.util.Log，必须使用统一工具类xxxLog",
+        "severity": "error"
+      }
+    ],
+    "construction": [
+      {
+        "name": "java.lang.Thread",
+        "message": "禁止直接使用new Thread()创建线程，建议使用xxxUtils做线程操作",
+        "severity": "error"
+      }
+    ],
+    "inherit": [
+      {
+        "name_regex": "\\.(AppCompat|Main)?Activity$",
+        "exclude_regex": "com.rocketzly.androidlint.MainActivity",
+        "message": "避免直接继承Activity，建议继承xxxActivity",
+        "severity": "warning"
+      }
+    ]
+  },
+  "handle_exception_method": [
+    {
+      "name": "android.graphics.Color.parseColor",
+      "exception": "java.lang.IllegalArgumentException",
+      "message": "Color.parseColor需要加try-catch处理IllegalArgumentException异常",
+      "severity": "error"
+    }
+  ],
+  "dependency_api": [
+    {
+      "trigger_method": "java.lang.StringBuilder.append",
+      "dependency_method": "java.lang.StringBuilder.toString",
+      "message": "StringBuilder调用append后必须调用toString",
+      "severity": "warning"
+    }
+  ],
+  "resource_name": {
+    "drawable": {
+      "name_regex": "^(bg|shape)_",
+      "message": "drawable命名不符合 (bg|shape)_ 规则",
+      "severity": "warning"
+    },
+    "layout": {
+      "name_regex": "^(activity|dialog|item|view|page)_",
+      "message": "layout命名不符合 (activity|dialog|item|view|page)_ 规则",
+      "severity": "warning"
+    }
+  },
+  "serializable_config": {
+    "name_regex": "^(com\\.kuanquan\\.lint_rules|com\\.kuanquan\\.lintapplication)",
+    "message": "该对象必须要实现Serializable接口，因为外部类实现了Serializable接口",
+    "severity": "warning"
+  }
+}

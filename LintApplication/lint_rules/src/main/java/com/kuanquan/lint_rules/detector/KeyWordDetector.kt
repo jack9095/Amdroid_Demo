@@ -1,4 +1,4 @@
-package com.kuanquan.lint_rules
+package com.kuanquan.lint_rules.detector
 
 import com.android.tools.lint.client.api.UElementHandler
 import com.android.tools.lint.detector.api.*
