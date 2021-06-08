@@ -71,11 +71,7 @@ class AvoidUsageApiDetector: BaseDetector(), Detector.UastScanner {
 
     private fun checkInheritClass(context: JavaContext, node: UClass) {
         lintConfig.avoidUsageApi.inherit.forEach { avoidInheritClass ->
-            if (LintMatcher.matchInheritClass(
-                    avoidInheritClass,
-                    node
-                )
-            ) {
+            if (LintMatcher.matchInheritClass(avoidInheritClass, node)) {
                 context.reportLint(
                     ISSUE,
                     context.getLocation(node as UElement),

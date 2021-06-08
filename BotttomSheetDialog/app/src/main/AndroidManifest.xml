@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BotttomSheetDialog">
+        <activity android:name=".CustomBehaviorActivity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,8 +18,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".test.TestActivity" />
-        <activity android:name=".demo.DemoActivity"/>
-        <activity android:name=".demo.share.RecyclerVireWithBottomSheetDialogActivity"/>
+        <activity android:name=".demo.DemoActivity" />
+        <activity android:name=".demo.share.RecyclerVireWithBottomSheetDialogActivity" />
     </application>
 
 </manifest>

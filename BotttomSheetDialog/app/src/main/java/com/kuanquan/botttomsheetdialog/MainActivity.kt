@@ -15,7 +15,8 @@ class MainActivity : AppCompatActivity() {
             TestDialogFragment.newInstance().show(supportFragmentManager)
         }
         test.setOnClickListener {
-            startActivity(Intent(this@MainActivity, TestActivity::class.java))
+            startActivity(Intent(this@MainActivity, CustomBehaviorActivity::class.java))
+//            startActivity(Intent(this@MainActivity, TestActivity::class.java))
 //            startActivity(Intent(this@MainActivity, DemoActivity::class.java))
         }
     }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CustomBehaviorActivity">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coo_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true">
+
+    <LinearLayout
+        android:id="@+id/ll_behavior"
+        android:layout_width="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:behavior_peekHeight="330dp"
+        app:layout_behavior="com.kuanquan.botttomsheetdialog.widget.BottomSheetBehavior">
+
+        <RelativeLayout
+            android:id="@+id/rl_iv_arrow"
+            android:layout_width="match_parent"
+            android:layout_height="24dp">
+            <ImageView
+                android:id="@+id/iv_arrow"
+                android:layout_centerInParent="true"
+                android:layout_width="36dp"
+                android:layout_height="8dp"
+                android:src="@mipmap/img_open" />
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:nestedScrollingEnabled="false"
+            android:background="#ddd" />
+    </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</RelativeLayout>
