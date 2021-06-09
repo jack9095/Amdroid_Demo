@@ -50,7 +50,6 @@ public class CustomBehaviorActivity extends AppCompatActivity {
                 } else {
                     iv_arrow.setImageResource(R.mipmap.img_drag);
                 }
-
             }
 
             @Override
