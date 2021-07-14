@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.graphics.Color
 import android.graphics.PointF
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
@@ -22,10 +23,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Priority
+import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.kuanquan.afewscreens.databinding.ActivityMainBinding
 import com.kuanquan.afewscreens.glide.GlideApp
 
@@ -355,14 +360,40 @@ class MainActivity : AppCompatActivity() {
 
             // 优化后的，不卡顿
             GlideApp.with(imageViewHolder.image)
-                    .asDrawable()
+//                    .asDrawable()
                     .load(items[position])
                     .transition(DrawableTransitionOptions.withCrossFade(200))
                     .apply(RequestOptions().priority(Priority.IMMEDIATE))
                     .placeholder(R.mipmap.ic_launcher)
                     .error(R.mipmap.ic_launcher)
                     .format(DecodeFormat.PREFER_ARGB_8888)
-                    .transform(RoundedCorners(1))
+//                    .transform(RoundedCorners(1))
+                .listener(object : RequestListener<Drawable>{
+
+                    // 加载图片异常
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+
+                        return false
+                    }
+
+                    // 加载图片成功
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+
+                        return false
+                    }
+
+                })
                     .into(imageViewHolder.image)
         }
 
