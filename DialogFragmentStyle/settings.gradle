@@ -1,0 +1,3 @@
+rootProject.name = "DialogFragmentStyle"
+include ':app'
+include ':test'
