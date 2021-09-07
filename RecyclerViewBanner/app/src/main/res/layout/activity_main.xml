@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.kuanquan.recyclerviewbanner.MainActivity">
+
+    <com.kuanquan.recyclerviewbanner.banner.BannerLayout
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:autoPlaying="true"
+        app:centerScale="1.3"
+        app:itemSpace="20"
+        app:moveSpeed="1.8"/>
+
+    <com.kuanquan.recyclerviewbanner.banner.BannerLayout
+        android:id="@+id/recycler_ver"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="10dp"
+        app:orientation="vertical"
+        app:showIndicator="false"/>
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:onClick="jump"
+        android:text="查看基础版"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:onClick="jumpOverFlying"
+        android:text="查看层叠版"/>
+</LinearLayout>
