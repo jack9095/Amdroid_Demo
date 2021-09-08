@@ -1,5 +1,6 @@
 package com.kuanquan.recyclerviewbanner.test
 
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -33,6 +34,17 @@ class TestActivity : AppCompatActivity() {
         list.add("https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3258484351,1612376358&fm=26&gp=0.jpg")
         list.add("https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1408371311,2263836872&fm=26&gp=0.jpg")
         list.add("https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2482360593,2739674846&fm=26&gp=0.jpg")
+
+        banner.setIndicator(IndicatorView(this).apply {
+            setIndicatorStyle(IndicatorView.IndicatorStyle.INDICATOR_DASH)
+                .setIndicatorRatio(1f)
+                .setIndicatorRadius(2.5f)
+                .setIndicatorSelectedRatio(2f)
+                .setIndicatorSelectedRadius(2.5f)
+                .setIndicatorColor(Color.parseColor("#a6ffffff"))
+                .setIndicatorSelectorColor(Color.WHITE)
+                .setIndicatorSpacing(2f)
+        })
 
         banner.initBannerImageView(list, object : BaseBannerRecyclerView.OnBannerItemClickListener{
             override fun onItemClick(position: Int) {

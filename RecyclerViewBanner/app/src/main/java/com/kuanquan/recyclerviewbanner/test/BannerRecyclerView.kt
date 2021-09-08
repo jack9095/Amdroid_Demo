@@ -34,6 +34,7 @@ class BannerRecyclerView: BaseBannerRecyclerView<LinearLayoutManager, BannerRecy
                     refreshIndicator()
                 }
             }
+            mIndicator?.onPageScrolled(mCurrentIndex, ratio, 0)
         }
     }
 
@@ -45,6 +46,7 @@ class BannerRecyclerView: BaseBannerRecyclerView<LinearLayoutManager, BannerRecy
             mCurrentIndex = first
             refreshIndicator()
         }
+        mIndicator?.onPageScrollStateChanged(newState)
     }
 
     override fun getLayoutManager(context: Context?, orientation: Int): LinearLayoutManager {

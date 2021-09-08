@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -14,19 +16,29 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.ColorRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.kuanquan.recyclerviewbanner.R;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,6 +143,7 @@ public abstract class RecyclerViewBannerBase<L extends RecyclerView.LayoutManage
         a.recycle();
         //recyclerView部分
         mRecyclerView = new RecyclerView(context);
+        initViewPagerScrollProxy();
         new PagerSnapHelper().attachToRecyclerView(mRecyclerView);
         mLayoutManager = getLayoutManager(context, orientation);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -405,4 +418,101 @@ public abstract class RecyclerViewBannerBase<L extends RecyclerView.LayoutManage
         return false;
     }
 
+    private void initViewPagerScrollProxy() {
+        try {
+            //控制切换速度，采用反射方。法方法只会调用一次，替换掉内部的RecyclerView的LinearLayoutManager
+//            RecyclerView recyclerView = (RecyclerView) viewPager2.getChildAt(0);
+            mRecyclerView.setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER);
+            LinearLayoutManager o = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+            ProxyLayoutManger proxyLayoutManger = new ProxyLayoutManger(getContext(), o);
+            mRecyclerView.setLayoutManager(proxyLayoutManger);
+
+//            Field mRecyclerView = RecyclerView.LayoutManager.class.getDeclaredField("mRecyclerView");
+//            mRecyclerView.setAccessible(true);
+//            mRecyclerView.set(o, mRecyclerView);
+
+//            Field LayoutMangerField = RecyclerView.class.getDeclaredField("mLayoutManager");
+//            LayoutMangerField.setAccessible(true);
+//            LayoutMangerField.set(mRecyclerView, proxyLayoutManger);
+
+//            Field pageTransformerAdapterField = RecyclerView.class.getDeclaredField("mPageTransformerAdapter");
+//            pageTransformerAdapterField.setAccessible(true);
+//            Object mPageTransformerAdapter = pageTransformerAdapterField.get(mRecyclerView);
+//            if (mPageTransformerAdapter != null) {
+//                Class<?> aClass = mPageTransformerAdapter.getClass();
+//                Field layoutManager = aClass.getDeclaredField("mLayoutManager");
+//                layoutManager.setAccessible(true);
+//                layoutManager.set(mPageTransformerAdapter, proxyLayoutManger);
+//            }
+//            Field scrollEventAdapterField = RecyclerView.class.getDeclaredField("mScrollEventAdapter");
+//            scrollEventAdapterField.setAccessible(true);
+//            Object mScrollEventAdapter = scrollEventAdapterField.get(mRecyclerView);
+//            if (mScrollEventAdapter != null) {
+//                Class<?> aClass = mScrollEventAdapter.getClass();
+//                Field layoutManager = aClass.getDeclaredField("mLayoutManager");
+//                layoutManager.setAccessible(true);
+//                layoutManager.set(mScrollEventAdapter, proxyLayoutManger);
+//            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private class ProxyLayoutManger extends LinearLayoutManager {
+        private final RecyclerView.LayoutManager layoutManager;
+
+        ProxyLayoutManger(Context context, LinearLayoutManager layoutManager) {
+            super(context, LinearLayoutManager.HORIZONTAL, false);
+            this.layoutManager = layoutManager;
+        }
+
+        @Override
+        public boolean performAccessibilityAction(@NonNull RecyclerView.Recycler recycler,
+                                                  @NonNull RecyclerView.State state, int action, @Nullable Bundle args) {
+            return layoutManager.performAccessibilityAction(recycler, state, action, args);
+        }
+
+        @Override
+        public void onInitializeAccessibilityNodeInfo(@NonNull RecyclerView.Recycler recycler,
+                                                      @NonNull RecyclerView.State state, @NonNull AccessibilityNodeInfoCompat info) {
+            layoutManager.onInitializeAccessibilityNodeInfo(recycler, state, info);
+        }
+
+        @Override
+        public boolean requestChildRectangleOnScreen(@NonNull RecyclerView parent,
+                                                     @NonNull View child, @NonNull Rect rect, boolean immediate,
+                                                     boolean focusedChildVisible) {
+            return layoutManager.requestChildRectangleOnScreen(parent, child, rect, immediate, focusedChildVisible);
+        }
+
+        @Override
+        protected void calculateExtraLayoutSpace(@NonNull RecyclerView.State state,
+                                                 @NonNull int[] extraLayoutSpace) {
+            try {
+                Method method = layoutManager.getClass().getDeclaredMethod("calculateExtraLayoutSpace", state.getClass(), extraLayoutSpace.getClass());
+                method.setAccessible(true);
+                method.invoke(layoutManager, state, extraLayoutSpace);
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
+            LinearSmoothScroller linearSmoothScroller = new LinearSmoothScroller(recyclerView.getContext()) {
+                @Override
+                protected int calculateTimeForDeceleration(int dx) {
+                    return (int) (pagerScrollDuration * (1 - .3356));
+                }
+            };
+            linearSmoothScroller.setTargetPosition(position);
+            startSmoothScroll(linearSmoothScroller);
+        }
+    }
+
+    private long pagerScrollDuration = 800; // 两个页面切换时长
 }

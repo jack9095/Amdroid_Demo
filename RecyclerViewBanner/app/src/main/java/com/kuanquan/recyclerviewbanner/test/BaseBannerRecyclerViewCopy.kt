@@ -11,19 +11,21 @@ import android.os.Looper
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.TypedValue
+import android.view.Gravity
 import android.view.MotionEvent
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.RelativeLayout
+import androidx.core.view.GravityCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
-import androidx.viewpager2.widget.ViewPager2
 import com.kuanquan.recyclerviewbanner.R
 
-
-abstract class BaseBannerRecyclerView<L : LayoutManager?, A : RecyclerView.Adapter<*>?> @JvmOverloads constructor(
+abstract class BaseBannerRecyclerViewCopy<L : LayoutManager?, A : RecyclerView.Adapter<*>?> @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : RelativeLayout(context, attrs, defStyleAttr) {
 
@@ -357,45 +359,4 @@ abstract class BaseBannerRecyclerView<L : LayoutManager?, A : RecyclerView.Adapt
             }
         }
     }
-
-//    private fun initViewPagerScrollProxy() {
-//        try {
-//            //控制切换速度，采用反射方。法方法只会调用一次，替换掉内部的RecyclerView的LinearLayoutManager
-//            val recyclerView = viewPager2.getChildAt(0)
-//            recyclerView.overScrollMode = OVER_SCROLL_NEVER
-//            val o = recyclerView.layoutManager as LinearLayoutManager?
-//            val proxyLayoutManger = ProxyLayoutManger(context, o)
-//            recyclerView.layoutManager = proxyLayoutManger
-//            val mRecyclerView: Field = LayoutManager::class.java.getDeclaredField("mRecyclerView")
-//            mRecyclerView.setAccessible(true)
-//            mRecyclerView.set(o, recyclerView)
-//            val LayoutMangerField: Field = ViewPager2::class.java.getDeclaredField("mLayoutManager")
-//            LayoutMangerField.setAccessible(true)
-//            LayoutMangerField.set(viewPager2, proxyLayoutManger)
-//            val pageTransformerAdapterField: Field =
-//                ViewPager2::class.java.getDeclaredField("mPageTransformerAdapter")
-//            pageTransformerAdapterField.setAccessible(true)
-//            val mPageTransformerAdapter: Any = pageTransformerAdapterField.get(viewPager2)
-//            if (mPageTransformerAdapter != null) {
-//                val aClass: Class<*> = mPageTransformerAdapter.javaClass
-//                val layoutManager: Field = aClass.getDeclaredField("mLayoutManager")
-//                layoutManager.setAccessible(true)
-//                layoutManager.set(mPageTransformerAdapter, proxyLayoutManger)
-//            }
-//            val scrollEventAdapterField: Field =
-//                ViewPager2::class.java.getDeclaredField("mScrollEventAdapter")
-//            scrollEventAdapterField.setAccessible(true)
-//            val mScrollEventAdapter: Any = scrollEventAdapterField.get(viewPager2)
-//            if (mScrollEventAdapter != null) {
-//                val aClass: Class<*> = mScrollEventAdapter.javaClass
-//                val layoutManager: Field = aClass.getDeclaredField("mLayoutManager")
-//                layoutManager.setAccessible(true)
-//                layoutManager.set(mScrollEventAdapter, proxyLayoutManger)
-//            }
-//        } catch (e: NoSuchFieldException) {
-//            e.printStackTrace()
-//        } catch (e: IllegalAccessException) {
-//            e.printStackTrace()
-//        }
-//    }
 }
