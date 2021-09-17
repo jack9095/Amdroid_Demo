@@ -209,4 +209,7 @@ Koin 注入框架在 kotlin 中的使用
 启动优化
 
 ### 55、scrollAppBarLayout
-c
+滑动状态栏和标题渐变显示
+
+### 56、DoYinCover
+仿抖音设置封面
