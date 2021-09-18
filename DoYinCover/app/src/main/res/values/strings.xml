@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">DoYinCover</string>
     <string name="agreement">您已同意<u>《%1$s用户协议》</u></string>
     <string name="agreement_link">https://dkhsh5.ricebook.com/protocol.html</string>
@@ -46,7 +46,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="string_confirm_2">确认</string>
-    <string name="string_choose_topic">选择话题</string>
+<!--    <string name="string_choose_topic">选择话题</string>-->
     <string name="string_third_login">第三方登录</string>
     <string name="string_login_by_mobile">手机号登录</string>
     <string name="string_login_right_label">用户注册协议、用户隐私条款</string>
@@ -544,7 +544,7 @@
     <string name="string_rotation_label">翻转</string>
     <string name="string_beautiful_face_label">美颜</string>
     <string name="string_filter_label">滤镜</string>
-    <string name="string_album_label">相册</string>
+<!--    <string name="string_album_label">相册</string>-->
     <string name="string_character_label">¥</string>
     <string name="string_ongratulations_you_has">恭喜你获得</string>
     <string name="string_input_receiver_address">填写收货地址</string>

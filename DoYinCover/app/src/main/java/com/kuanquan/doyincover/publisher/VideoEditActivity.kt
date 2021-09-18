@@ -1,38 +1,32 @@
-package com.shuashuakan.android.modules.publisher
+package com.kuanquan.doyincover.publisher
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.opengl.GLSurfaceView
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.*
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.flyco.roundview.RoundTextView
+import com.kuanquan.doyincover.R
 import com.qiniu.pili.droid.shortvideo.*
-import com.shuashuakan.android.R
-import com.shuashuakan.android.data.RxBus
-import com.shuashuakan.android.event.VideoRecordFinishEvent
-import com.shuashuakan.android.service.PullService
-import com.shuashuakan.android.ui.ProgressDialog
-import com.shuashuakan.android.ui.base.FishActivity
-import com.kuanquan.doyincover.publisher.chains.ChainsPublishActivity
 import com.kuanquan.doyincover.publisher.utils.StringUtil
-import com.shuashuakan.android.utils.TimeUtil
-import com.shuashuakan.android.utils.bindView
 import io.reactivex.disposables.CompositeDisposable
-import timber.log.Timber
 import java.io.File
 import java.util.*
+import com.kuanquan.doyincover.base.FishActivity
+import com.kuanquan.doyincover.dialog.FilterListBottomDialog
+import com.kuanquan.doyincover.utils.TimeUtil
 
-@Suppress("UNREACHABLE_CODE")
 /**
  * Author:  Chenglong.Lu
  * Email:   1053998178@qq.com | w490576578@gmail.com
@@ -42,6 +36,10 @@ import java.util.*
 class VideoEditActivity : FishActivity() {
   companion object {
     private const val MP4_PATH = "MP4_PATH"
+    private const val IMAGE_DISK_CACHE_MAX_SIZE = 500 * 1024 * 1024
+    private const val GLIDE_CACHE_DIR = "/doyin/video_cache"
+    private const val NO_MEDIA = "/.nomedia"
+    private const val EMPTY = ""
 
     fun start(context: Context, mp4Path: String, model: RecordDataModel?) {
       val intent = Intent(context, VideoEditActivity::class.java)
@@ -58,15 +56,15 @@ class VideoEditActivity : FishActivity() {
     }
   }
 
-  private val preview by bindView<GLSurfaceView>(R.id.preview)
-  private val editLayout by bindView<View>(R.id.edit_layout)
-  private val choseCoverLayout by bindView<View>(R.id.chose_cover_layout)
-  private val backBtn by bindView<ImageView>(R.id.ic_back)
-  private val doneBtn by bindView<RoundTextView>(R.id.done_btn)
-  private val filterBtn by bindView<TextView>(R.id.filter_btn)
-  private val choseCoverBtn by bindView<TextView>(R.id.chose_cover_btn)
-  private val filterNameText by bindView<TextView>(R.id.filter_name_text)
-  private val choiceCover by bindView<com.shuashuakan.android.modules.publisher.ChoiceCover>(R.id.choice_cover)
+  private val preview by lazy { findViewById<GLSurfaceView>(R.id.preview) }
+  private val editLayout by lazy { findViewById<View>(R.id.edit_layout) }
+  private val choseCoverLayout by lazy { findViewById<View>(R.id.chose_cover_layout) }
+  private val backBtn by lazy { findViewById<ImageView>(R.id.ic_back) }
+  private val doneBtn by lazy { findViewById<RoundTextView>(R.id.done_btn) }
+  private val filterBtn by lazy { findViewById<TextView>(R.id.filter_btn) }
+  private val choseCoverBtn by lazy { findViewById<TextView>(R.id.chose_cover_btn) }
+  private val filterNameText by lazy { findViewById<TextView>(R.id.filter_name_text) }
+  private val choiceCover by lazy { findViewById<ChoiceCover>(R.id.choice_cover) }
 
   private var mMp4path: String? = null
 
@@ -76,15 +74,6 @@ class VideoEditActivity : FishActivity() {
   private lateinit var model: RecordDataModel
 
   private var mShortVideoEditorStatus = PLShortVideoEditorStatus.Idle
-
-  private val progressDialog by lazy {
-    return@lazy ProgressDialog.progressDialog(this, getString(R.string.string_video_process))
-  }
-
-  private val alertDialog by lazy {
-    return@lazy createDialog(getString(R.string.string_back_clear_title), getString(R.string.string_back_clear_comfire), DialogInterface.OnClickListener
-    { _, _ -> finish() }, getString(R.string.string_back_clear_cancel), null)
-  }
 
   private val eventCompositeDisposable = CompositeDisposable()
 
@@ -108,16 +97,23 @@ class VideoEditActivity : FishActivity() {
     window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
         WindowManager.LayoutParams.FLAG_FULLSCREEN)
     setContentView(R.layout.activity_video_edit)
-    model = intent.getParcelableExtra("model")
+    getDefaultFilesDir(this)
+
+    val url = "android.resource://" + packageName + "/" + R.raw.test
+    val uri = Uri.parse(url)
+
+    mMp4path = url
+
+//    model = intent.getParcelableExtra("model")
     initPreviewView()
     initShortVideoEditor()
     setOther()
     initFilterList()
-    RxBus.get().toFlowable().subscribe {
-      if (it is VideoRecordFinishEvent) {
-        finish()
-      }
-    }.addTo(eventCompositeDisposable)
+//    RxBus.get().toFlowable().subscribe {
+//      if (it is VideoRecordFinishEvent) {
+//        finish()
+//      }
+//    }.addTo(eventCompositeDisposable)
   }
 
   @SuppressLint("ClickableViewAccessibility")
@@ -148,7 +144,7 @@ class VideoEditActivity : FishActivity() {
       filterBtn.visibility = View.VISIBLE
       choseCoverBtn.visibility = View.VISIBLE
     }
-    choiceCover.setOnScrollBorderListener(object : com.shuashuakan.android.modules.publisher.ChoiceCover.OnScrollBorderListener {
+    choiceCover.setOnScrollBorderListener(object : ChoiceCover.OnScrollBorderListener {
       override fun OnScrollBorder(start: Float, end: Float) {
         // 游标变更
         val startTIme = start.toInt()
@@ -160,25 +156,25 @@ class VideoEditActivity : FishActivity() {
 
       override fun onScrollStateChange() {
         // 如果没滑动就回传给页面-1，代表没修改封面 TODO
-        if (model.recordType == PullService.UploadEntity.TYPE_ADD_EDITED_VIDEO) {
-          coverDurationVideoEdit = -1
-        }
+//        if (model.recordType == PullService.UploadEntity.TYPE_ADD_EDITED_VIDEO) {
+//          coverDurationVideoEdit = -1
+//        }
       }
 
     })
   }
 
   private fun initFilterList() {
-    val filters = mShortVideoEditor.builtinFilterList
-    if (filters != null) {
-      filterList.addAll(Arrays.asList(*filters))
-      val builtinFilter = PLBuiltinFilter()
-      builtinFilter.name = "none"
-      filterList.add(0, builtinFilter)
-    } else {
-      filterList = mutableListOf()
-    }
-    filterDialog.initData(filterList)
+//    val filters = mShortVideoEditor.builtinFilterList
+//    if (filters != null) {
+//      filterList.addAll(Arrays.asList(*filters))
+//      val builtinFilter = PLBuiltinFilter()
+//      builtinFilter.name = "none"
+//      filterList.add(0, builtinFilter)
+//    } else {
+//      filterList = mutableListOf()
+//    }
+//    filterDialog.initData(filterList)
   }
 
   private var selectedPosition = 0
@@ -225,30 +221,30 @@ class VideoEditActivity : FishActivity() {
   }
 
   fun onCloseChoseCover(v: View) { // TODO
-    if (model.recordType == PullService.UploadEntity.TYPE_ADD_EDITED_VIDEO) {
-      comeBack()
-    } else {
+//    if (model.recordType == PullService.UploadEntity.TYPE_ADD_EDITED_VIDEO) {
+//      comeBack()
+//    } else {
       dismissChoseCover()
-    }
+//    }
   }
 
   fun onSaveChoseCover(v: View) {
     coverDuration = mShortVideoEditor.currentPosition
-    if (model.recordType == PullService.UploadEntity.TYPE_ADD_EDITED_VIDEO) {
-      // TODO 把 coverDuration 返回给ChansPublishActivity
-      model.coverDuration = coverDuration
-      model.filePath = mMp4path
-
-      if (coverDurationVideoEdit == 0) {
-        coverDurationVideoEdit = -1
-      } else {
-        coverDurationVideoEdit = model.coverDuration!!
-      }
-      setResult(Activity.RESULT_OK, Intent().putExtra("model", coverDurationVideoEdit))
-      finish()
-    } else {
+//    if (model.recordType == PullService.UploadEntity.TYPE_ADD_EDITED_VIDEO) {
+//      // TODO 把 coverDuration 返回给ChansPublishActivity
+//      model.coverDuration = coverDuration
+//      model.filePath = mMp4path
+//
+//      if (coverDurationVideoEdit == 0) {
+//        coverDurationVideoEdit = -1
+//      } else {
+//        coverDurationVideoEdit = model.coverDuration!!
+//      }
+//      setResult(Activity.RESULT_OK, Intent().putExtra("model", coverDurationVideoEdit))
+//      finish()
+//    } else {
       dismissChoseCover()
-    }
+//    }
   }
 
   fun onBackClick(v: View) {
@@ -260,19 +256,20 @@ class VideoEditActivity : FishActivity() {
   }
 
   override fun onBackPressed() {
-    if (model.recordType == PullService.UploadEntity.TYPE_ADD_EDITED_VIDEO) {
-      comeBack()
-    } else {
-      if (choseCoverLayout.visibility == View.VISIBLE) {
-        dismissChoseCover()
-      } else {
-        comeBack()
-      }
-    }
+//    if (model.recordType == PullService.UploadEntity.TYPE_ADD_EDITED_VIDEO) {
+//      comeBack()
+//    } else {
+//      if (choseCoverLayout.visibility == View.VISIBLE) {
+//        dismissChoseCover()
+//      } else {
+//        comeBack()
+//      }
+//    }
+    finish()
   }
 
   private fun comeBack() {
-    alertDialog.show()
+//    alertDialog.show()
   }
 
   private fun showChoseCover() {
@@ -316,7 +313,7 @@ class VideoEditActivity : FishActivity() {
   }
 
   fun onDoneClick(v: View) {
-    progressDialog.show()
+//    progressDialog.show()
     mShortVideoEditor.save()
   }
 
@@ -328,9 +325,9 @@ class VideoEditActivity : FishActivity() {
     if (selectedPosition > 0) {
       selectFilter(filterList[selectedPosition])
     }
-    if (model.recordType == PullService.UploadEntity.TYPE_ADD_EDITED_VIDEO) {
-      showChoseCover()
-    }
+//    if (model.recordType == PullService.UploadEntity.TYPE_ADD_EDITED_VIDEO) {
+//      showChoseCover()
+//    }
   }
 
   override fun onPause() {
@@ -386,43 +383,46 @@ class VideoEditActivity : FishActivity() {
   }
 
   private fun initShortVideoEditor() {
-    mMp4path = intent.getStringExtra(MP4_PATH)
+//    mMp4path = intent.getStringExtra(MP4_PATH)
 
-    choiceCover.setVideoPath(mMp4path)
+    mMp4path = "https://200024424.vod.myqcloud.com/200024424_709ae516bdf811e6ad39991f76a4df69.f20.mp4"
+
+//    choiceCover.setVideoPath(mMp4path)
 
     val setting = PLVideoEditSetting()
     setting.sourceFilepath = mMp4path
+//    setting.destFilepath = getDefaultFilesDir(this) + GLIDE_CACHE_DIR
     setting.destFilepath = "${Environment.getExternalStorageDirectory()}/DCIM/" +
         "Camera/SSR${TimeUtil.getCurrentTime("yyyyMMddHHmmss")}.mp4"
     setting.isKeepOriginFile = false
 
-    mShortVideoEditor = PLShortVideoEditor(preview, setting)
-    mShortVideoEditor.setVideoSaveListener(onSaveListener)
+//    mShortVideoEditor = PLShortVideoEditor(preview, setting)
+//    mShortVideoEditor.setVideoSaveListener(onSaveListener)
 
   }
 
   private val onSaveListener = object : PLVideoSaveListener {
     override fun onSaveVideoCanceled() {
-      progressDialog.dismiss()
+//      progressDialog.dismiss()
     }
 
     override fun onProgressUpdate(p0: Float) {
     }
 
     override fun onSaveVideoSuccess(p0: String) {
-      progressDialog.dismiss()
-      Timber.d(p0)
-      RxBus.get().post(VideoRecordFinishEvent())
-      model.coverDuration = coverDuration
-      model.filePath = p0
+//      progressDialog.dismiss()
+      Log.e("wangfei" ,p0)
+//      RxBus.get().post(VideoRecordFinishEvent())
+//      model.coverDuration = coverDuration
+//      model.filePath = p0
 
       // 通知图库更新
       sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(File(p0))))
-      startActivity(ChainsPublishActivity.create(this@VideoEditActivity, model))
+//      startActivity(ChainsPublishActivity.create(this@VideoEditActivity, model))
     }
 
     override fun onSaveVideoFailed(p0: Int) {
-      progressDialog.dismiss()
+//      progressDialog.dismiss()
     }
   }
 
@@ -444,5 +444,29 @@ class VideoEditActivity : FishActivity() {
       }
       return false
     }
+  }
+
+
+  /**
+   * 获取应用私有目录
+   */
+  private fun getDefaultFilesDir(context: Context): String? {
+    var fileDir = context.getExternalFilesDir(EMPTY)
+    if (fileDir == null) {
+      ContextCompat.getExternalFilesDirs(context, null)
+      fileDir = context.getExternalFilesDir(EMPTY)
+      if (fileDir == null) {
+        fileDir = context.filesDir
+      }
+    }
+    val file = File(fileDir?.absolutePath + NO_MEDIA)
+    if (!file.exists()) {
+      try {
+        file.createNewFile()
+      } catch (e: Exception) {
+        e.printStackTrace()
+      }
+    }
+    return fileDir?.absolutePath
   }
 }

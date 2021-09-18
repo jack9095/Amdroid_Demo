@@ -33,6 +33,12 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs/jni']
+        }
+    }
 }
 
 dependencies {
@@ -42,6 +48,15 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+
+    implementation files('libs/pldroid-player-2.1.7.jar')
+//    implementation 'com.qiniu:qiniu-android-sdk:8.0.3'
+    implementation 'com.qiniu:qiniu-android-sdk:7.3.13'
+
+    implementation files('libs/SaaS_AppAnalytics_Android_SDK_V4.0.26.jar')
+//    implementation files('libs/smantifraud.jar')
+    implementation files('libs/pldroid-shortvideo-3.2.2.jar')
+
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -84,4 +99,8 @@ dependencies {
     implementation 'com.gyf.immersionbar:immersionbar-components:3.0.0'
 // kotlin扩展（可选）
     implementation 'com.gyf.immersionbar:immersionbar-ktx:3.0.0'
+
+    implementation 'com.flyco.roundview:FlycoRoundView_Lib:1.1.4@aar'
+
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
 }

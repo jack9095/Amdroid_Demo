@@ -1,4 +1,4 @@
-package com.shuashuakan.android.modules.publisher
+package com.kuanquan.doyincover.publisher
 
 import android.os.Parcel
 import android.os.Parcelable

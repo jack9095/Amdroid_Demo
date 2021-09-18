@@ -7,8 +7,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,10 +16,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.qiniu.pili.droid.shortvideo.PLTextView;
-import com.shuashuakan.android.R;
-import com.shuashuakan.android.modules.publisher.IMGTextEditDialog;
-import com.shuashuakan.android.utils.AnimUtils;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.kuanquan.doyincover.R;
+import com.kuanquan.doyincover.utils.AnimUtils;
+//import com.qiniu.pili.droid.shortvideo.PLTextView;
+//import com.shuashuakan.android.modules.publisher.IMGTextEditDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class VideoEditorView extends FrameLayout implements MultiTouchListener.O
   private View deleteView;
   private Context context;
 
-  private IMGTextEditDialog mAddTextDialog;
+//  private IMGTextEditDialog mAddTextDialog;
 
   public void setContentView(View contentView) {
     this.contentView = contentView;
@@ -64,15 +65,15 @@ public class VideoEditorView extends FrameLayout implements MultiTouchListener.O
 
 
   public void addText() {
-    if (mAddTextDialog == null) {
-      mAddTextDialog = new IMGTextEditDialog(getContext());
-    }
-    mAddTextDialog.show(new IMGTextEditDialog.Callback() {
-      @Override
-      public void onText(String text, int colorCode) {
-        addText(text, colorCode);
-      }
-    });
+//    if (mAddTextDialog == null) {
+//      mAddTextDialog = new IMGTextEditDialog(getContext());
+//    }
+//    mAddTextDialog.show(new IMGTextEditDialog.Callback() {
+//      @Override
+//      public void onText(String text, int colorCode) {
+//        addText(text, colorCode);
+//      }
+//    });
   }
 
   private void addText(String text, final int colorCodeTextView) {
@@ -81,27 +82,27 @@ public class VideoEditorView extends FrameLayout implements MultiTouchListener.O
 
   @SuppressLint("ClickableViewAccessibility")
   private void addText(@Nullable Typeface textTypeface, String text, final int colorCodeTextView) {
-    PLTextView textInputTv = new PLTextView(getContext());
-    textInputTv.setText(text);
-    textInputTv.setTextColor(colorCodeTextView);
-    if (textTypeface != null) {
-      textInputTv.setTypeface(textTypeface);
-    }
-    MultiTouchListener multiTouchListener = getMultiTouchListener();
-
-    multiTouchListener.setOnGestureControl(() -> {
-      if (mAddTextDialog == null) {
-        mAddTextDialog = new IMGTextEditDialog(getContext());
-      }
-      mAddTextDialog.setText(textInputTv.getText().toString(), textInputTv.getCurrentTextColor());
-      mAddTextDialog.show((text1, colorCode) -> {
-        textInputTv.setText(text1);
-        textInputTv.setTextColor(colorCode);
-      });
-    });
-    textInputTv.setTag(ViewType.TEXT);
-    textInputTv.setOnTouchListener(multiTouchListener);
-    addViewToParent(textInputTv, ViewType.TEXT);
+//    PLTextView textInputTv = new PLTextView(getContext());
+//    textInputTv.setText(text);
+//    textInputTv.setTextColor(colorCodeTextView);
+//    if (textTypeface != null) {
+//      textInputTv.setTypeface(textTypeface);
+//    }
+//    MultiTouchListener multiTouchListener = getMultiTouchListener();
+//
+//    multiTouchListener.setOnGestureControl(() -> {
+//      if (mAddTextDialog == null) {
+//        mAddTextDialog = new IMGTextEditDialog(getContext());
+//      }
+//      mAddTextDialog.setText(textInputTv.getText().toString(), textInputTv.getCurrentTextColor());
+//      mAddTextDialog.show((text1, colorCode) -> {
+//        textInputTv.setText(text1);
+//        textInputTv.setTextColor(colorCode);
+//      });
+//    });
+//    textInputTv.setTag(ViewType.TEXT);
+//    textInputTv.setOnTouchListener(multiTouchListener);
+//    addViewToParent(textInputTv, ViewType.TEXT);
   }
 
 

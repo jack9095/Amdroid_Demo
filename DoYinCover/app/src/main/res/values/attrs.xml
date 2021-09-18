@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <declare-styleable name="ViewPagerIndicator">
+        <!-- Style of the icon indicator's views. -->
+        <attr name="vpiIconPageIndicatorStyle" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="SimpleProductView">
+        <attr name="style" format="enum">
+            <enum name="home_product" value="0" />
+            <enum name="product_list" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="MarqueeView">
+        <attr name="interval" format="integer" />
+        <attr name="duration" format="integer" />
+        <attr name="inAnimation" format="reference" />
+        <attr name="outAnimation" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="TagCloudLayout">
+        <attr name="lineSpacing" format="dimension" />
+        <attr name="tagSpacing" format="dimension" />
+        <!-- 是否是固定布局 -->
+        <attr name="isFixed" format="boolean" />
+        <attr name="columnSize" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="EmptyView">
+        <attr name="iv" format="reference" />
+        <attr name="title" format="string" />
+        <attr name="contentEmpty" format="string" />
+        <attr name="btnText" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="VerticalTabLayout">
+        <attr name="indicator_color" format="color" />
+        <attr name="indicator_width" format="dimension" />
+        <attr name="indicator_corners" format="dimension" />
+        <attr name="indicator_gravity" format="enum">
+            <enum name="left" value="3" />
+            <enum name="right" value="5" />
+            <enum name="fill" value="119" />
+        </attr>
+        <attr name="tab_margin" format="dimension" />
+        <attr name="tab_mode" format="enum">
+            <enum name="fixed" value="10" />
+            <enum name="scrollable" value="11" />
+        </attr>
+        <attr name="tab_height" format="dimension" />
+        <!--        <attr name="tab_padding" format="dimension"/>
+                <attr name="tab_paddingStart" format="dimension"/>
+                <attr name="tab_paddingTop" format="dimension"/>
+                <attr name="tab_paddingEnd" format="dimension"/>
+                <attr name="tab_paddingBottom" format="dimension"/>-->
+    </declare-styleable>
+    <declare-styleable name="FlikerProgressBar">
+        <attr name="textSize" format="dimension" />
+
+        <attr name="loadingColor" format="color" />
+
+        <attr name="stopColor" format="color" />
+
+        <attr name="flikeRadius" format="dimension" />
+
+        <attr name="flikwBorderWidth" format="dimension" />
+
+    </declare-styleable>
+
+
+    <declare-styleable name="IMGColorRadio" tools:ignore="ResourceName">
+        <attr name="image_color" format="color" />
+        <attr name="image_stroke_color" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="PxBlurringView">
+        <attr name="blurRadius" format="integer" />
+        <attr name="downsampleFactor" format="integer" />
+        <attr name="overlayColor" format="color" />
+    </declare-styleable>
+
+    <!--下载进度，自定义进度条-->
+    <declare-styleable name="CustomCircleProgressBar">
+        <attr name="radius" format="dimension" /><!--半径-->
+        <attr name="strokeWidth" format="dimension" /><!--画笔宽度-->
+        <attr name="circleColor" format="color" /><!--内圆颜色-->
+        <attr name="ringColor" format="color" /><!--进度条颜色-->
+        <attr name="totalProgress" format="integer" /><!--总进度-->
+        <attr name="textColor" format="color|reference" /><!--字体颜色-->
+        <attr name="bigCircleColor" format="color" /><!--外圆颜色-->
+    </declare-styleable>
+
+    <declare-styleable name="AutoPlayRecyclerView">
+        <attr name="timeInterval" format="integer" />
+        <attr name="direction" format="enum">
+            <enum name="left" value="1" />
+            <enum name="right" value="2" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="PeriscopeLayout">
+
+        <attr name="itemAlignParentLeft" format="boolean" />
+        <attr name="itemAlignParentRight" format="boolean" />
+        <attr name="itemAlignParentTop" format="boolean" />
+        <attr name="itemAlignParentBottom" format="boolean" />
+        <attr name="itemWidth" format="dimension" />
+        <attr name="itemHeight" format="dimension" />
+
+        <attr name="itemMarginLeft" format="dimension" />
+        <attr name="itemMarginRight" format="dimension" />
+        <attr name="itemMarginTop" format="dimension" />
+        <attr name="itemMarginBottom" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="FollowTextView">
+        <attr name="markColor" format="color" />
+        <attr name="needDrawAddOperator" format="boolean" />
+        <attr name="showDrawerAnimation" format="boolean" />
+        <attr name="overCircle" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="PageGridRecyclerView">
+        <attr name="PagingRows" format="integer" />
+        <attr name="PagingPadding" format="integer" />
+        <attr name="PagingColums" format="integer" />
+    </declare-styleable>
+</resources>

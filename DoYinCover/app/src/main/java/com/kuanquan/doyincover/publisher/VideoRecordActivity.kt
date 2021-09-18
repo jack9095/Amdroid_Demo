@@ -1,7 +1,8 @@
-package com.shuashuakan.android.modules.publisher
+package com.kuanquan.doyincover.publisher
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -10,30 +11,37 @@ import android.media.AudioFormat
 import android.opengl.GLSurfaceView
 import android.os.Bundle
 import android.provider.MediaStore
-import android.support.v4.app.LoaderManager
-import android.support.v4.content.ContextCompat
-import android.support.v4.content.CursorLoader
-import android.support.v4.content.Loader
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.loader.app.LoaderManager
+import androidx.loader.content.CursorLoader
+import androidx.loader.content.Loader
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.luck.picture.lib.PictureSelector
-import com.luck.picture.lib.config.PictureConfig
-import com.luck.picture.lib.config.PictureMimeType
+import com.kuanquan.doyincover.R
+import com.kuanquan.doyincover.base.FishActivity
+//import com.luck.picture.lib.PictureSelector
+//import com.luck.picture.lib.config.PictureConfig
+//import com.luck.picture.lib.config.PictureMimeType
 import com.qiniu.pili.droid.shortvideo.*
 import com.qiniu.pili.droid.shortvideo.PLErrorCode.*
-import com.shuashuakan.android.R
-import com.shuashuakan.android.data.RxBus
-import com.shuashuakan.android.event.VideoRecordFinishEvent
+//import com.shuashuakan.android.R
+//import com.shuashuakan.android.data.RxBus
+//import com.shuashuakan.android.event.VideoRecordFinishEvent
 import com.kuanquan.doyincover.publisher.utils.StringUtil
-import com.shuashuakan.android.ui.ProgressDialog
-import com.shuashuakan.android.ui.base.FishActivity
-import com.shuashuakan.android.modules.widget.RecordButton
-import com.shuashuakan.android.modules.widget.transform.RoundedCornersTransformation
-import com.shuashuakan.android.utils.bindView
+import com.kuanquan.doyincover.publisher.view.FocusIndicator
+import com.kuanquan.doyincover.publisher.view.RecordButton
+import com.kuanquan.doyincover.publisher.view.RoundedCornersTransformation
+import com.kuanquan.doyincover.publisher.view.SectionProgressBar
+import com.kuanquan.doyincover.utils.ScreenUtils
+//import com.shuashuakan.android.ui.ProgressDialog
+//import com.shuashuakan.android.ui.base.FishActivity
+//import com.kuanquan.doyincover.publisher.view.RecordButton
+//import transform.RoundedCornersTransformation
+//import com.shuashuakan.android.utils.bindView
 import io.reactivex.disposables.CompositeDisposable
 import java.io.File
 import java.util.*
@@ -65,20 +73,20 @@ class VideoRecordActivity : FishActivity() {
         }
     }
 
-    private val preview by bindView<GLSurfaceView>(R.id.preview)
-    private val mFocusIndicator by bindView<com.shuashuakan.android.modules.widget.FocusIndicator>(R.id.focus_indicator)
-    private val recordProgressbar by bindView<com.shuashuakan.android.modules.widget.SectionProgressBar>(R.id.record_progressbar)
-    private val record by bindView<RecordButton>(R.id.record)
-    private val recordOperation by bindView<View>(R.id.recording_operation)
-    private val openGallery by bindView<View>(R.id.open_gallery)
-    private val openGalleryImage by bindView<ImageView>(R.id.open_gallery_image)
-    private val switchFaceBeauty by bindView<TextView>(R.id.switch_face_beauty)
-    private val recordBottomOperation by bindView<View>(R.id.record_bottom_operation)
+    private val preview by lazy { findViewById<GLSurfaceView>(R.id.preview) }
+    private val mFocusIndicator by lazy{ findViewById<FocusIndicator>(R.id.focus_indicator) }
+    private val recordProgressbar by lazy { findViewById<SectionProgressBar>(R.id.record_progressbar) }
+    private val record by lazy { findViewById<RecordButton>(R.id.record) }
+    private val recordOperation by lazy { findViewById<View>(R.id.recording_operation) }
+    private val openGallery by lazy { findViewById<View>(R.id.open_gallery) }
+    private val openGalleryImage by lazy { findViewById<ImageView>(R.id.open_gallery_image) }
+    private val switchFaceBeauty by lazy { findViewById<TextView>(R.id.switch_face_beauty) }
+    private val recordBottomOperation by lazy { findViewById<View>(R.id.record_bottom_operation) }
 
-    private val filterScrollHint by bindView<TextView>(R.id.filter_scroll_hint)
-    private val filterNameText by bindView<TextView>(R.id.filter_name_text)
-    private val recordNextStepBtn by bindView<ImageView>(R.id.record_next_step)
-    private val recordOperationLayout by bindView<View>(R.id.record_operation_layout)
+    private val filterScrollHint by lazy { findViewById<TextView>(R.id.filter_scroll_hint) }
+    private val filterNameText by lazy { findViewById<TextView>(R.id.filter_name_text) }
+    private val recordNextStepBtn by lazy { findViewById<ImageView>(R.id.record_next_step) }
+    private val recordOperationLayout by lazy { findViewById<View>(R.id.record_operation_layout) }
 
     private lateinit var mShortVideoRecorder: PLShortVideoRecorder
     private lateinit var mCameraSetting: PLCameraSetting
@@ -97,14 +105,14 @@ class VideoRecordActivity : FishActivity() {
 
     private var model: RecordDataModel? = null
 
-    private val progressDialog by lazy {
-        return@lazy ProgressDialog.progressDialog(this, getString(R.string.string_video_process))
-    }
-    private val eventCompositeDisposable = CompositeDisposable()
-
-    private val filterDialog: FilterListBottomDialog by lazy {
-        FilterListBottomDialog(this)
-    }
+//    private val progressDialog by lazy {
+//        return@lazy ProgressDialog.progressDialog(this, getString(R.string.string_video_process))
+//    }
+//    private val eventCompositeDisposable = CompositeDisposable()
+//
+//    private val filterDialog: FilterListBottomDialog by lazy {
+//        FilterListBottomDialog(this)
+//    }
 
     private var cacheFilePath: File? = null
 
@@ -122,11 +130,11 @@ class VideoRecordActivity : FishActivity() {
         setOther()
         initFilterList()
         getFirstVideo()
-        RxBus.get().toFlowable().subscribe {
-            if (it is VideoRecordFinishEvent) {
-                finish()
-            }
-        }.addTo(eventCompositeDisposable)
+//        RxBus.get().toFlowable().subscribe {
+//            if (it is VideoRecordFinishEvent) {
+//                finish()
+//            }
+//        }.addTo(eventCompositeDisposable)
     }
 
     private fun initRecorder() {
@@ -176,25 +184,25 @@ class VideoRecordActivity : FishActivity() {
             mGestureDetector.onTouchEvent(motionEvent)
             true
         }
-        filterDialog.listener = object : FilterListBottomDialog.OnFilterDialogListener {
-            override fun onSelectPosition(position: Int) {
-                selectedPosition = position
-                selectFilter(filterList[selectedPosition])
-            }
-        }
-        filterDialog.setOnShowListener {
-            record.visibility = View.GONE
-            recordBottomOperation.visibility = View.GONE
-
-            if (filterDialog.getSelectPosition() != selectedPosition) {
-                filterDialog.setFilterPosition(selectedPosition)
-            }
-            filterDialog.scrollFilter(selectedPosition)
-        }
-        filterDialog.setOnDismissListener {
-            record.visibility = View.VISIBLE
-            recordBottomOperation.visibility = View.VISIBLE
-        }
+//        filterDialog.listener = object : FilterListBottomDialog.OnFilterDialogListener {
+//            override fun onSelectPosition(position: Int) {
+//                selectedPosition = position
+//                selectFilter(filterList[selectedPosition])
+//            }
+//        }
+//        filterDialog.setOnShowListener {
+//            record.visibility = View.GONE
+//            recordBottomOperation.visibility = View.GONE
+//
+//            if (filterDialog.getSelectPosition() != selectedPosition) {
+//                filterDialog.setFilterPosition(selectedPosition)
+//            }
+//            filterDialog.scrollFilter(selectedPosition)
+//        }
+//        filterDialog.setOnDismissListener {
+//            record.visibility = View.VISIBLE
+//            recordBottomOperation.visibility = View.VISIBLE
+//        }
         filterNameText.postDelayed(runnable, 3000)
     }
 
@@ -208,7 +216,7 @@ class VideoRecordActivity : FishActivity() {
         } else {
             filterList = mutableListOf()
         }
-        filterDialog.initData(filterList)
+//        filterDialog.initData(filterList)
     }
 
     private var selectedPosition = 0
@@ -249,7 +257,7 @@ class VideoRecordActivity : FishActivity() {
         filterNameText.removeCallbacks(runnable)
         filterNameText.postDelayed(runnable, 1000)
 
-        filterDialog.setFilterPosition(selectedPosition)
+//        filterDialog.setFilterPosition(selectedPosition)
     }
 
     private val runnable = Runnable {
@@ -288,7 +296,7 @@ class VideoRecordActivity : FishActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mShortVideoRecorder.setFocusListener(null)
-        eventCompositeDisposable.clear()
+//        eventCompositeDisposable.clear()
         mShortVideoRecorder.destroy()
     }
 
@@ -308,7 +316,7 @@ class VideoRecordActivity : FishActivity() {
     }
 
     fun onClickFilter(v: View) {
-        filterDialog.show()
+//        filterDialog.show()
     }
 
     fun onClickClose(v: View) {
@@ -321,41 +329,41 @@ class VideoRecordActivity : FishActivity() {
 
     private fun comeBack() {
         if (recordProgressbar.count > 0) {
-            createDialog(getString(R.string.string_can_give_up_video), DialogInterface.OnClickListener { _, _ ->
-                finish()
-            }).show()
+//            createDialog(getString(R.string.string_can_give_up_video), DialogInterface.OnClickListener { _, _ ->
+//                finish()
+//            }).show()
         } else {
             finish()
         }
     }
 
     fun onClickOpenGallery(v: View) {
-        PictureSelector.create(this)
-                .openGallery(PictureMimeType.ofVideo())
-                .theme(R.style.customPictureStyle)
-                .selectionMode(PictureConfig.SINGLE)
-                .previewVideo(true)
-                .videoMinSecond(3)
-                .videoMaxSecond(30)
-                .isCamera(false)
-                .isUploadVideo(true)
-                .forResult(PictureMimeType.ofVideo())
+//        PictureSelector.create(this)
+//                .openGallery(PictureMimeType.ofVideo())
+//                .theme(R.style.customPictureStyle)
+//                .selectionMode(PictureConfig.SINGLE)
+//                .previewVideo(true)
+//                .videoMinSecond(3)
+//                .videoMaxSecond(30)
+//                .isCamera(false)
+//                .isUploadVideo(true)
+//                .forResult(PictureMimeType.ofVideo())
     }
 
     fun onClickBackDelete(v: View) {
-        createDialog(getString(R.string.string_can_delete_video), DialogInterface.OnClickListener { _, _ ->
-            if (!mShortVideoRecorder.deleteLastSection()) {
-                showShortToast(getString(R.string.string_delete_part_video_error))
-            }
-        }).show()
+//        createDialog(getString(R.string.string_can_delete_video), DialogInterface.OnClickListener { _, _ ->
+//            if (!mShortVideoRecorder.deleteLastSection()) {
+//                showShortToast(getString(R.string.string_delete_part_video_error))
+//            }
+//        }).show()
     }
 
     fun onClickNextStep(v: View) {
         if (recordNextStepBtn.isSelected) {
-            progressDialog.show()
+//            progressDialog.show()
             mShortVideoRecorder.concatSections(videoSaveListener)
         } else {
-            showShortToast(getString(R.string.string_video_time_min))
+//            showShortToast(getString(R.string.string_video_time_min))
         }
     }
 
@@ -383,7 +391,9 @@ class VideoRecordActivity : FishActivity() {
 
     private val recordStateListener = object : PLRecordStateListener {
         override fun onDurationTooShort() {
-            runOnUiThread { showShortToast(getString(R.string.string_delete_part_video_error)) }
+            runOnUiThread {
+//                showShortToast(getString(R.string.string_delete_part_video_error))
+            }
         }
 
         override fun onReady() {
@@ -394,7 +404,7 @@ class VideoRecordActivity : FishActivity() {
 
         override fun onRecordStarted() {
             runOnUiThread {
-                recordProgressbar.setCurrentState(com.shuashuakan.android.modules.widget.SectionProgressBar.State.START)
+                recordProgressbar.setCurrentState(SectionProgressBar.State.START)
                 updateRecordingBtns(true)
             }
         }
@@ -409,7 +419,9 @@ class VideoRecordActivity : FishActivity() {
         }
 
         override fun onError(p0: Int) {
-            runOnUiThread { showShortToast(toastErrorCode(p0)) }
+            runOnUiThread { 
+//                showShortToast(toastErrorCode(p0)) 
+            }
         }
 
         override fun onSectionRecording(p0: Long, p1: Long, p2: Int) {
@@ -424,7 +436,7 @@ class VideoRecordActivity : FishActivity() {
         override fun onSectionIncreased(incDuration: Long, totalDuration: Long, sectionCount: Int) {
             mTotalDuration = totalDuration
             recordProgressbar.addBreakPointTime(totalDuration)
-            recordProgressbar.setCurrentState(com.shuashuakan.android.modules.widget.SectionProgressBar.State.PAUSE)
+            recordProgressbar.setCurrentState(SectionProgressBar.State.PAUSE)
             onSectionCountChanged(sectionCount, totalDuration)
         }
 
@@ -472,15 +484,15 @@ class VideoRecordActivity : FishActivity() {
     private val videoSaveListener = object : PLVideoSaveListener {
         override fun onSaveVideoSuccess(filePath: String) {
             runOnUiThread {
-                progressDialog.dismiss()
+//                progressDialog.dismiss()
                 VideoEditActivity.start(this@VideoRecordActivity, filePath, model)
             }
         }
 
         override fun onSaveVideoFailed(p0: Int) {
             runOnUiThread {
-                progressDialog.dismiss()
-                showShortToast("拼接视频段失败: $p0")
+//                progressDialog.dismiss()
+//                showShortToast("拼接视频段失败: $p0")
             }
         }
 
@@ -489,7 +501,7 @@ class VideoRecordActivity : FishActivity() {
         }
 
         override fun onSaveVideoCanceled() {
-            progressDialog.dismiss()
+//            progressDialog.dismiss()
         }
     }
 
@@ -504,7 +516,7 @@ class VideoRecordActivity : FishActivity() {
                 }
             } else {
                 record.reset()
-                showShortToast(getString(R.string.string_video_record_max))
+//                showShortToast(getString(R.string.string_video_record_max))
             }
         }
 
@@ -546,13 +558,13 @@ class VideoRecordActivity : FishActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == PictureMimeType.ofVideo()) {
-            var result = PictureSelector.obtainMultipleResult(data)
-            if (result.size != 0) {
-                val localMedia = result[0]
-                VideoEditActivity.start(this@VideoRecordActivity, localMedia.compressPath, model)
-            }
-        }
+//        if (resultCode == Activity.RESULT_OK && requestCode == PictureMimeType.ofVideo()) {
+//            var result = PictureSelector.obtainMultipleResult(data)
+//            if (result.size != 0) {
+//                val localMedia = result[0]
+//                VideoEditActivity.start(this@VideoRecordActivity, localMedia.compressPath, model)
+//            }
+//        }
     }
 
     fun toastErrorCode(errorCode: Int): String {
@@ -597,7 +609,7 @@ class VideoRecordActivity : FishActivity() {
                     Glide.with(openGalleryImage.context).load(MediaStore.Video.Thumbnails.getThumbnail(contentResolver,
                             videoId.toLong(), MediaStore.Video.Thumbnails.MICRO_KIND, null))
                             .apply(
-                                    RequestOptions().transform(RoundedCornersTransformation(dip(5), 0, RoundedCornersTransformation.CornerType.ALL)))
+                                    RequestOptions().transform(RoundedCornersTransformation(ScreenUtils.dip2px(openGalleryImage.context, 5f), 0, RoundedCornersTransformation.CornerType.ALL)))
                             .into(openGalleryImage)
                 }
             }

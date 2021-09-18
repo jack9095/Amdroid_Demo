@@ -8,8 +8,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.shuashuakan.android.R;
-
+import com.kuanquan.doyincover.R;
 
 /**
  * Created by frank on 18/3/20.
@@ -64,8 +63,8 @@ public class CutView extends View {
     marginRight = 2;
     marginTop = 2;
     marginBottom = 2;
-    dp3 = (int) getResources().getDimension(R.dimen.dp3);
-    dp1 = (int) getResources().getDimension(R.dimen.dp1);
+    dp3 = (int) getResources().getDimension(R.dimen.dimen_3);
+    dp1 = (int) getResources().getDimension(R.dimen.dimen_1);
 
     paint = new Paint();
     paint.setAntiAlias(true);

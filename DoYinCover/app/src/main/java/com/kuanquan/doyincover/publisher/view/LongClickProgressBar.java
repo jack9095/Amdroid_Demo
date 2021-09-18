@@ -4,12 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
 
-import com.shuashuakan.android.R;
+import androidx.core.content.ContextCompat;
+
+import com.kuanquan.doyincover.R;
 
 public class LongClickProgressBar extends View {
 
@@ -101,7 +102,7 @@ public class LongClickProgressBar extends View {
     mProgressBarPaint = new Paint();
     mFirstPointPaint = new Paint();
 
-    setBackgroundColor(ContextCompat.getColor(paramContext,R.color.transparent));
+    setBackgroundColor(ContextCompat.getColor(paramContext, R.color.transparent));
 
     mProgressBarPaint.setStyle(Paint.Style.FILL);
     mProgressBarPaint.setColor(ContextCompat.getColor(paramContext,R.color.color_ffef30));

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/colorPrimary"
+  tools:context="com.kuanquan.doyincover.publisher.chains.ChainsPublishActivity">
+
+
+  <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical">
+
+      <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+          android:id="@+id/back_tv"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:paddingLeft="15dp"
+          android:paddingTop="18dp"
+          android:paddingRight="15dp"
+          android:paddingBottom="17dp"
+          android:textSize="16sp"
+          android:textColor="@color/white"
+          android:text="@string/string_cancel"
+          />
+
+        <ImageView
+          android:visibility="gone"
+          android:id="@+id/back"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:paddingLeft="15dp"
+          android:paddingTop="18dp"
+          android:paddingRight="15dp"
+          android:paddingBottom="17dp"
+          android:src="@drawable/back_ic" />
+
+        <TextView
+          android:id="@+id/publish"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentRight="true"
+          android:layout_centerVertical="true"
+          android:alpha="0.5"
+          android:paddingRight="15dp"
+          android:text="@string/string_publish_label"
+          android:textColor="@color/color_ffef30"
+          android:textSize="16sp" />
+      </RelativeLayout>
+
+      <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:alpha="0.1"
+        android:background="@color/color_normal_e0e0e0" />
+
+      <EditText
+        android:id="@+id/home_container"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
+        android:background="@null"
+        android:gravity="top"
+        android:hint="@string/string_has_share_to_people"
+        android:textColor="@color/white"
+        android:textColorHint="@color/color_normal_5d6066"
+        android:textCursorDrawable="@null"
+        android:textSize="15sp" />
+
+      <TextView
+        android:id="@+id/select_topic_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/bg_topic_label"
+        android:drawableLeft="@drawable/ic_channel"
+        android:drawablePadding="4dp"
+        android:ellipsize="end"
+        android:paddingLeft="9.5dp"
+        android:paddingTop="5.5dp"
+        android:paddingRight="12dp"
+        android:paddingBottom="6.5dp"
+        android:singleLine="true"
+        android:text="@string/string_choose_topic"
+        android:textColor="@color/color_normal_b6b6b6"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+      <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="20dp">
+
+        <ImageView
+          android:id="@+id/image_view"
+          android:layout_width="150dp"
+          android:layout_height="150dp" />
+
+        <RelativeLayout
+          android:id="@+id/chains_publish_change_cover_rl"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignEnd="@+id/image_view"
+          android:layout_marginTop="5dp"
+          android:layout_marginEnd="5dp"
+          android:background="@drawable/bg_colorffffff_radius3"
+          android:paddingLeft="3dp"
+          android:paddingTop="2dp"
+          android:paddingRight="3dp"
+          android:paddingBottom="2dp"
+          android:visibility="gone">
+
+          <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/string_change_cover"
+            android:textColor="@color/colorPrimary"
+            android:textSize="10sp"/>
+        </RelativeLayout>
+      </RelativeLayout>
+
+    </LinearLayout>
+  </ScrollView>
+
+  <LinearLayout
+    android:id="@+id/publish_emoji_layout"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_gravity="bottom"
+    android:background="@color/white"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:visibility="gone" />
+</FrameLayout>

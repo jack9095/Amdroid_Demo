@@ -6,11 +6,12 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.support.v7.widget.AppCompatRadioButton;
 import android.util.AttributeSet;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
-import com.shuashuakan.android.R;
+import androidx.appcompat.widget.AppCompatRadioButton;
+
+import com.kuanquan.doyincover.R;
 
 /**
  * Created by felix on 2017/12/1 下午2:50.

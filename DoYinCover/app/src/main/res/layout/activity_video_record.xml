@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
+
+    <android.opengl.GLSurfaceView
+        android:id="@+id/preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipChildren="false">
+
+        <com.kuanquan.doyincover.publisher.view.FocusIndicator
+            android:id="@+id/focus_indicator"
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
+    </FrameLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/record_operation_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            android:animateLayoutChanges="true"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/filter_name_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:lineSpacingExtra="0sp"
+                android:shadowColor="@color/black40"
+                android:shadowDy="2"
+                android:shadowRadius="4"
+                android:text="@string/string_filter_none"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/filter_scroll_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="15dp"
+                android:gravity="center_horizontal"
+                android:lineSpacingExtra="0sp"
+                android:shadowColor="@color/black40"
+                android:shadowDy="2"
+                android:shadowRadius="4"
+                android:text="@string/string_heng_change_filter"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:onClick="onClickClose"
+            android:padding="18dp"
+            android:src="@drawable/ic_record_close"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/switch_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:drawablePadding="5dp"
+
+            android:gravity="center_horizontal"
+            android:onClick="onClickSwitchCamera"
+            android:paddingBottom="9dp"
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp"
+            android:paddingTop="18dp"
+            android:text="@string/string_rotation_label"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+<!--        android:drawableTop="@drawable/ic_record_turn_camera"-->
+
+        <TextView
+            android:id="@+id/switch_face_beauty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="5dp"
+            android:drawableTop="@drawable/ic_record_face_beauty_open"
+            android:gravity="center_horizontal"
+            android:onClick="onClickSwitchFaceBeauty"
+            android:paddingBottom="18dp"
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp"
+            android:paddingTop="9dp"
+            android:text="@string/string_beautiful_face_label"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/switch_camera" />
+
+        <LinearLayout
+            android:id="@+id/record_bottom_operation"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="30dp"
+            android:weightSum="3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:onClick="onClickFilter"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                         />
+<!--                    android:src="@drawable/ic_record_sel_filter"-->
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/string_filter_label"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"  android:layout_width="wrap_content"/>
+                </LinearLayout>
+            </FrameLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:id="@+id/open_gallery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:onClick="onClickOpenGallery"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <com.flyco.roundview.RoundFrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:rv_cornerRadius="5dp"
+                        app:rv_strokeColor="@color/white"
+                        app:rv_strokeWidth="2dp">
+
+                        <ImageView
+                            android:id="@+id/open_gallery_image"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:padding="2dp" />
+
+                    </com.flyco.roundview.RoundFrameLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+<!--                    android:text="@string/string_album_label"-->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/recording_operation"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onClick="onClickBackDelete"
+                        android:src="@drawable/ic_record_delete_back" />
+
+                    <ImageView
+                        android:id="@+id/record_next_step"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:onClick="onClickNextStep"
+                        android:src="@drawable/ic_record_next_step" />
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.kuanquan.doyincover.publisher.view.SectionProgressBar
+        android:id="@+id/record_progressbar"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_margin="5dp" />
+
+    <com.kuanquan.doyincover.publisher.view.RecordButton
+        android:id="@+id/record"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="30dp" />
+</FrameLayout>

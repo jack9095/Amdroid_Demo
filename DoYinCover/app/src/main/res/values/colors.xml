@@ -11,6 +11,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="transparent">#00000000</color>
+    <color name="color_FFEF30">#ffef30</color>
 
     <color name="divider_color">#090b10</color>
     <color name="white_3">#0cffffff</color>
@@ -147,7 +149,7 @@
 
     <color name="yellow">#ffbf00</color>
     <color name="black20">#000000</color>
-    <color name="black40">#66000000</color>
+<!--    <color name="black40">#66000000</color>-->
     <color name="bg_black">#010101</color>
     <color name="out_circle_color">#ffef30</color>
     <color name="ripple_clicked_color">#322c3038</color>

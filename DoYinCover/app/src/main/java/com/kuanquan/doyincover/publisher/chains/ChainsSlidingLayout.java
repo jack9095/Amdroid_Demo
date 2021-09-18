@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 
 import com.kuanquan.doyincover.R;
+import com.kuanquan.doyincover.publisher.view.Instrument;
 import com.kuanquan.doyincover.utils.Contexts;
 
 /**

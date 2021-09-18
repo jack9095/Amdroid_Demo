@@ -1,9 +1,9 @@
 package com.kuanquan.doyincover.utils.extension
 
 import android.graphics.Bitmap
-import android.support.annotation.DrawableRes
-import android.support.annotation.RawRes
 import android.widget.ImageView
+import androidx.annotation.DrawableRes
+import androidx.annotation.RawRes
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
