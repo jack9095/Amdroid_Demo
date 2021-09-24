@@ -12,6 +12,7 @@ import android.view.animation.ScaleAnimation
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 
 
 class DemoActivity: AppCompatActivity() {
@@ -24,7 +25,7 @@ class DemoActivity: AppCompatActivity() {
         setContentView(R.layout.activity_demo)
         textView = findViewById(R.id.textView)
         imageView = findViewById(R.id.imageView)
-        textView?.alpha = 0.0f
+//        textView?.alpha = 0.0f
     }
 
     /**
@@ -119,7 +120,17 @@ class DemoActivity: AppCompatActivity() {
     fun click(view: View) {
 //        animator()
 //        animatorScale()
-        imageView?.startAnimation(scaleAnimation())
+//        imageView?.startAnimation(scaleAnimation())
+
+        val appearAlpha = ObjectAnimator.ofFloat(textView, "alpha", 0.0f, 1.0f)
+        //设置匀速旋转
+//        appearAlpha.interpolator = LinearInterpolator()
+        //设置无限循环
+//        appearAlpha.repeatCount = Animation.INFINITE
+        appearAlpha.startDelay = 150
+        appearAlpha.start()
+
+//        textView?.isVisible = true
     }
 
     /**
