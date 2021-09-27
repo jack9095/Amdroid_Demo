@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.flyco.tablayout.SlidingScaleTabLayout
+        android:id="@+id/tablayout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:tl_indicator_color="@color/colorAccent"
+        app:tl_indicator_corner_radius="3dp"
+        app:tl_indicator_gravity="BOTTOM"
+        app:tl_indicator_height="2dp"
+        app:tl_indicator_width="7dp"
+        app:tl_openTextDmg="true"
+
+        app:tl_tab_dot_marginRight="-5dp"
+        app:tl_tab_dot_marginTop="-5dp"
+
+        app:tl_tab_horizontal_gravity="Left"
+        app:tl_tab_marginBottom="8dp"
+
+        app:tl_tab_msg_marginRight="-10dp"
+        app:tl_tab_msg_marginTop="-10dp"
+
+        app:tl_tab_padding="15dp"
+        app:tl_tab_background="@drawable/selector_tab_bg"
+
+        app:tl_tab_vertical_gravity="Bottom"
+        app:tl_textBold="SELECT"
+        app:tl_textSelectColor="@color/colorAccent"
+        app:tl_textSelectSize="30sp"
+
+        app:tl_textUnSelectColor="@color/colorPrimaryDark"
+        app:tl_textUnSelectSize="12sp" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
