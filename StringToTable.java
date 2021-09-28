@@ -48,7 +48,7 @@ public class StringToTable {
 
     public static void main(String[] args) {
 
-        HashMap<String, String> hashMap = dependentMap("/Users/fei/Downloads/searchDocument/bixin/class-map.txt");
+        HashMap<String, String> hashMap = dependentMap("/Users/fei/Downloads/searchDocument/aaa/class-map.txt");
 
         try {
 
@@ -59,13 +59,13 @@ public class StringToTable {
             // outFile.getParentFile().mkdirs();
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile), "UTF-8"));
 
-            string2Html("/Users/fei/Downloads/searchDocument/bixin/installed.txt", "/Users/fei/Downloads/html", "获取用户的安装列表", bw, hashMap);
-            string2Html("/Users/fei/Downloads/searchDocument/bixin/imei.txt", "/Users/fei/Downloads/html", "IMEI", bw, hashMap);
-            string2Html("/Users/fei/Downloads/searchDocument/bixin/mac.txt", "/Users/fei/Downloads/html", "mac地址", bw, hashMap);
-            string2Html("/Users/fei/Downloads/searchDocument/bixin/location.txt", "/Users/fei/Downloads/html", "定位信息", bw, hashMap);
-            string2Html("/Users/fei/Downloads/searchDocument/bixin/sms.txt", "/Users/fei/Downloads/html", "短信", bw, hashMap);
-            string2Html("/Users/fei/Downloads/searchDocument/bixin/calls.txt", "/Users/fei/Downloads/html", "通讯记录", bw, hashMap);
-            string2Html("/Users/fei/Downloads/searchDocument/bixin/contract.txt", "/Users/fei/Downloads/html", "通讯录", bw, hashMap);
+            string2Html("/Users/fei/Downloads/searchDocument/aaa/installed.txt", "/Users/fei/Downloads/html", "获取用户的安装列表", bw, hashMap);
+            string2Html("/Users/fei/Downloads/searchDocument/aaa/imei.txt", "/Users/fei/Downloads/html", "IMEI", bw, hashMap);
+            string2Html("/Users/fei/Downloads/searchDocument/aaa/mac.txt", "/Users/fei/Downloads/html", "mac地址", bw, hashMap);
+            string2Html("/Users/fei/Downloads/searchDocument/aaa/location.txt", "/Users/fei/Downloads/html", "定位信息", bw, hashMap);
+            string2Html("/Users/fei/Downloads/searchDocument/aaa/sms.txt", "/Users/fei/Downloads/html", "短信", bw, hashMap);
+            string2Html("/Users/fei/Downloads/searchDocument/aaa/calls.txt", "/Users/fei/Downloads/html", "通讯记录", bw, hashMap);
+            string2Html("/Users/fei/Downloads/searchDocument/aaa/contract.txt", "/Users/fei/Downloads/html", "通讯录", bw, hashMap);
 
             bw.close();
         } catch (Exception e) {
