@@ -1,0 +1,46 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion cfgs.compileSdkVersion
+
+    defaultConfig {
+        applicationId "com.luck.pictureselector"
+        minSdkVersion cfgs.minSdkVersion
+        targetSdkVersion cfgs.targetSdkVersion
+        versionCode cfgs.versionCode
+        versionName cfgs.versionName
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    ndkVersion "22.1.7171670"
+}
+
+dependencies {
+    implementation project(':picture_library')
+//    implementation 'me.jessyan:insgallery:0.7.0'
+
+    implementation "androidx.appcompat:appcompat:${cfgs.version_appcompat}"
+    implementation "androidx.recyclerview:recyclerview:${cfgs.version_recyclerview}"
+    implementation "androidx.camera:camera-camera2:${cfgs.camerax_version}"
+    implementation "com.github.bumptech.glide:glide:${cfgs.glide_version}"
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
+}
