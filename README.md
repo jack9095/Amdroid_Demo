@@ -211,8 +211,8 @@ Koin 注入框架在 kotlin 中的使用
 ### 55、scrollAppBarLayout
 滑动状态栏和标题渐变显示
 
-### 56、DoYinCover
-仿抖音设置封面
+### 56、DoYinCover、InsGallery-master
+仿抖音设置封面、仿 InsGallery 设置视屏封面
 
 ### 57、FlycoTabLayoutZ-master、XiaMiTablayout-master、FlycoTablayout-master
 TabLayout 选项卡 选中的文字加粗放大
