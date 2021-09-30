@@ -216,3 +216,6 @@ Koin 注入框架在 kotlin 中的使用
 
 ### 57、FlycoTabLayoutZ-master、XiaMiTablayout-master、FlycoTablayout-master
 TabLayout 选项卡 选中的文字加粗放大
+
+### 58、VideoCover
+视屏封面选择
