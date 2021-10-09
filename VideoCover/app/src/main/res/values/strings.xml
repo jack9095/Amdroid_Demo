@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">VideoCover</string>
+    <string name="picture_error">图片已损坏</string>
+    <string name="picture_video_error">视频已损坏</string>
+    <string name="picture_audio_error">音频已损坏</string>
+    <string name="next_alert">图片加载完成后才能继续下一步哦！</string>
+
+    <string name="trim">修剪</string>
+    <string name="cover">封面</string>
 </resources>

@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * ================================================
@@ -35,6 +36,7 @@ import androidx.annotation.Nullable;
  * ================================================
  */
 public class InstagramMediaProcessActivity extends PictureBaseActivity {
+//public class InstagramMediaProcessActivity extends AppCompatActivity {
     public static final String EXTRA_ASPECT_RATIO = "extra_aspect_ratio";
     public static final String EXTRA_SINGLE_IMAGE_FILTER = "extra_single_image_filter";
     public static final String EXTRA_SINGLE_IMAGE_SELECTION_FILTER = "extra_single_image_selection_filter";
