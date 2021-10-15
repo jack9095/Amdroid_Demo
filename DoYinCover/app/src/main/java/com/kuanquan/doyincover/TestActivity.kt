@@ -26,22 +26,31 @@ class TestActivity : AppCompatActivity() {
         val list1 = ArrayList<A>()
 
         for (i in 0..100) {
-            list.add(A("Alex", 2))
+            list.add(A("Alex", i))
             list1.add(A("Alex", i))
         }
-        Log.e("wangfei -> ", "${checkDiffrent5(list, list1)}")
+        Log.e("wangfei -> ", "${checkDiffrent(list, null)}")
     }
 }
 
-private fun checkDiffrent5(list: ArrayList<A>, list1: ArrayList<A>): Boolean {
+private fun checkDiffrent5(list: MutableList<A>?, list1: MutableList<A>?): Boolean {
     val st = System.nanoTime();
-    println("消耗时间为： " + (System.nanoTime() - st));
+    Log.e("wangfei -> ", "消耗时间为： " + (System.nanoTime() - st));
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        list.sortWith(Comparator.comparing{ it.hashCode() })
-//        list1.sortWith(Comparator.comparing(A::hashCode))
-        list1.sortWith(Comparator.comparing{ it.hashCode() })
+        list?.sortWith(Comparator.comparing{ it.hashCode() })
+//        list1?.sortWith(Comparator.comparing(A::hashCode))
+        list1?.sortWith(Comparator.comparing{ it.hashCode() })
     }
     return list.toString() == list1.toString()
+}
+
+private fun checkDiffrent(list: MutableList<A>?, list1: MutableList<A>?): Boolean {
+    val st = System.nanoTime();
+    Log.e("wangfei -> ", "消耗时间为： " + (System.nanoTime() - st))
+    if (list.isNullOrEmpty() || list1.isNullOrEmpty()) {
+        return false
+    }
+    return !list.retainAll(list1)
 }
 
 
