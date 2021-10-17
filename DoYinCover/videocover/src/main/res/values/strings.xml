@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">VideoCover</string>
+    <string name="cover" translatable="false">设置封面</string>
+    <string name="next" translatable="false">下一步</string>
+</resources>

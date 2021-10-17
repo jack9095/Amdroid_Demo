@@ -1,2 +1,3 @@
 rootProject.name = "DoYinCover"
 include ':app'
+include ':videocover'
