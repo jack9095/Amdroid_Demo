@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import kotlinx.coroutines.MainScope
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -12,6 +13,7 @@ import org.greenrobot.eventbus.ThreadMode
 class MainActivity : AppCompatActivity() {
 
     private var mImageView: ImageView? = null
+    private val mainScope = MainScope()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

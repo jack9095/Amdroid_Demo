@@ -22,10 +22,10 @@ object SdkVersionUtils {
      * @param url
      * @return
      */
-    fun isContent(url: String): Boolean {
+    fun isContent(url: String?): Boolean {
         return if (TextUtils.isEmpty(url)) {
             false
-        } else url.startsWith("content://")
+        } else url?.startsWith("content://") ?: false
     }
 
     fun close(c: Closeable?) {
