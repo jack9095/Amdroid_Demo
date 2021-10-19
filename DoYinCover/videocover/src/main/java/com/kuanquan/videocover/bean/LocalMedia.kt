@@ -22,4 +22,4 @@ data class LocalMedia(
     /**
      * 文件大小
      */
-    var size: Long): Serializable
+    var size: Long = 0): Serializable

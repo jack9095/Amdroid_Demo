@@ -38,4 +38,13 @@ object SdkVersionUtils {
         }
     }
 
+    fun getInstagramAspectRatio(width: Int, height: Int): Float {
+        var aspectRatio = 0f
+        if (height > width * 1.266f) {
+            aspectRatio = width / (width * 1.266f)
+        } else if (width > height * 1.9f) {
+            aspectRatio = height * 1.9f / height
+        }
+        return aspectRatio
+    }
 }

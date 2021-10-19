@@ -3,14 +3,20 @@ package com.kuanquan.videocover.util
 import android.content.Context
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
+import android.media.MediaScannerConnection
 import android.net.Uri
+import android.os.Environment
 import com.kuanquan.videocover.bean.LocalMedia
+import org.greenrobot.eventbus.EventBus
 import java.io.File
+import java.io.FileNotFoundException
+import java.io.OutputStream
 import java.lang.ref.WeakReference
+import java.util.concurrent.CountDownLatch
 
 object GetFrameBitmap {
     private var mContextWeakReference: WeakReference<Context>? = null
-    private var mMedia: LocalMedia? = null
+    private var mLocalMedia: LocalMedia? = null
     private var isAspectRatio = false
     private var mTime: Long = 0
     private var mCropWidth = 0
@@ -24,26 +30,13 @@ object GetFrameBitmap {
         cropWidth: Int,
         cropHeight: Int,
     ) {
-//        setParams(context, media, isAspectRatio, time)
         mCropWidth = cropWidth
         mCropHeight = cropHeight
         mContextWeakReference = WeakReference(context)
-        mMedia = media
+        mLocalMedia = media
         this.isAspectRatio = isAspectRatio
         mTime = time
     }
-//
-//    fun setParams(
-//        context: Context?,
-//        media: LocalMedia?,
-//        isAspectRatio: Boolean,
-//        time: Long,
-//    ) {
-//        mContextWeakReference = WeakReference(context)
-//        mMedia = media
-//        this.isAspectRatio = isAspectRatio
-//        mTime = time
-//    }
 
     fun doInBackground(): Bitmap? {
 
@@ -52,17 +45,17 @@ object GetFrameBitmap {
             try {
                 val mediaMetadataRetriever = MediaMetadataRetriever()
                 val uri =
-                    if (SdkVersionUtils.checkedAndroid_Q() && SdkVersionUtils.isContent(mMedia?.path)) {
-                        Uri.parse(mMedia?.path)
+                    if (SdkVersionUtils.checkedAndroid_Q() && SdkVersionUtils.isContent(mLocalMedia?.path)) {
+                        Uri.parse(mLocalMedia?.path)
                     } else {
-                        Uri.fromFile(File(mMedia?.path))
+                        Uri.fromFile(File(mLocalMedia?.path))
                     }
                 mediaMetadataRetriever.setDataSource(context, uri)
                 var frame = mediaMetadataRetriever.getFrameAtTime(mTime)
                 if (isAspectRatio) {
                     val width = frame!!.width
                     val height = frame!!.height
-                    val instagramAspectRatio: Float = getInstagramAspectRatio(width, height)
+                    val instagramAspectRatio: Float = SdkVersionUtils.getInstagramAspectRatio(width, height)
                     val targetAspectRatio =
                         if (instagramAspectRatio > 0) instagramAspectRatio else width * 1.0f / height
                     val adjustWidth: Int
@@ -131,14 +124,37 @@ object GetFrameBitmap {
         return null
     }
 
-    fun getInstagramAspectRatio(width: Int, height: Int): Float {
-        var aspectRatio = 0f
-        if (height > width * 1.266f) {
-            aspectRatio = width / (width * 1.266f)
-        } else if (width > height * 1.9f) {
-            aspectRatio = height * 1.9f / height
+    fun doInSync(bitmap: Bitmap?, count: CountDownLatch): String? {
+        var scanFilePath: String? = null // 保存后扫描到的图片路径
+        val context: Context? = mContextWeakReference?.get()
+        context ?: return null
+        val fileName = System.currentTimeMillis().toString() + ".jpg"
+        val path = context.applicationContext
+            .getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val file = File(path, "Covers/$fileName")
+        var outputStream: OutputStream? = null
+        try {
+            file.parentFile.mkdirs()
+            outputStream = context.applicationContext.contentResolver
+                .openOutputStream(Uri.fromFile(file))
+            // 压缩图片 80 是压缩率，表示压缩20%; 如果不压缩是100，表示压缩率为0，把图片压缩到 outputStream 所在的文件夹下
+            bitmap?.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
+            bitmap?.recycle()
+            MediaScannerConnection.scanFile(
+                context.applicationContext, arrayOf(file.toString()), null
+            ) { path1: String?, uri: Uri? ->
+                scanFilePath = path1
+                EventBus.getDefault().post(path1)
+                mLocalMedia?.coverPath = path1
+//                count.countDown()
+            }
+            return scanFilePath
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        } finally {
+            SdkVersionUtils.close(outputStream)
         }
-        return aspectRatio
+        return null
     }
 
 }

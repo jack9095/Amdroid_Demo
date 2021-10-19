@@ -4,10 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Rect
-import android.media.MediaScannerConnection
-import android.net.Uri
-import android.os.AsyncTask
-import android.os.Environment
 import android.os.SystemClock
 import android.util.Log
 import android.view.MotionEvent
@@ -17,17 +13,16 @@ import android.widget.ImageView
 import androidx.lifecycle.MutableLiveData
 import com.kuanquan.videocover.R
 import com.kuanquan.videocover.bean.LocalMedia
+import com.kuanquan.videocover.util.GetAllFrame
 import com.kuanquan.videocover.util.GetFrameBitmap
 import com.kuanquan.videocover.util.ScreenUtils
 import com.kuanquan.videocover.util.SdkVersionUtils
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.greenrobot.eventbus.EventBus
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.OutputStream
+import java.lang.Runnable
 import java.lang.ref.WeakReference
 import java.util.concurrent.CountDownLatch
 
@@ -39,7 +34,7 @@ class CoverContainer: FrameLayout {
 
     private var mImageViewWidth = 0 // 展示图片控件的宽度
 
-    private var mFrameTask: GetAllFrameTask? = null
+//    private var mFrameTask: GetAllFrameTask? = null
     private var mMaskView: View? = null // 未被选择的图片上面的蒙层View，百分之70 的透明度
 
     private var mZoomView: ZoomView? = null // 选中图片上面的蒙板View,可以跟着手指滑动
@@ -52,17 +47,18 @@ class CoverContainer: FrameLayout {
     private var mLocalMedia // 传进来的数据，包含视频的路径
             : LocalMedia? = null
     private var mChangeTime: Long = 0
-    private var mGetFrameBitmapTask // 解析视频帧图片的任务
-            : GetFrameBitmapTask? = null
+//    private var mGetFrameBitmapTask // 解析视频帧图片的任务
+//            : GetFrameBitmapTask? = null
     private var mCurrentPercent = 0f // 当前的百分比
 
     var mLiveData = MutableLiveData<String>()
-    var startClickX = 0 // 点击确认选中图片上面的蒙板View的x轴位置
+    private var startClickX = 0 // 点击确认选中图片上面的蒙板View的x轴位置
+    private val mainScope = MainScope()
 
 
     constructor(context: Context, media: LocalMedia): super(context) {
         mLocalMedia = media
-        mImageViewHeight = ScreenUtils.dip2px(getContext(), 60)
+        mImageViewHeight = ScreenUtils.dip2px(getContext(), 60F)
         // 创建展示图片的 View ,并添加到容器中，这里会创建10个出来
         for (i in mImageViews.indices) {
             mImageViews[i] = ImageView(context)
@@ -80,8 +76,6 @@ class CoverContainer: FrameLayout {
     }
 
     fun getFrame(context: Context, media: LocalMedia) {
-        val mainScope = MainScope()
-
         mainScope.launch {
             val job = async(Dispatchers.IO) {
                 GetFrameBitmap.setParams(
@@ -94,7 +88,7 @@ class CoverContainer: FrameLayout {
                 GetFrameBitmap.doInBackground()
             }
             val await = job.await()
-            mZoomView?.setBitmap(await as Bitmap)
+            await?.let { mZoomView?.setBitmap(it) }
         }
         // 给手指触摸移动的选中view设置显示的图片 一进来mZoomView初始值
 //        mGetFrameBitmapTask = GetFrameBitmapTask(
@@ -108,33 +102,46 @@ class CoverContainer: FrameLayout {
 //        )
 //        mGetFrameBitmapTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
 
-        mFrameTask = GetAllFrameTask(
-            context,
-            media,
-            mImageViews.size,
-            0,
-            media.getDuration() as Int,
-            OnSingleBitmapListenerImpl(this)
-        )
-        mFrameTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        mainScope.launch {
+            val job = async(Dispatchers.IO) {
+                GetAllFrame.setParams(
+                    context,
+                    media,
+                    mImageViews.size,
+                    0,
+                    media.duration,
+                    OnSingleBitmapListenerImpl(this@CoverContainer))
+                GetFrameBitmap.doInBackground()
+            }
+            val await = job.await()
+        }
+//        mFrameTask = GetAllFrameTask(
+//            context,
+//            media,
+//            mImageViews.size,
+//            0,
+//            media.getDuration() as Int,
+//            OnSingleBitmapListenerImpl(this)
+//        )
+//        mFrameTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val width = MeasureSpec.getSize(widthMeasureSpec)
         val height = MeasureSpec.getSize(heightMeasureSpec)
-        mImageViewWidth = (width - ScreenUtils.dip2px(context, 40)) / mImageViews.size
+        mImageViewWidth = (width - ScreenUtils.dip2px(context, 40F)) / mImageViews.size
         for (imageView in mImageViews) {
-            imageView.measure(
+            imageView?.measure(
                 MeasureSpec.makeMeasureSpec(mImageViewWidth, MeasureSpec.EXACTLY),
                 MeasureSpec.makeMeasureSpec(mImageViewHeight, MeasureSpec.EXACTLY)
             )
         }
-        val maskViewWidth: Int = width - ScreenUtils.dip2px(context, 40) + mImageViews.size - 1
-        mMaskView.measure(
+        val maskViewWidth: Int = width - ScreenUtils.dip2px(context, 40F) + mImageViews.size - 1
+        mMaskView?.measure(
             MeasureSpec.makeMeasureSpec(maskViewWidth, MeasureSpec.EXACTLY),
             MeasureSpec.makeMeasureSpec(mImageViewHeight, MeasureSpec.EXACTLY)
         )
-        mZoomView.measure(
+        mZoomView?.measure(
             MeasureSpec.makeMeasureSpec(mImageViewWidth, MeasureSpec.EXACTLY),
             MeasureSpec.makeMeasureSpec(mImageViewHeight, MeasureSpec.EXACTLY)
         )
@@ -147,7 +154,7 @@ class CoverContainer: FrameLayout {
 
         // 布局，使控件距离左右各20dp
         for (i in mImageViews.indices) {
-            viewLeft = i * (mImageViewWidth + 1) + ScreenUtils.dip2px(context, 20)
+            viewLeft = i * (mImageViewWidth + 1) + ScreenUtils.dip2px(context, 20F)
             mImageViews.get(i)?.layout(
                 viewLeft,
                 viewTop,
@@ -155,18 +162,18 @@ class CoverContainer: FrameLayout {
                 viewTop + (mImageViews[i]?.measuredHeight ?: 0)
             )
         }
-        viewLeft = ScreenUtils.dip2px(context, 20)
-        mMaskView.layout(
+        viewLeft = ScreenUtils.dip2px(context, 20F)
+        mMaskView?.layout(
             viewLeft,
             viewTop,
-            viewLeft + mMaskView.getMeasuredWidth(),
-            viewTop + mMaskView.getMeasuredHeight()
+            viewLeft + mMaskView!!.measuredWidth,
+            viewTop + mMaskView!!.measuredHeight
         )
-        mZoomView.layout(
+        mZoomView?.layout(
             viewLeft,
             viewTop,
-            viewLeft + mZoomView.getMeasuredWidth(),
-            viewTop + mZoomView.getMeasuredHeight()
+            viewLeft + mZoomView!!.measuredWidth,
+            viewTop + mZoomView!!.measuredHeight
         )
     }
 
@@ -175,36 +182,28 @@ class CoverContainer: FrameLayout {
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val rect = Rect()
-        mMaskView.getHitRect(rect)
+        mMaskView?.getHitRect(rect)
 
         // 限制手指滑动范围的，滑动不再封面图控件上就不响应事件
 //        if (!rect.contains((int) (event.getX()), (int) (event.getY()))) {
 //            return super.onTouchEvent(event);
 //        }
-        if (mOnSeekListener != null) {
-            mOnSeekListener.onSeekEnd()
-        }
+            mOnSeekListener?.onSeekEnd()
         if (event.action == MotionEvent.ACTION_DOWN) {
             startedTrackingX = event.x.toInt()
             startClickX = event.x.toInt()
             setScrollHorizontalPosition(
-                startClickX - ScreenUtils.dip2px(context, 20) - mZoomView.getMeasuredWidth() / 2
+                (startClickX - ScreenUtils.dip2px(context, 20F) - mZoomView!!.measuredWidth / 2).toFloat()
             )
         } else if (event.action == MotionEvent.ACTION_MOVE) {
-            dxMove = (event.x - startedTrackingX) as Int.toFloat()
+            dxMove = (event.x - startedTrackingX)
             moveByX(dxMove)
             startedTrackingX = event.x.toInt()
-            if (mOnSeekListener != null) {
-                mOnSeekListener.onSeekEnd()
-            }
+                mOnSeekListener?.onSeekEnd()
         } else if (event.action == MotionEvent.ACTION_CANCEL) {
-            if (mOnSeekListener != null) {
-                mOnSeekListener.onSeekEnd()
-            }
+                mOnSeekListener?.onSeekEnd()
         } else if (event.action == MotionEvent.ACTION_UP) {
-            if (mOnSeekListener != null) {
-                mOnSeekListener.onSeek(mCurrentPercent, true)
-            }
+                mOnSeekListener?.onSeek(mCurrentPercent, true)
             postDelayed({ moveByXX(dxMove) }, 100)
         }
         return true
@@ -225,9 +224,7 @@ class CoverContainer: FrameLayout {
     fun setScrollHorizontalPositionX(value: Float) {
         Log.e("当前滑动的x轴位置", "x -> $scrollHorizontalPosition")
         Log.e("当前滑动的x轴百分比", "mCurrentPercent -> " + mCurrentPercent * 100)
-        if (mOnSeekListener != null) {
-            mOnSeekListener.onSeek(mCurrentPercent, true)
-        }
+            mOnSeekListener?.onSeek(mCurrentPercent, true)
         if (mCurrentPercent * 100 <= 10) {
             getZoomViewBitmap()
             return
@@ -248,20 +245,17 @@ class CoverContainer: FrameLayout {
     fun setScrollHorizontalPosition(value: Float) {
         val oldHorizontalPosition: Float = scrollHorizontalPosition
         scrollHorizontalPosition = Math.min(
-            Math.max(0f, value),
-            mMaskView.getMeasuredWidth() - mZoomView.getMeasuredWidth()
+            Math.max(0f, value), (mMaskView!!.measuredWidth - mZoomView!!.measuredWidth).toFloat()
         )
         if (oldHorizontalPosition == scrollHorizontalPosition) {
             return
         }
-        mZoomView.setTranslationX(scrollHorizontalPosition)
+        mZoomView?.translationX = scrollHorizontalPosition
         mCurrentPercent =
-            scrollHorizontalPosition / (mMaskView.getMeasuredWidth() - mZoomView.getMeasuredWidth())
+            scrollHorizontalPosition / (mMaskView!!.measuredWidth - mZoomView!!.measuredWidth)
         Log.e("当前滑动的x轴位置", "x -> $scrollHorizontalPosition")
         Log.e("当前滑动的x轴百分比", "mCurrentPercent -> " + mCurrentPercent * 100)
-        if (mOnSeekListener != null) {
-            mOnSeekListener.onSeek(mCurrentPercent, true)
-        }
+            mOnSeekListener?.onSeek(mCurrentPercent, true)
         if (mCurrentPercent * 100 <= 10) {
             getZoomViewBitmap()
             return
@@ -277,90 +271,118 @@ class CoverContainer: FrameLayout {
 
     private fun getZoomViewBitmap() {
         // 返回一个数字四舍五入后最接近的整数，获取到当前视屏点的毫秒值
-        val time = Math.round(mLocalMedia.getDuration() * mCurrentPercent * 1000)
+        val time = Math.round(mLocalMedia!!.duration * mCurrentPercent * 1000).toLong()
 
         // TODO 给手指触摸移动的选中view设置显示的图片 手指拖拽 mZoomView 移动的值 bitmap
-        mGetFrameBitmapTask = GetFrameBitmapTask(
-            context,
-            mLocalMedia,
-            false,
-            time,
-            mImageViewHeight,
-            mImageViewHeight,
-            OnCompleteListenerImpl(mZoomView)
-        )
-        mGetFrameBitmapTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        mainScope.launch {
+            val job = async(Dispatchers.IO) {
+                GetFrameBitmap.setParams(
+                    context,
+                    mLocalMedia,
+                    false,
+                    time,
+                    mImageViewHeight,
+                    mImageViewHeight)
+                GetFrameBitmap.doInBackground()
+            }
+            val await = job.await()
+            await?.let { mZoomView?.setBitmap(it) }
+        }
+//        mGetFrameBitmapTask = GetFrameBitmapTask(
+//            context,
+//            mLocalMedia,
+//            false,
+//            time,
+//            mImageViewHeight,
+//            mImageViewHeight,
+//            OnCompleteListenerImpl(mZoomView)
+//        )
+//        mGetFrameBitmapTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
     }
-
-    var scanFilePath // 保存后扫描到的图片路径
-            : String? = null
 
     fun cropCover(count: CountDownLatch) {
         val time: Long
         time = if (mCurrentPercent > 0) {
-            Math.round(mLocalMedia.getDuration() * mCurrentPercent * 1000)
+            Math.round(mLocalMedia!!.duration * mCurrentPercent * 1000).toLong()
         } else {
             -1
         }
-        GetFrameBitmapTask(context, mLocalMedia, false, time) label@
-        { bitmap ->
-            PictureThreadUtils.executeByIo(object : SimpleTask<File?>() {
-                fun doInBackground(): File? {
-                    val fileName = System.currentTimeMillis().toString() + ".jpg"
-                    val path = context.applicationContext
-                        .getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                    val file = File(path, "Covers/$fileName")
-                    var outputStream: OutputStream? = null
-                    try {
-                        file.parentFile.mkdirs()
-                        outputStream = context.applicationContext.contentResolver
-                            .openOutputStream(Uri.fromFile(file))
-                        // 压缩图片 80 是压缩率，表示压缩20%; 如果不压缩是100，表示压缩率为0，把图片压缩到 outputStream 所在的文件夹下
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
-                        bitmap.recycle()
-                        MediaScannerConnection.scanFile(
-                            context.applicationContext,
-                            arrayOf(file.toString()),
-                            null
-                        ) { path1: String?, uri: Uri? ->
-                            scanFilePath = path1
-                            EventBus.getDefault().post(path1)
-                            mLocalMedia.coverPath = path1
-                            count.countDown()
-                        }
-                    } catch (e: FileNotFoundException) {
-                        e.printStackTrace()
-                    } finally {
-                        SdkVersionUtils.close(outputStream)
-                    }
-                    return@label null
-                }
 
-                fun onSuccess(result: File?) {
-                    // TODO finish 当前页面
-                    mLiveData.setValue(scanFilePath)
-                }
-            })
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        mainScope.launch {
+            val job = async(Dispatchers.IO) {
+                GetFrameBitmap.setParams(
+                    context,
+                    mLocalMedia,
+                    false,
+                    time,
+                    mImageViewHeight,
+                    mImageViewHeight)
+
+                GetFrameBitmap.doInSync(GetFrameBitmap.doInBackground(), count)
+            }
+            val scanFilePath = job.await()
+            // TODO finish 当前页面
+            mLiveData.setValue(scanFilePath)
+        }
+//        GetFrameBitmapTask(context, mLocalMedia, false, time) label@
+//        { bitmap ->
+//            PictureThreadUtils.executeByIo(object : SimpleTask<File?>() {
+//                fun doInBackground(): File? {
+//                    val fileName = System.currentTimeMillis().toString() + ".jpg"
+//                    val path = context.applicationContext
+//                        .getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+//                    val file = File(path, "Covers/$fileName")
+//                    var outputStream: OutputStream? = null
+//                    try {
+//                        file.parentFile.mkdirs()
+//                        outputStream = context.applicationContext.contentResolver
+//                            .openOutputStream(Uri.fromFile(file))
+//                        // 压缩图片 80 是压缩率，表示压缩20%; 如果不压缩是100，表示压缩率为0，把图片压缩到 outputStream 所在的文件夹下
+//                        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
+//                        bitmap.recycle()
+//                        MediaScannerConnection.scanFile(
+//                            context.applicationContext,
+//                            arrayOf(file.toString()),
+//                            null
+//                        ) { path1: String?, uri: Uri? ->
+//                            scanFilePath = path1
+//                            EventBus.getDefault().post(path1)
+//                            mLocalMedia.coverPath = path1
+//                            count.countDown()
+//                        }
+//                    } catch (e: FileNotFoundException) {
+//                        e.printStackTrace()
+//                    } finally {
+//                        SdkVersionUtils.close(outputStream)
+//                    }
+//                    return@label null
+//                }
+//
+//                fun onSuccess(result: File?) {
+//                    // TODO finish 当前页面
+//                    mLiveData.setValue(scanFilePath)
+//                }
+//            })
+//        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
     }
 
     fun onDestroy() {
-        if (mFrameTask != null) {
-            mFrameTask.setStop(true)
-            mFrameTask.cancel(true)
-            mFrameTask = null
-        }
-        if (mGetFrameBitmapTask != null) {
-            mGetFrameBitmapTask.cancel(true)
-            mGetFrameBitmapTask = null
-        }
+//        if (mFrameTask != null) {
+//            mFrameTask.setStop(true)
+//            mFrameTask.cancel(true)
+//            mFrameTask = null
+//        }
+//        if (mGetFrameBitmapTask != null) {
+//            mGetFrameBitmapTask.cancel(true)
+//            mGetFrameBitmapTask = null
+//        }
     }
 
     class OnSingleBitmapListenerImpl(coverContainer: CoverContainer) :
-        GetAllFrameTask.OnSingleBitmapListener {
-        private val mContainerWeakReference: WeakReference<CoverContainer>
+        GetAllFrame.OnSingleBitmapListener {
+        private val mContainerWeakReference: WeakReference<CoverContainer> = WeakReference(coverContainer)
         private var index = 0
-        fun onSingleBitmapComplete(bitmap: Bitmap?) {
+       override fun onSingleBitmapComplete(bitmap: Bitmap?) {
             val container = mContainerWeakReference.get()
             if (container != null) {
                 container.post(RunnableImpl(container.mImageViews.get(index), bitmap))
@@ -368,38 +390,27 @@ class CoverContainer: FrameLayout {
             }
         }
 
-        inner class RunnableImpl(imageView: ImageView, bitmap: Bitmap) : Runnable {
-            private val mViewWeakReference: WeakReference<ImageView>
-            private val mBitmap: Bitmap
+        inner class RunnableImpl(imageView: ImageView?, bitmap: Bitmap?) : Runnable {
+            private val mViewWeakReference: WeakReference<ImageView> = WeakReference(imageView)
+            private val mBitmap: Bitmap? = bitmap
             override fun run() {
                 val imageView = mViewWeakReference.get()
-                if (imageView != null) {
-                    imageView.setImageBitmap(mBitmap)
-                }
+                imageView?.setImageBitmap(mBitmap)
             }
-
-            init {
-                mViewWeakReference = WeakReference(imageView)
-                mBitmap = bitmap
-            }
-        }
-
-        init {
-            mContainerWeakReference = WeakReference(coverContainer)
         }
     }
 
-    class OnCompleteListenerImpl(view: ZoomView) : GetFrameBitmapTask.OnCompleteListener {
-        private val mViewWeakReference: WeakReference<ZoomView>
-        fun onGetBitmapComplete(bitmap: Bitmap?) {
-            val view = mViewWeakReference.get()
-            view?.setBitmap(bitmap!!)
-        }
-
-        init {
-            mViewWeakReference = WeakReference(view)
-        }
-    }
+//    class OnCompleteListenerImpl(view: ZoomView) : GetFrameBitmapTask.OnCompleteListener {
+//        private val mViewWeakReference: WeakReference<ZoomView>
+//        fun onGetBitmapComplete(bitmap: Bitmap?) {
+//            val view = mViewWeakReference.get()
+//            view?.setBitmap(bitmap!!)
+//        }
+//
+//        init {
+//            mViewWeakReference = WeakReference(view)
+//        }
+//    }
 
     fun setOnSeekListener(onSeekListener: onSeekListener) {
         mOnSeekListener = onSeekListener

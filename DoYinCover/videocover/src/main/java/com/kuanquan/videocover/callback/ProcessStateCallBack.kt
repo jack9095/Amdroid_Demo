@@ -1,6 +1,7 @@
 package com.kuanquan.videocover.callback
 
 import android.content.Intent
+import com.kuanquan.videocover.InstagramMediaProcessActivity
 
 interface ProcessStateCallBack {
 
