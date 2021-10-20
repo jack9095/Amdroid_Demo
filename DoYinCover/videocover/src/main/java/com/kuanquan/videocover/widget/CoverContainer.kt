@@ -1,5 +1,7 @@
 package com.kuanquan.videocover.widget
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
@@ -21,7 +23,7 @@ import java.lang.ref.WeakReference
 import java.util.concurrent.CountDownLatch
 import kotlin.math.roundToLong
 
-@SuppressLint("ViewConstructor")
+@SuppressLint("ViewConstructor", "ObjectAnimatorBinding")
 class CoverContainer(context: Context, media: LocalMedia) : FrameLayout(context), LifecycleObserver {
 
     private val mImageViews = arrayOfNulls<ImageView>(10) // 把视频几等份的图片集合，这里是 10等份
@@ -44,6 +46,10 @@ class CoverContainer(context: Context, media: LocalMedia) : FrameLayout(context)
     private val mGetFrameBitmap: GetFrameBitmap by lazy {
         GetFrameBitmap()
     }
+
+    private var enlargeAnimSet: AnimatorSet? = null
+    private var zoomAnimSet: AnimatorSet? = null
+
     fun addLifeCycleObserver(lifecycleOwner: LifecycleOwner?) {
         lifecycleOwner?.lifecycle?.addObserver(this)
     }
@@ -64,12 +70,28 @@ class CoverContainer(context: Context, media: LocalMedia) : FrameLayout(context)
         // 选中图片上面的蒙板View,可以跟着手指滑动
         mZoomView = ZoomView(context)
         addView(mZoomView)
+
+        // 放大动画
+        enlargeAnimSet = AnimatorSet()
+        val enlargeScaleX = ObjectAnimator.ofFloat(mZoomView, "scaleX", 1.0f, 1.1f)
+        val enlargeScaleY = ObjectAnimator.ofFloat(mZoomView, "scaleY", 1.0f, 1.1f)
+        enlargeAnimSet?.playTogether(enlargeScaleX, enlargeScaleY)
+//                enlargeAnimSet?.duration = 300
+
+        // 恢复原来大小动画
+        val zoomScaleX = ObjectAnimator.ofFloat(mZoomView, "scaleX", 1.1f, 1.0f)
+        val zoomScaleY = ObjectAnimator.ofFloat(mZoomView, "scaleY", 1.1f, 1.0f)
+        zoomAnimSet = AnimatorSet()
+        zoomAnimSet?.playTogether(zoomScaleX, zoomScaleY)
+//                zoomAnimSet?.duration = 300
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy() {
         mainScope.cancel()
         mGetAllFrame.setStop(true)
+        enlargeAnimSet?.cancel()
+        zoomAnimSet?.cancel()
     }
 
     fun getFrame(context: Context, media: LocalMedia) {
@@ -139,23 +161,34 @@ class CoverContainer(context: Context, media: LocalMedia) : FrameLayout(context)
     }
 
     private var dxMove = 0f
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility", "ObjectAnimatorBinding")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val rect = Rect()
         mMaskView?.getHitRect(rect)
 
         // 限制手指滑动范围的，滑动不再封面图控件上就不响应事件
-//        if (!rect.contains((int) (event.getX()), (int) (event.getY()))) {
-//            return super.onTouchEvent(event);
+//        if (!rect.contains(event.getX().toInt(), event.getY().toInt())) {
+//            zoomAnimSet?.start()
+//            return super.onTouchEvent(event)
 //        }
         mOnSeekListener?.onSeekEnd()
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
+                // 限制手指滑动范围的，滑动不再封面图控件上就不响应事件
+                if (!rect.contains(event.getX().toInt(), event.getY().toInt())) {
+                    return super.onTouchEvent(event)
+                }
+
                 startedTrackingX = event.x.toInt()
                 startClickX = event.x.toInt()
                 setScrollHorizontalPosition(
                     (startClickX - ScreenUtils.dip2px(context, 20F) - mZoomView!!.measuredWidth / 2).toFloat()
                 )
+                if (rect.contains(event.getX().toInt(), event.getY().toInt())) {
+                    enlargeAnimSet?.start()
+                }
+
+                Log.e("fei.wang","手指按下")
             }
             MotionEvent.ACTION_MOVE -> {
                 dxMove = (event.x - startedTrackingX)
@@ -164,9 +197,12 @@ class CoverContainer(context: Context, media: LocalMedia) : FrameLayout(context)
                 mOnSeekListener?.onSeekEnd()
             }
             MotionEvent.ACTION_CANCEL -> {
+                zoomAnimSet?.start()
                 mOnSeekListener?.onSeekEnd()
             }
             MotionEvent.ACTION_UP -> {
+                Log.e("fei.wang","手指抬起")
+                zoomAnimSet?.start()
                 mOnSeekListener?.onSeek(mCurrentPercent, true)
                 postDelayed({ moveBy() }, 100)
             }
