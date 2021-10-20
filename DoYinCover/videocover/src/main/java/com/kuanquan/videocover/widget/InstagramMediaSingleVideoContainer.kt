@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
-import android.media.MediaPlayer.OnPreparedListener
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
@@ -27,28 +26,19 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.util.concurrent.CountDownLatch
 
-class InstagramMediaSingleVideoContainer: FrameLayout, ProcessStateCallBack, LifecycleCallBack {
+@SuppressLint("ViewConstructor")
+class InstagramMediaSingleVideoContainer(
+    context: Context, media: LocalMedia, isAspectRatio: Boolean
+) : FrameLayout(context), ProcessStateCallBack, LifecycleCallBack {
 
     private var mTopContainer: FrameLayout? = null // 整体布局根 View
-
     var mCoverView: CoverContainer? = null // 视频封面图选择器
-            
     private var mVideoView: VideoView? = null // 视频播放控件
-            
     private var mThumbView: ImageView? = null // 封面图
-            
     private var mMediaPlayer: MediaPlayer? = null // 系统播放控制器
-            
-    private var mMedia: LocalMedia? = null // 视频及封面图实体类
-            
     private var isStart = false // true 表示可以播放
-            
-    private var isFirst = false // 是不是第一次进来
-           
     private var mCoverPlayPosition = 0 // 记录封面所在的播放点
-           
     private var isPlay = false // true 在播放状态， false 停止播放状态
-           
     private var needPause = false // 需要暂停标识
            
     private var needSeekCover = false
@@ -66,23 +56,20 @@ class InstagramMediaSingleVideoContainer: FrameLayout, ProcessStateCallBack, Lif
             currentPosition = mVideoView!!.currentPosition
             Log.e("监听播放进度", "currentPosition ->$currentPosition")
             count++
-            if (handler != null) {
-                if (count >= 10) {
-                    Log.e("wangfei", "播放暂停")
-                    startVideo(false)
-                    handler.removeCallbacks(this)
-                    autoPlay = true
-                    startVideo(true)
-                    mVideoView?.seekTo(seekDuration)
-                } else {
-                    handler.postDelayed(this, 100)
-                }
+            if (count >= 10) {
+                Log.e("wangfei", "播放暂停")
+                startVideo(false)
+                mHandler.removeCallbacks(this)
+                autoPlay = true
+                startVideo(true)
+                mVideoView?.seekTo(seekDuration)
+            } else {
+                mHandler.postDelayed(this, 100)
             }
         }
     }
 
-    constructor(context: Context, media: LocalMedia, isAspectRatio: Boolean): super(context) {
-        mMedia = media
+    init {
         initView(context, media, isAspectRatio)
     }
 
@@ -98,14 +85,14 @@ class InstagramMediaSingleVideoContainer: FrameLayout, ProcessStateCallBack, Lif
             mVideoView?.setVideoPath(media.path)
         }
         mVideoView?.setOnClickListener { startVideo(!isStart) }
-        mVideoView?.setOnPreparedListener(OnPreparedListener { mediaPlayer: MediaPlayer ->
+        mVideoView?.setOnPreparedListener { mediaPlayer: MediaPlayer ->
             mMediaPlayer = mediaPlayer
             mediaPlayer.isLooping = true
             changeVideoSize(mediaPlayer, isAspectRatio)
-            mediaPlayer.setOnInfoListener { mp1: MediaPlayer?, what: Int, extra: Int ->
+            mediaPlayer.setOnInfoListener { _: MediaPlayer?, what: Int, _: Int ->
                 if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
                     // video started
-                    handler.postDelayed(runnable, 100)
+                    mHandler.postDelayed(runnable, 100)
                     isPlay = true
                     if (needSeekCover && mCoverPlayPosition >= 0) {
                         mVideoView?.seekTo(mCoverPlayPosition)
@@ -113,7 +100,7 @@ class InstagramMediaSingleVideoContainer: FrameLayout, ProcessStateCallBack, Lif
                         needSeekCover = false
                     }
                     if (needPause) {
-//                        mVideoView.pause();
+//                        mVideoView.pause()
                         needPause = false
                     }
                     if (mThumbView?.visibility == VISIBLE && !autoPlay) {
@@ -124,7 +111,7 @@ class InstagramMediaSingleVideoContainer: FrameLayout, ProcessStateCallBack, Lif
                 }
                 false
             }
-        })
+        }
         mThumbView = rootView.findViewById(R.id.image_view)
         mCoverView = CoverContainer(context, media)
         addView(mCoverView)
@@ -149,13 +136,7 @@ class InstagramMediaSingleVideoContainer: FrameLayout, ProcessStateCallBack, Lif
 
         mainScope.launch {
             val job = async(Dispatchers.IO) {
-                GetFrameBitmap.setParams(
-                    context,
-                    media,
-                    isAspectRatio,
-                    0,
-                    0,
-                    0)
+                GetFrameBitmap.setParams(context, media, isAspectRatio, 0)
                 GetFrameBitmap.doInBackground()
             }
             val await = job.await()

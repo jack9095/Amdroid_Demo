@@ -3,6 +3,7 @@ package com.kuanquan.videocover
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,7 @@ import kotlinx.coroutines.MainScope
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import java.util.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,6 +28,18 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val list = ArrayList<String>()
+
+        for (i in 0..10) {
+            list.add("Alex")
+        }
+
+        Log.e("wangfei -> ", "size -> ${list.size}")
+        for (i in list.indices) {
+            Log.e("wangfei -> ", "i -> $i")
+        }
+
         mImageView = findViewById(R.id.image_view)
         EventBus.getDefault().register(this)
         if (PermissionChecker

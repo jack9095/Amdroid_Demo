@@ -27,8 +27,8 @@ object GetFrameBitmap {
         media: LocalMedia?,
         isAspectRatio: Boolean,
         time: Long,
-        cropWidth: Int,
-        cropHeight: Int,
+        cropWidth: Int = 0,
+        cropHeight: Int = 0,
     ) {
         mCropWidth = cropWidth
         mCropHeight = cropHeight
@@ -96,24 +96,23 @@ object GetFrameBitmap {
                     )
                 } else {
                     if (mCropWidth > 0 && mCropHeight > 0) {
-                        val scale: Float
-                        scale = if (frame!!.width > frame!!.height) {
-                            mCropHeight * 1f / frame!!.height
+                        val scale: Float = if (frame!!.width > frame.height) {
+                            mCropHeight * 1f / frame.height
                         } else {
-                            mCropWidth * 1f / frame!!.width
+                            mCropWidth * 1f / frame.width
                         }
                         frame = Bitmap.createScaledBitmap(
-                            frame!!,
-                            Math.round(frame!!.width * scale),
-                            Math.round(frame!!.height * scale), false
+                            frame,
+                            Math.round(frame.width * scale),
+                            Math.round(frame.height * scale), false
                         )
                     }
-                    val cropWidth = Math.min(frame!!.width, frame!!.height)
-                    val cropOffsetX = (frame!!.width - cropWidth) / 2
-                    val cropOffsetY = (frame!!.height - cropWidth) / 2
+                    val cropWidth = Math.min(frame!!.width, frame.height)
+                    val cropOffsetX = (frame.width - cropWidth) / 2
+                    val cropOffsetY = (frame.height - cropWidth) / 2
                     // TODO 获取滑动到某处的帧图片 width = cropWidth / 2
                     frame =
-                        Bitmap.createBitmap(frame!!, cropOffsetX, cropOffsetY, cropWidth, cropWidth)
+                        Bitmap.createBitmap(frame, cropOffsetX, cropOffsetY, cropWidth, cropWidth)
                 }
                 mediaMetadataRetriever.release()
                 return frame

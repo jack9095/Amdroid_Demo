@@ -25,11 +25,19 @@ class TestActivity : AppCompatActivity() {
         val list = ArrayList<A>()
         val list1 = ArrayList<A>()
 
-        for (i in 0..100) {
+        for (i in 0..10) {
             list.add(A("Alex", i))
             list1.add(A("Alex", i))
         }
-        Log.e("wangfei -> ", "${checkDiffrent(list, null)}")
+
+        Log.e("wangfei -> ", "size -> ${list.size}")
+        for (i in list.indices) {
+            Log.e("wangfei -> ", "i -> $i")
+            list.add(A("Alex", i))
+            list1.add(A("Alex", i))
+        }
+
+//        Log.e("wangfei -> ", "${checkDiffrent(list, null)}")
     }
 }
 
