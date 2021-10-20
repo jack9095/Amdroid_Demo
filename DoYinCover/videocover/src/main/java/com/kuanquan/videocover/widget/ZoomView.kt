@@ -10,12 +10,12 @@ import com.kuanquan.videocover.util.ScreenUtils
 /**
  * 手指触摸放大的 View
  */
-class ZoomView: AppCompatImageView {
+class ZoomView(context: Context) : AppCompatImageView(context) {
 
     private var mPaint: Paint? = null
     private var mBitmap: Bitmap? = null
 
-    constructor(context: Context): super(context) {
+    init {
         mPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             style = Paint.Style.STROKE
             color = -0x222223

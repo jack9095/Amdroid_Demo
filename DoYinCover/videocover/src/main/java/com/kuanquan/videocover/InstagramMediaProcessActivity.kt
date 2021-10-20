@@ -5,12 +5,10 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.kuanquan.videocover.bean.LocalMedia
-import com.kuanquan.videocover.callback.LifecycleCallBack
 import com.kuanquan.videocover.callback.ProcessStateCallBack
 import com.kuanquan.videocover.util.InstagramTitleBar
 import com.kuanquan.videocover.widget.InstagramMediaSingleVideoContainer
@@ -65,8 +63,7 @@ class InstagramMediaProcessActivity: AppCompatActivity() {
             singleVideoContainer,
             FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
         )
-        singleVideoContainer.mCoverView?.mLiveData?.observe(this,
-            Observer<String?> { finish() })
+        singleVideoContainer.mCoverView?.mLiveData?.observe(this, Observer { finish() })
         mTitleBar = InstagramTitleBar(this)
         contentView.addView(mTitleBar)
         mTitleBar!!.setClickListener(object : InstagramTitleBar.OnTitleBarItemOnClickListener {
@@ -80,47 +77,6 @@ class InstagramMediaProcessActivity: AppCompatActivity() {
                 }
             }
         })
-    }
-
-    override fun onStart() {
-        super.onStart()
-        if (container != null && (container as ViewGroup).getChildAt(0) is LifecycleCallBack) {
-            ((container as ViewGroup).getChildAt(0) as LifecycleCallBack).onStart(this@InstagramMediaProcessActivity)
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (container != null && (container as ViewGroup).getChildAt(0) is LifecycleCallBack) {
-            ((container as ViewGroup).getChildAt(0) as LifecycleCallBack).onResume(this@InstagramMediaProcessActivity)
-        }
-    }
-
-    override fun onPause() {
-        overridePendingTransition(0, 0)
-        super.onPause()
-        if (container != null && (container as ViewGroup).getChildAt(0) is LifecycleCallBack) {
-            ((container as ViewGroup).getChildAt(0) as LifecycleCallBack).onPause(this@InstagramMediaProcessActivity)
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if (container != null && (container as ViewGroup).getChildAt(0) is LifecycleCallBack) {
-            ((container as ViewGroup).getChildAt(0) as LifecycleCallBack).onDestroy(this@InstagramMediaProcessActivity)
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (container != null && (container as ViewGroup).getChildAt(0) is ProcessStateCallBack) {
-            ((container as ViewGroup).getChildAt(0) as ProcessStateCallBack).onActivityResult(
-                this@InstagramMediaProcessActivity,
-                requestCode,
-                resultCode,
-                data
-            )
-        }
     }
 
     companion object{

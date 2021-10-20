@@ -3,7 +3,6 @@ package com.kuanquan.videocover.widget
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Handler
@@ -13,23 +12,24 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.VideoView
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.OnLifecycleEvent
 import com.kuanquan.videocover.InstagramMediaProcessActivity
 import com.kuanquan.videocover.R
 import com.kuanquan.videocover.bean.LocalMedia
-import com.kuanquan.videocover.callback.LifecycleCallBack
 import com.kuanquan.videocover.callback.ProcessStateCallBack
 import com.kuanquan.videocover.util.GetFrameBitmap
 import com.kuanquan.videocover.util.SdkVersionUtils
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import java.lang.Runnable
 import java.util.concurrent.CountDownLatch
 
 @SuppressLint("ViewConstructor")
 class InstagramMediaSingleVideoContainer(
     context: Context, media: LocalMedia, isAspectRatio: Boolean
-) : FrameLayout(context), ProcessStateCallBack, LifecycleCallBack {
+) : FrameLayout(context), ProcessStateCallBack, LifecycleObserver {
 
     private var mTopContainer: FrameLayout? = null // 整体布局根 View
     var mCoverView: CoverContainer? = null // 视频封面图选择器
@@ -71,6 +71,10 @@ class InstagramMediaSingleVideoContainer(
 
     init {
         initView(context, media, isAspectRatio)
+    }
+
+    fun addLifecycleObserver(lifecycleOwner: LifecycleOwner?){
+        lifecycleOwner?.lifecycle?.addObserver(this)
     }
 
     @SuppressLint("ObjectAnimatorBinding")
@@ -204,42 +208,36 @@ class InstagramMediaSingleVideoContainer(
         mCoverView?.cropCover(count)
     }
 
-    override fun onActivityResult(
-        activity: InstagramMediaProcessActivity?,
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?
-    ) {
-
-    }
-
-    override fun onStart(activity: InstagramMediaProcessActivity?) {
-
-    }
-
-    override fun onResume(activity: InstagramMediaProcessActivity?) {
-        if (!mVideoView!!.isPlaying) {
-            mVideoView!!.start()
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun onResume() {
+        if (mVideoView?.isPlaying == false) {
+            mVideoView?.start()
         }
         needPause = true
         needSeekCover = true
         isStart = false
     }
 
-    override fun onPause(activity: InstagramMediaProcessActivity?) {
-        mCoverPlayPosition = mVideoView!!.currentPosition
-        if (mVideoView!!.isPlaying) {
-            mVideoView!!.stopPlayback()
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    fun onPause() {
+        mCoverPlayPosition = mVideoView?.currentPosition ?: 0
+        if (mVideoView?.isPlaying == true) {
+            mVideoView?.stopPlayback()
         }
         isPlay = false
         needPause = false
     }
 
-    override fun onDestroy(activity: InstagramMediaProcessActivity?) {
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    fun onDestroy() {
+        mainScope.cancel()
         mMediaPlayer?.release()
         mMediaPlayer = null
         mVideoView = null
-        mHandler.removeCallbacks(runnable)
+        mHandler.run {
+            removeCallbacks(runnable)
+            removeCallbacksAndMessages(null)
+        }
     }
 
     private fun changeVideoSize(mediaPlayer: MediaPlayer?, isAspectRatio: Boolean) {
@@ -283,9 +281,9 @@ class InstagramMediaSingleVideoContainer(
                 adjustHeight = height
             }
         }
-        val layoutParams = mVideoView!!.layoutParams as LayoutParams
-        layoutParams.width = adjustWidth
-        layoutParams.height = adjustHeight
-        mVideoView!!.layoutParams = layoutParams
+        val layoutParams = mVideoView?.layoutParams as? LayoutParams
+        layoutParams?.width = adjustWidth
+        layoutParams?.height = adjustHeight
+        mVideoView?.layoutParams = layoutParams
     }
 }

@@ -10,7 +10,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.*
 import com.kuanquan.videocover.R
 import com.kuanquan.videocover.bean.LocalMedia
 import com.kuanquan.videocover.util.GetAllFrame
@@ -22,7 +22,7 @@ import java.util.concurrent.CountDownLatch
 import kotlin.math.roundToLong
 
 @SuppressLint("ViewConstructor")
-class CoverContainer(context: Context, media: LocalMedia) : FrameLayout(context) {
+class CoverContainer(context: Context, media: LocalMedia) : FrameLayout(context), LifecycleObserver {
 
     private val mImageViews = arrayOfNulls<ImageView>(10) // 把视频几等份的图片集合，这里是 10等份
     private var mImageViewHeight = 0 // 展示图片控件的高度，写死的 60dp
@@ -38,6 +38,10 @@ class CoverContainer(context: Context, media: LocalMedia) : FrameLayout(context)
     var mLiveData = MutableLiveData<String>()
     private var startClickX = 0 // 点击确认选中图片上面的蒙板View的x轴位置
     private val mainScope = MainScope()
+
+    fun addLifeCycleObserver(lifecycleOwner: LifecycleOwner?) {
+        lifecycleOwner?.lifecycle?.addObserver(this)
+    }
 
     init {
         mImageViewHeight = ScreenUtils.dip2px(getContext(), 60F)
@@ -55,6 +59,11 @@ class CoverContainer(context: Context, media: LocalMedia) : FrameLayout(context)
         // 选中图片上面的蒙板View,可以跟着手指滑动
         mZoomView = ZoomView(context)
         addView(mZoomView)
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    fun onDestroy() {
+        mainScope.cancel()
     }
 
     fun getFrame(context: Context, media: LocalMedia) {
