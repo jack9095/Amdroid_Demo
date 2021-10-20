@@ -146,9 +146,10 @@ class InstagramMediaSingleVideoContainer(
         }
 
         mainScope.launch {
+            val getFrameBitmap = GetFrameBitmap()
             val job = async(Dispatchers.IO) {
-                GetFrameBitmap.setParams(context, media, isAspectRatio, 0)
-                GetFrameBitmap.doInBackground()
+                getFrameBitmap.setParams(context, media, isAspectRatio, 0)
+                getFrameBitmap.doInBackground()
             }
             val await = job.await()
             await?.let { mThumbView?.setImageBitmap(it) }

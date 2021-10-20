@@ -66,7 +66,7 @@ class InstagramMediaProcessActivity: AppCompatActivity() {
         singleVideoContainer.mCoverView?.mLiveData?.observe(this, Observer { finish() })
         mTitleBar = InstagramTitleBar(this)
         contentView.addView(mTitleBar)
-        mTitleBar!!.setClickListener(object : InstagramTitleBar.OnTitleBarItemOnClickListener {
+        mTitleBar?.setClickListener(object : InstagramTitleBar.OnTitleBarItemOnClickListener {
             override fun onLeftViewClick() {
                 finish()
             }

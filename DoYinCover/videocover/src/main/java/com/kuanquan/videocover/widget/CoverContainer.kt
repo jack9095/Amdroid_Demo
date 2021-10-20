@@ -38,7 +38,12 @@ class CoverContainer(context: Context, media: LocalMedia) : FrameLayout(context)
     var mLiveData = MutableLiveData<String>()
     private var startClickX = 0 // 点击确认选中图片上面的蒙板View的x轴位置
     private val mainScope = MainScope()
-
+    private val mGetAllFrame: GetAllFrame by lazy {
+        GetAllFrame()
+    }
+    private val mGetFrameBitmap: GetFrameBitmap by lazy {
+        GetFrameBitmap()
+    }
     fun addLifeCycleObserver(lifecycleOwner: LifecycleOwner?) {
         lifecycleOwner?.lifecycle?.addObserver(this)
     }
@@ -64,25 +69,27 @@ class CoverContainer(context: Context, media: LocalMedia) : FrameLayout(context)
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy() {
         mainScope.cancel()
+        mGetAllFrame.setStop(true)
     }
 
     fun getFrame(context: Context, media: LocalMedia) {
         mainScope.launch {
             val job = async(Dispatchers.IO) {
                 // 给手指触摸移动的选中view设置显示的图片 一进来mZoomView初始值
-                GetFrameBitmap.setParams(
+                mGetFrameBitmap.setParams(
                     context, media, false, 0, mImageViewHeight, mImageViewHeight)
-                GetFrameBitmap.doInBackground()
+                mGetFrameBitmap.doInBackground()
             }
             val await = job.await()
             await?.let { mZoomView?.setBitmap(it) }
         }
 
+
         mainScope.launch(Dispatchers.IO) {
-            GetAllFrame.setParams(
+            mGetAllFrame.setParams(
                 context, media, mImageViews.size, 0, media.duration,
                 OnSingleBitmapListenerImpl(this@CoverContainer))
-            GetAllFrame.doInBackground()
+            mGetAllFrame.doInBackground()
         }
     }
 
@@ -232,14 +239,10 @@ class CoverContainer(context: Context, media: LocalMedia) : FrameLayout(context)
         // TODO 给手指触摸移动的选中view设置显示的图片 手指拖拽 mZoomView 移动的值 bitmap
         mainScope.launch {
             val job = async(Dispatchers.IO) {
-                GetFrameBitmap.setParams(
-                    context,
-                    mLocalMedia,
-                    false,
-                    time,
-                    mImageViewHeight,
-                    mImageViewHeight)
-                GetFrameBitmap.doInBackground()
+                mGetFrameBitmap.setParams(
+                    context, mLocalMedia, false,
+                    time, mImageViewHeight, mImageViewHeight)
+                mGetFrameBitmap.doInBackground()
             }
             val await = job.await()
             await?.let { mZoomView?.setBitmap(it) }
@@ -253,10 +256,10 @@ class CoverContainer(context: Context, media: LocalMedia) : FrameLayout(context)
 
         mainScope.launch {
             val job = async(Dispatchers.IO) {
-                GetFrameBitmap.setParams(
+                mGetFrameBitmap.setParams(
                     context, mLocalMedia, false,
                     time, mImageViewHeight, mImageViewHeight)
-                GetFrameBitmap.doInSync(GetFrameBitmap.doInBackground(), count)
+                mGetFrameBitmap.doInSync(mGetFrameBitmap.doInBackground(), count)
             }
             val scanFilePath = job.await()
             mLiveData.setValue(scanFilePath)

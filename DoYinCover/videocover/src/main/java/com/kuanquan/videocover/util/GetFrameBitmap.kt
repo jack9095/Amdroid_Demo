@@ -13,8 +13,9 @@ import java.io.FileNotFoundException
 import java.io.OutputStream
 import java.lang.ref.WeakReference
 import java.util.concurrent.CountDownLatch
+import kotlin.math.roundToInt
 
-object GetFrameBitmap {
+class GetFrameBitmap {
     private var mContextWeakReference: WeakReference<Context>? = null
     private var mLocalMedia: LocalMedia? = null
     private var isAspectRatio = false
@@ -23,12 +24,8 @@ object GetFrameBitmap {
     private var mCropHeight = 0
 
     fun setParams(
-        context: Context?,
-        media: LocalMedia?,
-        isAspectRatio: Boolean,
-        time: Long,
-        cropWidth: Int = 0,
-        cropHeight: Int = 0,
+        context: Context?, media: LocalMedia?, isAspectRatio: Boolean,
+        time: Long, cropWidth: Int = 0, cropHeight: Int = 0,
     ) {
         mCropWidth = cropWidth
         mCropHeight = cropHeight
@@ -39,7 +36,6 @@ object GetFrameBitmap {
     }
 
     fun doInBackground(): Bitmap? {
-
         val context: Context? = mContextWeakReference?.get()
         if (context != null) {
             try {
@@ -48,13 +44,13 @@ object GetFrameBitmap {
                     if (SdkVersionUtils.checkedAndroid_Q() && SdkVersionUtils.isContent(mLocalMedia?.path)) {
                         Uri.parse(mLocalMedia?.path)
                     } else {
-                        Uri.fromFile(File(mLocalMedia?.path))
+                        Uri.fromFile(File(mLocalMedia?.path!!))
                     }
                 mediaMetadataRetriever.setDataSource(context, uri)
                 var frame = mediaMetadataRetriever.getFrameAtTime(mTime)
                 if (isAspectRatio) {
-                    val width = frame!!.width
-                    val height = frame!!.height
+                    val width = frame?.width ?: 0
+                    val height = frame?.height ?: 0
                     val instagramAspectRatio: Float = SdkVersionUtils.getInstagramAspectRatio(width, height)
                     val targetAspectRatio =
                         if (instagramAspectRatio > 0) instagramAspectRatio else width * 1.0f / height
@@ -83,17 +79,11 @@ object GetFrameBitmap {
                         }
                     }
                     frame = Bitmap.createScaledBitmap(
-                        frame!!,
-                        Math.round(width * resizeScale),
-                        Math.round(height * resizeScale), false
+                        frame!!, (width * resizeScale).roundToInt(),
+                        (height * resizeScale).roundToInt(), false
                     )
                     frame = Bitmap.createBitmap(
-                        frame,
-                        cropOffsetX,
-                        cropOffsetY,
-                        adjustWidth,
-                        adjustHeight
-                    )
+                        frame, cropOffsetX, cropOffsetY, adjustWidth, adjustHeight)
                 } else {
                     if (mCropWidth > 0 && mCropHeight > 0) {
                         val scale: Float = if (frame!!.width > frame.height) {
@@ -102,15 +92,13 @@ object GetFrameBitmap {
                             mCropWidth * 1f / frame.width
                         }
                         frame = Bitmap.createScaledBitmap(
-                            frame,
-                            Math.round(frame.width * scale),
-                            Math.round(frame.height * scale), false
-                        )
+                            frame, (frame.width * scale).roundToInt(),
+                            (frame.height * scale).roundToInt(), false)
                     }
-                    val cropWidth = Math.min(frame!!.width, frame.height)
+                    val cropWidth = frame!!.width.coerceAtMost(frame.height)
                     val cropOffsetX = (frame.width - cropWidth) / 2
                     val cropOffsetY = (frame.height - cropWidth) / 2
-                    // TODO 获取滑动到某处的帧图片 width = cropWidth / 2
+                    // TODO 获取滑动到某处的帧图片
                     frame =
                         Bitmap.createBitmap(frame, cropOffsetX, cropOffsetY, cropWidth, cropWidth)
                 }
@@ -133,7 +121,7 @@ object GetFrameBitmap {
         val file = File(path, "Covers/$fileName")
         var outputStream: OutputStream? = null
         try {
-            file.parentFile.mkdirs()
+            file.parentFile!!.mkdirs()
             outputStream = context.applicationContext.contentResolver
                 .openOutputStream(Uri.fromFile(file))
             // 压缩图片 80 是压缩率，表示压缩20%; 如果不压缩是100，表示压缩率为0，把图片压缩到 outputStream 所在的文件夹下
@@ -141,7 +129,7 @@ object GetFrameBitmap {
             bitmap?.recycle()
             MediaScannerConnection.scanFile(
                 context.applicationContext, arrayOf(file.toString()), null
-            ) { path1: String?, uri: Uri? ->
+            ) { path1: String?, _: Uri? ->
                 scanFilePath = path1
                 EventBus.getDefault().post(path1)
                 mLocalMedia?.coverPath = path1
