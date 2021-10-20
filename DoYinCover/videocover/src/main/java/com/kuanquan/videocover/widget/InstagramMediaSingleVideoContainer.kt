@@ -110,8 +110,9 @@ class InstagramMediaSingleVideoContainer(
                         needPause = false
                     }
                     if (mThumbView?.visibility == VISIBLE && !autoPlay) {
-                        ObjectAnimator.ofFloat(mThumbView, "alpha", 1.0f, 0f).setDuration(400)
-                            .start()
+//                        ObjectAnimator.ofFloat(mThumbView, "alpha", 1.0f, 0f).setDuration(400)
+//                            .start()
+                        mThumbView?.isVisible = false
                     }
                     return@setOnInfoListener true
                 }
