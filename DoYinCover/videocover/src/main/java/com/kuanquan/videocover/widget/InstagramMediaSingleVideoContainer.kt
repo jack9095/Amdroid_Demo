@@ -49,6 +49,7 @@ class InstagramMediaSingleVideoContainer(
     private var count = 0 // 开始播放到400毫秒就暂停
     private var autoPlay = false // 循环自动播放
     private val mainScope = MainScope()
+    private var mLifecycleOwner: LifecycleOwner? = null
 
     private val runnable: Runnable = object : Runnable {
         override fun run() {
@@ -74,6 +75,7 @@ class InstagramMediaSingleVideoContainer(
     }
 
     fun addLifecycleObserver(lifecycleOwner: LifecycleOwner?){
+        mLifecycleOwner = lifecycleOwner
         lifecycleOwner?.lifecycle?.addObserver(this)
     }
 
@@ -117,26 +119,30 @@ class InstagramMediaSingleVideoContainer(
             }
         }
         mThumbView = rootView.findViewById(R.id.image_view)
-        mCoverView = CoverContainer(context, media)
+        mCoverView = CoverContainer(context, media).apply {
+            addLifeCycleObserver(mLifecycleOwner)
+        }
         addView(mCoverView)
-        mCoverView?.getFrame(getContext(), media)
-        mCoverView?.setOnSeekListener(object : CoverContainer.onSeekListener {
-            override fun onSeek(percent: Float, isStart: Boolean) {
-                if (isStart) {
-                    startVideo(true)
+        mCoverView?.run {
+            getFrame(getContext(), media)
+            setOnSeekListener(object : CoverContainer.onSeekListener {
+                override fun onSeek(percent: Float, isStart: Boolean) {
+                    if (isStart) {
+                        startVideo(true)
+                    }
+                    seekDuration = (media.duration * percent).toInt()
+                    mVideoView?.seekTo(seekDuration)
                 }
-                seekDuration = (media.duration * percent).toInt()
-                mVideoView?.seekTo(seekDuration)
-            }
 
-           override fun onSeekEnd() {
-                needPause = true
-                autoPlay = false
-                if (isStart && isPlay) {
-                    startVideo(false)
+                override fun onSeekEnd() {
+                    needPause = true
+                    autoPlay = false
+                    if (isStart && isPlay) {
+                        startVideo(false)
+                    }
                 }
-            }
-        })
+            })
+        }
 
         mainScope.launch {
             val job = async(Dispatchers.IO) {

@@ -42,7 +42,7 @@ class InstagramMediaProcessActivity: AppCompatActivity() {
             }
 
             override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-                mTitleBar!!.layout(0, 0, mTitleBar!!.measuredWidth, mTitleBar!!.measuredHeight)
+                mTitleBar?.layout(0, 0, mTitleBar!!.measuredWidth, mTitleBar!!.measuredHeight)
                 val child = getChildAt(0)
                 child.layout(
                     0,
@@ -59,8 +59,8 @@ class InstagramMediaProcessActivity: AppCompatActivity() {
         // 视频控件
         val singleVideoContainer =
             InstagramMediaSingleVideoContainer(this, mLocalMedia!!, false)
-        contentView.addView(
-            singleVideoContainer,
+        singleVideoContainer.addLifecycleObserver(this)
+        contentView.addView(singleVideoContainer,
             FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
         )
         singleVideoContainer.mCoverView?.mLiveData?.observe(this, Observer { finish() })
