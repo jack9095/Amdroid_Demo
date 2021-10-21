@@ -144,7 +144,7 @@ class InstagramMediaSingleVideoContainer(
                 }
             })
         }
-
+        startVideo(true)
         mainScope.launch {
             val getFrameBitmap = GetFrameBitmap()
             val job = async(Dispatchers.IO) {
