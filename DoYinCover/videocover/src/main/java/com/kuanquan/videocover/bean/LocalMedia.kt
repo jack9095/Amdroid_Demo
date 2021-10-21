@@ -16,7 +16,7 @@ data class LocalMedia(
      */
     var fileName: String?,
     /**
-     * 视频时长
+     * 视频时长 毫秒
      */
     var duration: Long,
     /**

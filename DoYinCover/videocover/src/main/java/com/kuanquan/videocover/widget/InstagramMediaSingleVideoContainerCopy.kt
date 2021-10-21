@@ -1,5 +1,6 @@
 package com.kuanquan.videocover.widget
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.media.MediaPlayer
@@ -19,11 +20,14 @@ import com.kuanquan.videocover.InstagramMediaProcessActivity
 import com.kuanquan.videocover.R
 import com.kuanquan.videocover.bean.LocalMedia
 import com.kuanquan.videocover.callback.ProcessStateCallBack
+import com.kuanquan.videocover.util.GetFrameBitmap
 import com.kuanquan.videocover.util.SdkVersionUtils
 import kotlinx.coroutines.*
+import java.lang.Runnable
+import java.util.concurrent.CountDownLatch
 
 @SuppressLint("ViewConstructor")
-class InstagramMediaSingleVideoContainer(
+class InstagramMediaSingleVideoContainerCopy(
     context: Context, media: LocalMedia, isAspectRatio: Boolean
 ) : FrameLayout(context), ProcessStateCallBack, LifecycleObserver {
 
@@ -43,6 +47,7 @@ class InstagramMediaSingleVideoContainer(
            
     private var seekDuration = 0 // 拖动的播放点
     private var count = 0 // 开始播放到400毫秒就暂停
+    private var autoPlay = false // 循环自动播放
     private val mainScope = MainScope()
     private var mLifecycleOwner: LifecycleOwner? = null
 
@@ -56,6 +61,7 @@ class InstagramMediaSingleVideoContainer(
                 Log.e("wangfei", "播放暂停")
                 startVideo(false)
                 mHandler.removeCallbacks(this)
+                autoPlay = true
                 startVideo(true)
                 mVideoView?.seekTo(seekDuration)
             } else {
@@ -100,7 +106,13 @@ class InstagramMediaSingleVideoContainer(
                         needSeekCover = false
                     }
                     if (needPause) {
+//                        mVideoView.pause()
                         needPause = false
+                    }
+                    if (mThumbView?.visibility == VISIBLE && !autoPlay) {
+//                        ObjectAnimator.ofFloat(mThumbView, "alpha", 1.0f, 0f).setDuration(400)
+//                            .start()
+                        mThumbView?.isVisible = false
                     }
                     return@setOnInfoListener true
                 }
@@ -108,24 +120,24 @@ class InstagramMediaSingleVideoContainer(
             }
         }
         mThumbView = rootView.findViewById(R.id.image_view)
-        mCoverView = rootView.findViewById(R.id.cover_container)
-        mCoverView?.addLifeCycleObserver(mLifecycleOwner)
+        mCoverView = CoverContainer(context, media).apply {
+            addLifeCycleObserver(mLifecycleOwner)
+        }
+        addView(mCoverView)
         mCoverView?.run {
             getFrame(getContext(), media)
             setOnSeekListener(object : CoverContainer.onSeekListener {
                 override fun onSeek(percent: Float, isStart: Boolean) {
-                    startVideo(isStart)
-                    seekDuration = (media.duration * percent).toInt()
-                    Log.e("seekto", "seekDuration -> $seekDuration")
-                    Log.e("seekto", "totalDuration -> ${media.duration}")
-                    if (seekDuration >= media.duration - 2000) {
-                        seekDuration = (media.duration - 2000).toInt()
+                    if (isStart) {
+                        startVideo(true)
                     }
+                    seekDuration = (media.duration * percent).toInt()
                     mVideoView?.seekTo(seekDuration)
                 }
 
                 override fun onSeekEnd() {
                     needPause = true
+                    autoPlay = false
                     if (isStart && isPlay) {
                         startVideo(false)
                     }
@@ -133,6 +145,15 @@ class InstagramMediaSingleVideoContainer(
             })
         }
         startVideo(true)
+//        mainScope.launch {
+//            val getFrameBitmap = GetFrameBitmap()
+//            val job = async(Dispatchers.IO) {
+//                getFrameBitmap.setParams(context, media, isAspectRatio, 0)
+//                getFrameBitmap.doInBackground()
+//            }
+//            val await = job.await()
+//            await?.let { mThumbView?.setImageBitmap(it) }
+//        }
     }
 
     /**
@@ -150,13 +171,51 @@ class InstagramMediaSingleVideoContainer(
         }
     }
 
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+//        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        val width = MeasureSpec.getSize(widthMeasureSpec)
+        val height = MeasureSpec.getSize(heightMeasureSpec)
+        mTopContainer?.measure(
+            MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
+            MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY)
+        )
+        mCoverView?.measure(
+            MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
+            MeasureSpec.makeMeasureSpec(height - width, MeasureSpec.EXACTLY)
+        )
+        setMeasuredDimension(width, height)
+    }
+
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+//        super.onLayout(changed, left, top, right, bottom)
+        var viewTop = 0
+        val viewLeft = 0
+        mTopContainer?.layout(
+            viewLeft,
+            viewTop,
+            viewLeft + mTopContainer!!.measuredWidth,
+            viewTop + mTopContainer!!.measuredHeight
+        )
+        viewTop = mTopContainer?.measuredHeight ?: 0
+        mCoverView?.layout(
+            viewLeft,
+            viewTop,
+            viewLeft + mCoverView!!.measuredWidth,
+            viewTop + mCoverView!!.measuredHeight
+        )
+    }
+
     override fun onBack(activity: InstagramMediaProcessActivity?) {
         activity?.finish()
     }
 
     // 最后生成封面的操作
     override fun onProcess(activity: InstagramMediaProcessActivity?) {
+        var c = 1
+        c++
+        val count = CountDownLatch(c)
         mCoverView?.cropCover()
+//        mCoverView?.cropCover(count)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)

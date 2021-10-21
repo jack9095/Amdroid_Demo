@@ -73,9 +73,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onClick(view: View) {
-        val videoPath = "/storage/emulated/0/DCIM/Camera/VID_20210929_18262509.mp4"
-        val fileName = "VID_20210929_18262509.mp4"
-        val videoDuration = 17024L // 毫秒
+//        val videoPath = "/storage/emulated/0/DCIM/Video/V11021-153429.mp4"
+//        val fileName = "V11021-153429.mp4"
+//        val videoDuration = 20171L // 毫秒
+
+        val videoPath = "/storage/emulated/0/Movies/QQ视频_9fdd2348b2c3d6f703ab84ae010b7c891634795766.mp4"
+        val fileName = "QQ视频_9fdd2348b2c3d6f703ab84ae010b7c891634795766.mp4"
+        val videoDuration = 10067L // 毫秒
+
+//        val videoPath = "/storage/emulated/0/DCIM/Camera/VID_20210929_18262509.mp4"
+//        val fileName = "VID_20210929_18262509.mp4"
+//        val videoDuration = 17024L // 毫秒
 
         val localMedia = LocalMedia(videoPath,"",fileName,videoDuration)
 

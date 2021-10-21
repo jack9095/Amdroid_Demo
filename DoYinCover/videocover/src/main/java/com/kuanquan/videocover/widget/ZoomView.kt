@@ -25,6 +25,8 @@ class ZoomView(context: Context) : AppCompatImageView(context) {
 
     fun setBitmap(bitmap: Bitmap) {
         mBitmap = bitmap
+//        scaleType = ScaleType.CENTER_CROP
+//        setImageBitmap(bitmap)
         invalidate()
     }
 

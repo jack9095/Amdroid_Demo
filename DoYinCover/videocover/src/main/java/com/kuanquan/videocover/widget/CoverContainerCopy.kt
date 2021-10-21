@@ -1,11 +1,12 @@
 package com.kuanquan.videocover.widget
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Rect
 import android.os.SystemClock
-import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -23,7 +24,7 @@ import java.util.concurrent.CountDownLatch
 import kotlin.math.roundToLong
 
 @SuppressLint("ViewConstructor", "ObjectAnimatorBinding")
-class CoverContainer : FrameLayout, LifecycleObserver {
+class CoverContainerCopy(context: Context, media: LocalMedia) : FrameLayout(context), LifecycleObserver {
 
     private val mImageViews = arrayOfNulls<ImageView>(10) // 把视频几等份的图片集合，这里是 10等份
     private var mImageViewHeight = 0 // 展示图片控件的高度，写死的 60dp
@@ -33,7 +34,7 @@ class CoverContainer : FrameLayout, LifecycleObserver {
     private var startedTrackingX = 0 // X轴跟踪手指移动的坐标
     private var scrollHorizontalPosition = 0f // 当前实时水平滑动的位置（x轴坐标）
     private var mOnSeekListener: onSeekListener? = null
-    private var mLocalMedia: LocalMedia? = null // 传进来的数据，包含视频的路径
+    private var mLocalMedia: LocalMedia? = media // 传进来的数据，包含视频的路径
     private var mChangeTime: Long = 0  // 记录系统临时时间变量
     private var mCurrentPercent = 0f // 当前的百分比
     var mLiveData = MutableLiveData<String>()
@@ -46,23 +47,15 @@ class CoverContainer : FrameLayout, LifecycleObserver {
         GetFrameBitmap()
     }
 
+    private var enlargeAnimSet: AnimatorSet? = null
+    private var zoomAnimSet: AnimatorSet? = null
+
     fun addLifeCycleObserver(lifecycleOwner: LifecycleOwner?) {
         lifecycleOwner?.lifecycle?.addObserver(this)
     }
 
-    constructor(context: Context, media: LocalMedia) : super(context) {
-        mLocalMedia = media
-    }
-    constructor(context: Context) : super(context) {
-        initView()
-    }
-
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        initView()
-    }
-
-   private fun initView() {
-        mImageViewHeight = ScreenUtils.dip2px(context, 60F)
+    init {
+        mImageViewHeight = ScreenUtils.dip2px(getContext(), 60F)
         // 创建展示图片的 View ,并添加到容器中，这里会创建10个出来
         for (i in mImageViews.indices) {
             mImageViews[i] = ImageView(context)
@@ -70,38 +63,55 @@ class CoverContainer : FrameLayout, LifecycleObserver {
             mImageViews[i]?.setImageResource(R.drawable.picture_image_placeholder)
             addView(mImageViews[i])
         }
-        // 创建未被选择的图片上面的蒙层View，百分之 77 的透明度
+        // 创建未被选择的图片上面的蒙层View，百分之70 的透明度
         mMaskView = View(context)
         mMaskView?.setBackgroundColor(0x77FFFFFF)
         addView(mMaskView)
         // 选中图片上面的蒙板View,可以跟着手指滑动
         mZoomView = ZoomView(context)
         addView(mZoomView)
+
+        // 放大动画
+        enlargeAnimSet = AnimatorSet()
+        val enlargeScaleX = ObjectAnimator.ofFloat(mZoomView, "scaleX", 1.0f, 1.1f)
+        val enlargeScaleY = ObjectAnimator.ofFloat(mZoomView, "scaleY", 1.0f, 1.1f)
+        enlargeAnimSet?.playTogether(enlargeScaleX, enlargeScaleY)
+//                enlargeAnimSet?.duration = 300
+
+        // 恢复原来大小动画
+        val zoomScaleX = ObjectAnimator.ofFloat(mZoomView, "scaleX", 1.1f, 1.0f)
+        val zoomScaleY = ObjectAnimator.ofFloat(mZoomView, "scaleY", 1.1f, 1.0f)
+        zoomAnimSet = AnimatorSet()
+        zoomAnimSet?.playTogether(zoomScaleX, zoomScaleY)
+//                zoomAnimSet?.duration = 300
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy() {
         mainScope.cancel()
         mGetAllFrame.setStop(true)
+        enlargeAnimSet?.cancel()
+        zoomAnimSet?.cancel()
     }
 
     fun getFrame(context: Context, media: LocalMedia) {
-        mLocalMedia = media
         mainScope.launch {
             val job = async(Dispatchers.IO) {
                 // 给手指触摸移动的选中view设置显示的图片 一进来mZoomView初始值
                 mGetFrameBitmap.setParams(
                     context, media, false, 0, mImageViewWidth, mImageViewHeight)
+//                mGetFrameBitmap.doInBackground()
                 mGetFrameBitmap.zoomSync()
             }
             val await = job.await()
             await?.let { mZoomView?.setBitmap(it) }
         }
 
+
         mainScope.launch(Dispatchers.IO) {
             mGetAllFrame.setParams(
                 context, media, mImageViews.size, 0, media.duration,
-                OnSingleBitmapListenerImpl(this@CoverContainer))
+                OnSingleBitmapListenerImpl(this@CoverContainerCopy))
             mGetAllFrame.doInBackground()
         }
     }
@@ -156,8 +166,13 @@ class CoverContainer : FrameLayout, LifecycleObserver {
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val rect = Rect()
         mMaskView?.getHitRect(rect)
-        mOnSeekListener?.onSeekEnd()
 
+        // 限制手指滑动范围的，滑动不再封面图控件上就不响应事件
+//        if (!rect.contains(event.getX().toInt(), event.getY().toInt())) {
+//            zoomAnimSet?.start()
+//            return super.onTouchEvent(event)
+//        }
+        mOnSeekListener?.onSeekEnd()
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 // 限制手指滑动范围的，滑动不再封面图控件上就不响应事件
@@ -170,15 +185,25 @@ class CoverContainer : FrameLayout, LifecycleObserver {
                 setScrollHorizontalPosition(
                     (startClickX - ScreenUtils.dip2px(context, 20F) - mZoomView!!.measuredWidth / 2).toFloat()
                 )
+                if (rect.contains(event.getX().toInt(), event.getY().toInt())) {
+//                    enlargeAnimSet?.start()
+                }
+
                 Log.e("fei.wang","手指按下")
             }
             MotionEvent.ACTION_MOVE -> {
                 dxMove = (event.x - startedTrackingX)
                 moveByX(dxMove)
                 startedTrackingX = event.x.toInt()
+                mOnSeekListener?.onSeekEnd()
             }
-            MotionEvent.ACTION_CANCEL,MotionEvent.ACTION_UP -> {
+            MotionEvent.ACTION_CANCEL -> {
+//                zoomAnimSet?.start()
+                mOnSeekListener?.onSeekEnd()
+            }
+            MotionEvent.ACTION_UP -> {
                 Log.e("fei.wang","手指抬起")
+//                zoomAnimSet?.start()
                 mOnSeekListener?.onSeek(mCurrentPercent, true)
                 postDelayed({ moveBy() }, 100)
             }
@@ -200,7 +225,7 @@ class CoverContainer : FrameLayout, LifecycleObserver {
     private fun setScrollHorizontalPositionX() {
         Log.e("当前滑动的x轴位置", "x -> $scrollHorizontalPosition")
         Log.e("当前滑动的x轴百分比", "mCurrentPercent -> " + mCurrentPercent * 100)
-        mOnSeekListener?.onSeek(mCurrentPercent, false)
+        mOnSeekListener?.onSeek(mCurrentPercent, true)
         if (mCurrentPercent * 100 <= 10) {
             getZoomViewBitmap()
             return
@@ -231,7 +256,7 @@ class CoverContainer : FrameLayout, LifecycleObserver {
             scrollHorizontalPosition / (mMaskView!!.measuredWidth - mZoomView!!.measuredWidth) // 原来的算法
         Log.e("当前滑动的x轴位置", "x -> $scrollHorizontalPosition")
         Log.e("当前滑动的x轴百分比", "mCurrentPercent -> " + mCurrentPercent * 100)
-        mOnSeekListener?.onSeek(mCurrentPercent, false)
+            mOnSeekListener?.onSeek(mCurrentPercent, true)
         if (mCurrentPercent * 100 <= 10) {
             getZoomViewBitmap()
             return
@@ -248,7 +273,6 @@ class CoverContainer : FrameLayout, LifecycleObserver {
     private fun getZoomViewBitmap() {
         // 返回一个数字四舍五入后最接近的整数，获取到当前视屏点的毫秒值
         val time = (mLocalMedia!!.duration * mCurrentPercent * 1000).roundToLong()
-//        val time = (mLocalMedia!!.duration * mCurrentPercent * 1000).toLong()
 
         // TODO 给手指触摸移动的选中view设置显示的图片 手指拖拽 mZoomView 移动的值 bitmap
         mainScope.launch {
@@ -256,6 +280,7 @@ class CoverContainer : FrameLayout, LifecycleObserver {
                 mGetFrameBitmap.setParams(
                     context, mLocalMedia, false,
                     time, mImageViewWidth, mImageViewHeight)
+//                mGetFrameBitmap.doInBackground()
                 mGetFrameBitmap.zoomSync()
             }
             val await = job.await()
@@ -264,7 +289,7 @@ class CoverContainer : FrameLayout, LifecycleObserver {
     }
 
     // 最后生成封面的操作
-    fun cropCover() {
+    fun cropCover(count: CountDownLatch) {
         val time: Long = if (mCurrentPercent > 0) {
             (mLocalMedia!!.duration * mCurrentPercent * 1000).roundToLong()
         } else 0
@@ -274,6 +299,8 @@ class CoverContainer : FrameLayout, LifecycleObserver {
                 mGetFrameBitmap.setParams(
                     context, mLocalMedia, false,
                     time, ScreenUtils.dip2px(context, 500F), ScreenUtils.dip2px(context, 1000F))
+//                    time, 0, 0)
+//                mGetFrameBitmap.doInSync(mGetFrameBitmap.doInBackground(), count)
                 mGetFrameBitmap.doInSync(mGetFrameBitmap.doInBackground())
             }
             val scanFilePath = job.await()
@@ -281,8 +308,8 @@ class CoverContainer : FrameLayout, LifecycleObserver {
         }
     }
 
-    class OnSingleBitmapListenerImpl(coverContainer: CoverContainer) : GetAllFrame.OnSingleBitmapListener {
-        private val mContainerWeakReference: WeakReference<CoverContainer> = WeakReference(coverContainer)
+    class OnSingleBitmapListenerImpl(coverContainer: CoverContainerCopy) : GetAllFrame.OnSingleBitmapListener {
+        private val mContainerWeakReference: WeakReference<CoverContainerCopy> = WeakReference(coverContainer)
         private var index = 0
        override fun onSingleBitmapComplete(bitmap: Bitmap?) {
             val container = mContainerWeakReference.get()
