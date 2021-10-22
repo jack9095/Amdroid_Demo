@@ -118,6 +118,7 @@ class InstagramMediaSingleVideoContainer(
                     seekDuration = (media.duration * percent).toInt()
                     Log.e("seekto", "seekDuration -> $seekDuration")
                     Log.e("seekto", "totalDuration -> ${media.duration}")
+                    seekDuration += 1000 // 实现拖动的帧与播放器的seekTo对不起的情况
                     if (seekDuration >= media.duration - 2000) {
                         seekDuration = (media.duration - 2000).toInt()
                     }

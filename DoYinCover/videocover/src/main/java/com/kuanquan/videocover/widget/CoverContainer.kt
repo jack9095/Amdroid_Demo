@@ -247,8 +247,8 @@ class CoverContainer : FrameLayout, LifecycleObserver {
 
     private fun getZoomViewBitmap() {
         // 返回一个数字四舍五入后最接近的整数，获取到当前视屏点的毫秒值
-        val time = (mLocalMedia!!.duration * mCurrentPercent * 1000).roundToLong()
-//        val time = (mLocalMedia!!.duration * mCurrentPercent * 1000).toLong()
+//        val time = (mLocalMedia!!.duration * mCurrentPercent * 1000).roundToLong()
+        val time = (mLocalMedia!!.duration * mCurrentPercent * 1000).toLong()
 
         // TODO 给手指触摸移动的选中view设置显示的图片 手指拖拽 mZoomView 移动的值 bitmap
         mainScope.launch {
