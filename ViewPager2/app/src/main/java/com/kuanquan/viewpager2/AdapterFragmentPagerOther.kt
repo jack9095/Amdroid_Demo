@@ -11,16 +11,22 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
  */
 class AdapterFragmentPagerOther(fragmentActivity: FragmentActivity, val data: MutableList<String>) : FragmentStateAdapter(fragmentActivity) {
 
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
-        recyclerView.setItemViewCacheSize(data.size)
-    }
+//    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+//        super.onAttachedToRecyclerView(recyclerView)
+//        recyclerView.setItemViewCacheSize(data.size)
+//    }
 
     override fun createFragment(position: Int): Fragment {
-        return HomeFragment.newInstance(data[position])
+        if (position == 0) {
+            return TestFragment()
+        } else {
+            return HomeFragment.newInstance(data[position])
+        }
     }
 
     override fun getItemCount(): Int {
         return data.size
     }
+
+
 }

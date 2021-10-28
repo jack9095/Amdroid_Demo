@@ -2,6 +2,7 @@ package com.kuanquan.viewpager2
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.Toast
 import androidx.viewpager2.widget.ViewPager2
 
@@ -16,10 +17,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        for (i in 0..9){
+        for (i in 0..20){
             list.add("$i")
         }
 
+        findViewById<Button>(R.id.button).setOnClickListener {
+            viewPager2?.setCurrentItem(0, false)
+        }
         viewPager2 = findViewById<ViewPager2>(R.id.view_pager)
         initViewPager2()
 
@@ -31,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         // 配合 fragment 使用
         viewPager2?.run {
 //            adapter = AdapterFragmentPager(this@MainActivity)
-//            offscreenPageLimit = 3
+            offscreenPageLimit = 1
             adapter = AdapterFragmentPagerOther(this@MainActivity, list)
             isUserInputEnabled = true
         }
@@ -46,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         viewPager2?.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                Toast.makeText(this@MainActivity, "page selected $position", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this@MainActivity, "page selected $position", Toast.LENGTH_SHORT).show()
             }
         })
 
