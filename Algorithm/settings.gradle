@@ -1,2 +1,3 @@
 rootProject.name = "Algorithm"
 include ':app'
+include ':algorithm_library'
