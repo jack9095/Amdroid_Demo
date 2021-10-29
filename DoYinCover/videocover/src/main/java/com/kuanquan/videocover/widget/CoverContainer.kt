@@ -107,6 +107,14 @@ class CoverContainer : FrameLayout, LifecycleObserver {
             val await = job.await()
             await?.let { mZoomView?.setBitmap(it) }
 
+            // TODO 协程添加了异常处理
+            val job1 = mainScope.launch(Dispatchers.Default + CoroutineExceptionHandler { coroutineContext, throwable ->
+                Log.e("fei.wang", "CoroutineExceptionHandler: $throwable")
+            }) {
+
+                // 测试抛出异常
+                throw RuntimeException("--> RuntimeException <--")
+            }
             // 创建一个指定了调度模式的协程，该协程的运行线程为IO线程
             val job2 = mainScope.launch(Dispatchers.IO) {
 

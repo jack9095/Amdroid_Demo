@@ -19,6 +19,9 @@ import java.util.ArrayList
 /**
  * 协程好文
  * https://juejin.cn/post/6950616789390721037
+ *
+ * rebase 会把你当前分支的 commit 放到公共分支的最后面，所以叫变基。就好像你从公共分支又重新拉出来这个分支一样。（不会改变节点）
+ *   merge 会把公共分支和你当前的 commit 合并在一起，形成一个新的 commit 节点提交。（会改变节点）
  */
 class MainActivity : AppCompatActivity() {
 
@@ -32,6 +35,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+//        lifecycleScope
 
         val list = ArrayList<String>()
 

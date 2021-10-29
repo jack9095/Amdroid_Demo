@@ -219,3 +219,6 @@ TabLayout 选项卡 选中的文字加粗放大
 
 ### 58、VideoCover
 视屏封面选择
+
+### 60、Algorithm
+算法
