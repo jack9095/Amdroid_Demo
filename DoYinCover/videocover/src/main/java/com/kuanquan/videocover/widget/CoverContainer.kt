@@ -53,6 +53,7 @@ class CoverContainer : FrameLayout, LifecycleObserver {
     constructor(context: Context, media: LocalMedia) : super(context) {
         mLocalMedia = media
     }
+
     constructor(context: Context) : super(context) {
         initView()
     }
@@ -61,7 +62,7 @@ class CoverContainer : FrameLayout, LifecycleObserver {
         initView()
     }
 
-   private fun initView() {
+    private fun initView() {
         mImageViewHeight = ScreenUtils.dip2px(context, 60F)
         // 创建展示图片的 View ,并添加到容器中，这里会创建10个出来
         for (i in mImageViews.indices) {
@@ -87,21 +88,44 @@ class CoverContainer : FrameLayout, LifecycleObserver {
 
     fun getFrame(context: Context, media: LocalMedia) {
         mLocalMedia = media
+
+        // 创建一个默认参数的协程，其默认的调度模式为Main 也就是说该协程的线程环境是Main线程
         mainScope.launch {
+
+            // 这里就是协程体
+
+
+            // 开启新的协程 async 主要用于获取返回值和并发
             val job = async(Dispatchers.IO) {
                 // 给手指触摸移动的选中view设置显示的图片 一进来mZoomView初始值
                 mGetFrameBitmap.setParams(
-                    context, media, false, 0, mImageViewWidth, mImageViewHeight)
+                    context, media, false, 0, mImageViewWidth, mImageViewHeight
+                )
                 mGetFrameBitmap.zoomSync()
             }
+            // 获取异步的结果
             val await = job.await()
             await?.let { mZoomView?.setBitmap(it) }
+
+            // 创建一个指定了调度模式的协程，该协程的运行线程为IO线程
+            val job2 = mainScope.launch(Dispatchers.IO) {
+
+                // 此处是IO线程模式
+                Log.e("fei.wang", "io -> ${Thread.currentThread().name}")
+
+                // 切线程 将协程所处的线程环境切至指定的调度模式Main
+                withContext(Dispatchers.Main) {
+                    Log.e("fei.wang", "main -> ${Thread.currentThread().name}")
+                    // 现在这里就是Main线程了  可以在此进行UI操作了
+                }
+            }
         }
 
         mainScope.launch(Dispatchers.IO) {
             mGetAllFrame.setParams(
                 context, media, mImageViews.size, 0, media.duration,
-                OnSingleBitmapListenerImpl(this@CoverContainer))
+                OnSingleBitmapListenerImpl(this@CoverContainer)
+            )
             mGetAllFrame.doInBackground()
         }
     }
@@ -152,6 +176,7 @@ class CoverContainer : FrameLayout, LifecycleObserver {
     }
 
     private var dxMove = 0f
+
     @SuppressLint("ClickableViewAccessibility", "ObjectAnimatorBinding")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val rect = Rect()
@@ -168,17 +193,20 @@ class CoverContainer : FrameLayout, LifecycleObserver {
                 startedTrackingX = event.x.toInt()
                 startClickX = event.x.toInt()
                 setScrollHorizontalPosition(
-                    (startClickX - ScreenUtils.dip2px(context, 20F) - mZoomView!!.measuredWidth / 2).toFloat()
+                    (startClickX - ScreenUtils.dip2px(
+                        context,
+                        20F
+                    ) - mZoomView!!.measuredWidth / 2).toFloat()
                 )
-                Log.e("fei.wang","手指按下")
+                Log.e("fei.wang", "手指按下")
             }
             MotionEvent.ACTION_MOVE -> {
                 dxMove = (event.x - startedTrackingX)
                 moveByX(dxMove)
                 startedTrackingX = event.x.toInt()
             }
-            MotionEvent.ACTION_CANCEL,MotionEvent.ACTION_UP -> {
-                Log.e("fei.wang","手指抬起")
+            MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> {
+                Log.e("fei.wang", "手指抬起")
                 mOnSeekListener?.onSeek(mCurrentPercent, true)
                 postDelayed({ moveBy() }, 100)
             }
@@ -255,7 +283,8 @@ class CoverContainer : FrameLayout, LifecycleObserver {
             val job = async(Dispatchers.IO) {
                 mGetFrameBitmap.setParams(
                     context, mLocalMedia, false,
-                    time, mImageViewWidth, mImageViewHeight)
+                    time, mImageViewWidth, mImageViewHeight
+                )
                 mGetFrameBitmap.zoomSync()
             }
             val await = job.await()
@@ -273,7 +302,8 @@ class CoverContainer : FrameLayout, LifecycleObserver {
             val job = async(Dispatchers.IO) {
                 mGetFrameBitmap.setParams(
                     context, mLocalMedia, false,
-                    time, ScreenUtils.dip2px(context, 500F), ScreenUtils.dip2px(context, 1000F))
+                    time, ScreenUtils.dip2px(context, 500F), ScreenUtils.dip2px(context, 1000F)
+                )
                 mGetFrameBitmap.doInSync(mGetFrameBitmap.doInBackground())
             }
             val scanFilePath = job.await()
@@ -281,10 +311,12 @@ class CoverContainer : FrameLayout, LifecycleObserver {
         }
     }
 
-    class OnSingleBitmapListenerImpl(coverContainer: CoverContainer) : GetAllFrame.OnSingleBitmapListener {
-        private val mContainerWeakReference: WeakReference<CoverContainer> = WeakReference(coverContainer)
+    class OnSingleBitmapListenerImpl(coverContainer: CoverContainer) :
+        GetAllFrame.OnSingleBitmapListener {
+        private val mContainerWeakReference: WeakReference<CoverContainer> =
+            WeakReference(coverContainer)
         private var index = 0
-       override fun onSingleBitmapComplete(bitmap: Bitmap?) {
+        override fun onSingleBitmapComplete(bitmap: Bitmap?) {
             val container = mContainerWeakReference.get()
             if (container != null) {
                 container.post(RunnableImpl(container.mImageViews[index], bitmap))

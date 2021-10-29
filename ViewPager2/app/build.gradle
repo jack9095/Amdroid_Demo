@@ -10,7 +10,7 @@ static String getDate() {
 }
 
 def devVersionCode = "1"
-def devDate = '\"20210603.182346\"'
+def devDate = '\"20211030.182346\"'
 def isDev = false
 Properties properties = new Properties()
 try {
@@ -70,14 +70,14 @@ android {
 
         debug {
             // TODO 优化编译速度 start
-//            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.debug
 //            ext.alwaysUpdateBuildId = false
 
-//            if (isDev) {
-//                buildConfigField("String", "BUILD_TIME", devDate)
-//            } else {
-//                buildConfigField("String", "BUILD_TIME", getDate())
-//            }
+            if (isDev) {
+                buildConfigField("String", "BUILD_TIME", devDate)
+            } else {
+                buildConfigField("String", "BUILD_TIME", getDate())
+            }
 //            println("------------------------ Date " + getDate())
             // TODO 优化编译速度 end
         }
@@ -109,7 +109,7 @@ android {
             minSdkVersion '21'
             dimension "api"
             // 我们在开发环境下只引入英文资源和xxhdpi下的资源，减小打包时间，大概能减少1秒
-//            resConfigs("zn", "xxhdpi")
+            resConfigs("zn", "xxhdpi")
         }
 //        minApi21 {
 //            minSdkVersion '21'

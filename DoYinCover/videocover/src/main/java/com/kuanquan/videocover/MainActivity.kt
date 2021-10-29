@@ -16,6 +16,10 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.util.ArrayList
 
+/**
+ * 协程好文
+ * https://juejin.cn/post/6950616789390721037
+ */
 class MainActivity : AppCompatActivity() {
 
     companion object{
