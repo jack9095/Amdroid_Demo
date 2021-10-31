@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/btn_insertEmperor"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/purple_500"
+        android:text="增" />
+
+    <Button
+        android:id="@+id/btn_deleteEmperor"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/purple_500"
+        android:text="删" />
+
+    <Button
+        android:id="@+id/btn_updateEmperor"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/purple_500"
+        android:text="改" />
+
+    <Button
+        android:id="@+id/btn_queryEmperorById"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/purple_500"
+        android:text="查符合指定条件的某一个" />
+
+    <Button
+        android:id="@+id/btn_queryEmperorsByAge"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/purple_500"
+        android:text="查所有符合条件的" />
+
+    <Button
+        android:id="@+id/btn_queryEmperors"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/purple_500"
+        android:text="查所有" />
+
+</LinearLayout>

@@ -212,7 +212,7 @@ Koin 注入框架在 kotlin 中的使用
 滑动状态栏和标题渐变显示
 
 ### 56、DoYinCover、InsGallery-master
-仿抖音设置封面、仿 InsGallery 设置视屏封面
+仿抖音设置封面、仿 InsGallery 设置视屏封面, 里面有协程的使用
 
 ### 57、FlycoTabLayoutZ-master、XiaMiTablayout-master、FlycoTablayout-master
 TabLayout 选项卡 选中的文字加粗放大
@@ -226,5 +226,5 @@ gradle编译优化
 ### 60、Algorithm
 算法
 
-### 61、SQLite、room
+### 61、SQLite、roomDb
 数据库使用
