@@ -16,4 +16,13 @@ public class Person {
 		this.name = name;
 		this.phonenum = phonenum;
 	}
+
+	@Override
+	public String toString() {
+		return "Person{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", phonenum='" + phonenum + '\'' +
+				'}';
+	}
 }

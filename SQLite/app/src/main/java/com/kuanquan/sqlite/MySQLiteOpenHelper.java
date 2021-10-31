@@ -27,7 +27,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper{
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        //创建表结构     fly创建的表名   id，name，phonenum都是表中的字段，代表这个表有三列
+        //创建表结构     fly创建的表名   id，name，phonenum 都是表中的字段，代表这个表有三列
         db.execSQL("create table fly (id integer primary key autoincrement , name varchar(20) , phonenum varchar(11)) ");
     }
 

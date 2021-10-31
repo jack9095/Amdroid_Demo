@@ -3,6 +3,7 @@ package com.kuanquan.sqlite.dao;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.kuanquan.sqlite.MySQLiteOpenHelper;
 import com.kuanquan.sqlite.bean.Person;
@@ -58,7 +59,7 @@ public class ControlDao {
     }
 
     /**
-     * 按姓名查找记录是够存在
+     * 按姓名查找记录是否存在
      * @param name 姓名
      * @return true 存在 false 不存在
      */
@@ -72,7 +73,7 @@ public class ControlDao {
     }
 
     /**
-     * 按姓名查找记录是够存在
+     * 按姓名查找记录是否存在
      *
      * @param name 姓名
      * @return string 电话号码
@@ -80,6 +81,9 @@ public class ControlDao {
     public String findPhone(String name) {
         SQLiteDatabase db = helper.getWritableDatabase();
         Cursor cursor = db.rawQuery("select * from fly where name =?", new String[]{name});
+        int phonenum = cursor.getColumnIndex("phonenum");
+//        Log.e("ControlDao", "phonenum -> " + phonenum);
+        cursor.moveToFirst(); // 避免异常 Index -1 requested, with a size of 4
         String phone = cursor.getString(cursor.getColumnIndex("phonenum"));
         cursor.close();
         db.close();

@@ -2,7 +2,6 @@ package com.kuanquan.sqlite.test;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-//import android.test.AndroidTestCase;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.runner.AndroidJUnit4;
@@ -32,7 +31,7 @@ import static org.junit.Assert.assertEquals;
 public class TestHightVersionDB {
 
     @Test
-    public void testCreateDB() throws Exception{
+    public void testCreateDB() {
         Context context= InstrumentationRegistry.getInstrumentation().getTargetContext();
         MySQLiteOpenHelper helper = new MySQLiteOpenHelper(context);
         helper.getWritableDatabase();
@@ -40,14 +39,14 @@ public class TestHightVersionDB {
 
     //添加
     @Test
-    public void testAdd() throws Exception{
+    public void testAdd() {
         ControlDao dao = new ControlDao(getContext());
         dao.add("wangfei", "18072850706");
     }
 
     //查找
     @Test
-    public void testFind() throws Exception{
+    public void testFind() {
         ControlDao dao = new ControlDao(getContext());
         boolean result = dao.find("wangfei");
         assertEquals(true, result);
@@ -55,21 +54,21 @@ public class TestHightVersionDB {
 
     //修改
     @Test
-    public void testModify() throws Exception{
+    public void testModify() {
         ControlDao dao = new ControlDao(getContext());
         dao.modify("wangfei", "18072850708");
     }
 
     //删除
     @Test
-    public void testDelete() throws Exception{
+    public void testDelete() {
         ControlDao dao = new ControlDao(getContext());
         dao.delete("wangfei");
     }
 
     //查找所有
     @Test
-    public void testFindAll() throws Exception{
+    public void testFindAll() {
         ControlDao dao = new ControlDao(getContext());
         List<Person> persons = dao.findAll();
         for(Person p: persons){
@@ -79,7 +78,7 @@ public class TestHightVersionDB {
 
     //数据库的事务
     @Test
-    public void testTransaction() throws Exception {
+    public void testTransaction() {
         MySQLiteOpenHelper helper = new MySQLiteOpenHelper(getContext());
         SQLiteDatabase db = helper.getWritableDatabase();
         db.beginTransaction();
