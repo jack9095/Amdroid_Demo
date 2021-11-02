@@ -50,10 +50,10 @@ class InstagramMediaSingleVideoContainer(
         override fun run() {
             // 获得当前播放时间和当前视频的长度
             currentPosition = mVideoView!!.currentPosition
-            Log.e("监听播放进度", "currentPosition ->$currentPosition")
+//            Log.e("监听播放进度", "currentPosition ->$currentPosition")
             count++
             if (count >= 10) {
-                Log.e("wangfei", "播放暂停")
+//                Log.e("wangfei", "播放暂停")
                 startVideo(false)
                 mHandler.removeCallbacks(this)
                 startVideo(true)
@@ -145,7 +145,7 @@ class InstagramMediaSingleVideoContainer(
         if (!start) {
             mVideoView?.pause()
         } else {
-            Log.e("wangfei", "开始播放")
+//            Log.e("wangfei", "开始播放")
             count = 0
             mVideoView?.start()
         }

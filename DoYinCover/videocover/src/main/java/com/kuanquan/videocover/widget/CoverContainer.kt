@@ -206,7 +206,7 @@ class CoverContainer : FrameLayout, LifecycleObserver {
                         20F
                     ) - mZoomView!!.measuredWidth / 2).toFloat()
                 )
-                Log.e("fei.wang", "手指按下")
+//                Log.e("fei.wang", "手指按下")
             }
             MotionEvent.ACTION_MOVE -> {
                 dxMove = (event.x - startedTrackingX)
@@ -214,7 +214,7 @@ class CoverContainer : FrameLayout, LifecycleObserver {
                 startedTrackingX = event.x.toInt()
             }
             MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> {
-                Log.e("fei.wang", "手指抬起")
+//                Log.e("fei.wang", "手指抬起")
                 mOnSeekListener?.onSeek(mCurrentPercent, true)
                 postDelayed({ moveBy() }, 100)
             }
@@ -234,8 +234,8 @@ class CoverContainer : FrameLayout, LifecycleObserver {
      * 设置 X 轴上滑动的坐标
      */
     private fun setScrollHorizontalPositionX() {
-        Log.e("当前滑动的x轴位置", "x -> $scrollHorizontalPosition")
-        Log.e("当前滑动的x轴百分比", "mCurrentPercent -> " + mCurrentPercent * 100)
+//        Log.e("当前滑动的x轴位置", "x -> $scrollHorizontalPosition")
+//        Log.e("当前滑动的x轴百分比", "mCurrentPercent -> " + mCurrentPercent * 100)
         mOnSeekListener?.onSeek(mCurrentPercent, false)
         if (mCurrentPercent * 100 <= 10) {
             getZoomViewBitmap()
@@ -265,8 +265,8 @@ class CoverContainer : FrameLayout, LifecycleObserver {
         mCurrentPercent =
 //            scrollHorizontalPosition / (mMaskView!!.measuredWidth - mZoomView!!.measuredWidth*2)
             scrollHorizontalPosition / (mMaskView!!.measuredWidth - mZoomView!!.measuredWidth) // 原来的算法
-        Log.e("当前滑动的x轴位置", "x -> $scrollHorizontalPosition")
-        Log.e("当前滑动的x轴百分比", "mCurrentPercent -> " + mCurrentPercent * 100)
+//        Log.e("当前滑动的x轴位置", "x -> $scrollHorizontalPosition")
+//        Log.e("当前滑动的x轴百分比", "mCurrentPercent -> " + mCurrentPercent * 100)
         mOnSeekListener?.onSeek(mCurrentPercent, false)
         if (mCurrentPercent * 100 <= 10) {
             getZoomViewBitmap()
