@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
     }
     fun show3(view: View) {
         ToastUtils.style = WhiteToastStyle()
-        ToastUtils.show("动态切换白色吐司样式成功")
+        ToastUtils.show("动态切换白色吐司样式成功", true)
     }
     fun show4(view: View) {
         ToastUtils.style = BlackToastStyle()
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
     fun show5(view: View) {
         ToastUtils.setView(R.layout.toast_custom_view)
         ToastUtils.setGravity(Gravity.CENTER, 0, 0, 0.05f, 0.3f)
-        ToastUtils.show("自定义 Toast 布局")
+        ToastUtils.show("自定义 Toast 布局", true)
     }
     fun show6(view: View) {
 

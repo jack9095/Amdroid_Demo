@@ -79,14 +79,27 @@ object ToastUtils {
         }
     }
 
+    private var hasDefaultStyle = false // 是否需要重新设置默认样式 true 需要
+
     /**
      * 显示一个吐司 默认格式的toast
      *
-     * @param text      需要显示的文本
+     * @param text  需要显示的文本
+     * @param isCustomStyle  是否是自定义样式布局 true 表示是自定义的样式
      */
-    fun show(text: CharSequence?) {
+    fun show(text: CharSequence?, isCustomStyle: Boolean = false) {
+
+        if (isCustomStyle) {
+            hasDefaultStyle = true
+        } else {
+            if (hasDefaultStyle) {
+                hasDefaultStyle = false
+                style = BlackToastStyle()
+            }
+        }
+
         // 如果是空对象或者空文本就不显示
-        if (text == null || text.length == 0) {
+        if (text == null || text.isEmpty()) {
             return
         }
         sToastStrategy?.showToast(text)
