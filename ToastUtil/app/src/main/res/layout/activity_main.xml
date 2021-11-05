@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:onClick="show1"
-                android:text="简简单单显示 Toast" />
+                android:text="普通显示 Toast" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -38,6 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="30dp"
+                android:visibility="gone"
                 android:onClick="show3"
                 android:text="切换吐司的样式为白色" />
 
@@ -46,6 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="30dp"
+                android:visibility="gone"
                 android:onClick="show4"
                 android:text="切换吐司的样式为黑色" />
 
@@ -55,7 +57,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="30dp"
                 android:onClick="show5"
-                android:text="点我自定义 Toast 布局" />
+                android:text="自定义 Toast 布局" />
 
             <Button
                 android:layout_width="wrap_content"
