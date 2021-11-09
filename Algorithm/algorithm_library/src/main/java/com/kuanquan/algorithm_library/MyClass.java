@@ -14,7 +14,15 @@ public class MyClass {
 
     public static void main(String[] args) {
 //        mergeDeDuplication();
-        selectedSort();
+//        selectedSort();
+        List<Integer> lists = new ArrayList<>();
+        for (int i = 0; i < 50; i++) {
+            lists.add(i);
+        }
+
+        for (int i = 0; i < lists.size(); i++) {
+            System.out.println(i%4);
+        }
     }
 
     // 选择排序
