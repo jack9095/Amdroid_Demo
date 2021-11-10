@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">CustomPopupwindow</string>
+
+    <string name="popup_text">哪里不会点哪里</string>
+
+    <string name="not_interest">不感兴趣</string>
 </resources>
