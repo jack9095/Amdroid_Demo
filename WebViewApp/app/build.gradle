@@ -3,6 +3,27 @@ plugins {
     id 'kotlin-android'
 }
 
+project.afterEvaluate {
+    project.android.applicationVariants.all { variant ->
+        println("===== aaaaa =====")
+        variant.outputs.each { output ->
+            println("===== bbbbb =====")
+//            output.processResourcesProvider.doFirst { pm->
+            output.processResources.doFirst { pm ->
+//            output.processManifest.doFirst { pm->
+                println("===== ccccc =====")
+                String manifestPath = output.processResources.manifestFile
+                def manifestContent = file(manifestPath).getText()
+                manifestContent = manifestContent.replace('', '')
+                manifestContent = manifestContent.replace('', '')
+                manifestContent = manifestContent.replace('', '')
+                manifestContent = manifestContent.replace('', '')
+                file(manifestPath).write(manifestContent)
+            }
+        }
+    }
+}
+
 android {
     compileSdkVersion 31
     buildToolsVersion "30.0.3"
@@ -35,11 +56,177 @@ android {
 dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation "androidx.core:core-ktx:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
+//    implementation project(path: ':mylibrary')
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
+
+
+//android.applicationVariants.all { variant ->
+//    variant.outputs.all { output ->
+//        println "=====test output====="
+//        def first = output.processResources.doFirst { pm ->
+//            String manifestPath = output.processResources.manifestFile
+//            println "=====test manifestPath=====$manifestPath"
+//            def manifestContent = file(manifestPath).getText()
+////                manifestContent = manifestContent.replace('<uses-permission android:name="android.permission.BLUETOOTH" />', '')
+//            def xml = new XmlParser().parseText(manifestContent)
+//            //println "=====test xml=====$xml"
+//
+//            def processtag = "android:exported"
+//            def nodes = xml.application[0].'*'.findAll {
+//                (it.name() == 'activity' || it.name() == 'receiver' || it.name() == 'service') && it."intent-filter"[0] != null && it.attributes() != null && !it.attributes().containsKey("exported")
+//            }
+//            nodes.each {
+//                Map names = it.attributes()
+//                Iterator iterator = names.keySet().iterator()
+//
+//                def doAdd = true
+//                while (iterator.hasNext()) {
+//                    Object key = iterator.next()
+//                    Object part = key.getLocalPart()
+//                    println "=====test xml=====key==$part"
+//                    if (key.getLocalPart().contains("exported")) {
+//                        doAdd = false
+//                        break
+//                    }
+//                }
+//                if (doAdd) {
+//                    it.attributes().put(processtag, "true")
+//                }
+//            }
+//            def serialize = groovy.xml.XmlUtil.serialize(xml)
+//            file(manifestPath).write(serialize)
+//
+//        }
+//        first
+//    }
+//}
+
+
+// 兼容 Android 12下给 安装的主 Activity 增加 android:exported="false" 属性
+this.afterEvaluate {
+    def manifestFile = "${projectDir}/src/main/AndroidManifest.xml"
+//    def xml = file(manifestFile)
+
+    def manifestContent = file(manifestFile).getText()
+    def manifestXml = new XmlParser().parseText(manifestContent)
+
+    def processtag = "android:exported"
+    def nodes = manifestXml.application[0].'*'.findAll {
+//        (it.name() == 'activity' || it.name() == 'receiver' || it.name() == 'service') && it."intent-filter"[0] != null && it.attributes() != null && !it.attributes().containsKey("exported")
+        (it.name() == 'activity' || it.name() == 'receiver' || it.name() == 'service') && it.attributes() != null && !it.attributes().containsKey("exported")
+    }
+    nodes.each {
+        Map names = it.attributes()
+        Iterator iterator = names.keySet().iterator()
+
+        def doAdd = true
+        while (iterator.hasNext()) {
+            Object key = iterator.next()
+            Object part = key.getLocalPart()
+            println "=====test xml=====key==$part"
+            if (key.getLocalPart().contains("exported")) {
+                doAdd = false
+                break
+            } else {
+                doAdd = true
+            }
+        }
+        if (doAdd) {
+            println "===== add =====key=="
+            it.attributes().put(processtag, "false")
+        }
+    }
+
+//    manifestContent.withWriter { out ->
+//        groovy.xml.XmlUtil.serialize(manifestXml, out)
+//    }
+    file(manifestFile).write(groovy.xml.XmlUtil.serialize(manifestXml))
+
+//    def manifest = new XmlSlurper().parse(manifestFile)
+//    def application = manifest.application
+//
+//    // 修改替换 application
+//    application.each {
+//        it.@"android:name" = ".WorkApplication"
+//    }
+//    application.@"android:name" = ".MyApplication"
+//
+//    application.activity.each { activity ->
+//        def isFind = false
+//        activity.children().each { activityInner ->
+//            if (activityInner.name() == "intent-filter") {
+//                activityInner.children().each { intent_filter ->
+//                    if (intent_filter.name() == "action" && intent_filter.@"android:name" == "android.intent.action.MAIN") {
+//                        isFind = true
+//                        return true
+//                    }
+//                }
+//            }
+//
+//            if (isFind) {
+//                return true // 闭包
+//            }
+//        }
+//
+//        // 动态修改启动的 Activity
+//        if (isFind) {
+//            activity.@"android:name" = "DemoActivity"
+////            activity.@"android:exported" = "false"
+//            return true // 闭包
+//        }
+//    }
+//    xml.withWriter { out ->
+//        groovy.xml.XmlUtil.serialize(manifest, out)
+//    }
+
+}
+
+
+//this.afterEvaluate {
+//    def manifestFile = "${projectDir}/src/main/AndroidManifest.xml"
+//    def xml = file(manifestFile)
+//    def manifest = new XmlSlurper().parse(manifestFile)
+//    def application = manifest.application
+//
+//    // 修改替换 application
+//    application.each {
+//        it.@"android:name" = ".WorkApplication"
+//    }
+//    application.@"android:name" = ".MyApplication"
+//
+//    application.activity.each { activity ->
+//        def isFind = false
+//        activity.children().each { activityInner ->
+//            if (activityInner.name() == "intent-filter") {
+//                activityInner.children().each { intent_filter ->
+//                    if (intent_filter.name() == "action" && intent_filter.@"android:name" == "android.intent.action.MAIN") {
+//                        isFind = true
+//                        return true
+//                    }
+//                }
+//            }
+//
+//            if (isFind) {
+//                return true // 闭包
+//            }
+//        }
+//
+//        // 动态修改启动的 Activity
+//        if (isFind) {
+//            activity.@"android:name" = "DemoActivity"
+////            activity.@"android:exported" = "false"
+//            return true // 闭包
+//        }
+//    }
+//    xml.withWriter { out ->
+//        groovy.xml.XmlUtil.serialize(manifest, out)
+//    }
+//
+//}

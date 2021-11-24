@@ -1,2 +1,3 @@
 rootProject.name = "WebViewApp"
 include ':app'
+include ':mylibrary'
