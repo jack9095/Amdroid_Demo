@@ -3,6 +3,7 @@ package com.kuanquan.toastutil
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.kuanquan.toastlibrary.ToastUtils
@@ -15,23 +16,26 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val mImageView = findViewById<ImageView>(R.id.imageView)
+        mImageView.setImageDrawable(R.drawable.shape_gradient.res2Drawable())
+        mImageView.setImageDrawable(R.drawable.shape_gradient.res2Drawable())
     }
 
     fun show1(view: View) {
-        ToastUtils.show("我是普通的 Toast")
+        ToastUtils.show(R.string.one_toast.res2String())
     }
     fun show2(view: View) {
         lifecycleScope.launch(Dispatchers.IO) {
-            ToastUtils.show("我是子线程中弹出的吐司")
+            ToastUtils.show(getString(R.string.two_toast))
         }
     }
     fun show3(view: View) {
         ToastUtils.style = WhiteToastStyle()
-        ToastUtils.show("动态切换白色吐司样式成功", true)
+        ToastUtils.show("动态切换白色吐司样式", true)
     }
     fun show4(view: View) {
         ToastUtils.style = BlackToastStyle()
-        ToastUtils.show("动态切换黑色吐司样式成功")
+        ToastUtils.show("动态切换黑色吐司样式")
     }
     fun show5(view: View) {
         ToastUtils.setView(R.layout.toast_custom_view)

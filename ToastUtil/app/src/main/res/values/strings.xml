@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ToastUtil</string>
+    <string name="one_toast">我是普通的 Toast</string>
+    <string name="two_toast">我是子线程中弹出的吐司</string>
+    <string name="three_toast">动态切换白色吐司样式</string>
+    <string name="four_toast">动态切换黑色吐司样式</string>
+    <string name="five_toast">自定义 Toast 布局</string>
 </resources>
