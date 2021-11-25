@@ -60,7 +60,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
-//    implementation project(path: ':mylibrary')
+    implementation project(path: ':mylibrary')
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -119,8 +119,8 @@ this.afterEvaluate {
 
     def processtag = "android:exported"
     def nodes = manifestXml.application[0].'*'.findAll {
-//        (it.name() == 'activity' || it.name() == 'receiver' || it.name() == 'service') && it."intent-filter"[0] != null && it.attributes() != null && !it.attributes().containsKey("exported")
-        (it.name() == 'activity' || it.name() == 'receiver' || it.name() == 'service') && it.attributes() != null && !it.attributes().containsKey("exported")
+        (it.name() == 'activity' || it.name() == 'receiver' || it.name() == 'service') && it."intent-filter"[0] != null && it.attributes() != null && !it.attributes().containsKey("exported")
+//        (it.name() == 'activity' || it.name() == 'receiver' || it.name() == 'service') && it.attributes() != null && !it.attributes().containsKey("exported")
     }
     nodes.each {
         Map names = it.attributes()
@@ -140,7 +140,7 @@ this.afterEvaluate {
         }
         if (doAdd) {
             println "===== add =====key=="
-            it.attributes().put(processtag, "false")
+            it.attributes().put(processtag, "true")
         }
     }
 
