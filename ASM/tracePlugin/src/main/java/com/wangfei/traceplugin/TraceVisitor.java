@@ -83,12 +83,12 @@ public class TraceVisitor extends ClassVisitor {
                     if ("onCreate".equals(name)) {
                         mv.visitVarInsn(ALOAD, 0);
                         mv.visitMethodInsn(INVOKESTATIC,
-                                "com/kuanquan/asm/traceutils",
+                                "com/kuanquan/asm/TraceUtil",
                                 "onActivityCreate", "(Landroid/app/Activity;)V",
                                 false);
                     } else if ("onDestroy".equals(name)) {
                         mv.visitVarInsn(ALOAD, 0);
-                        mv.visitMethodInsn(INVOKESTATIC, "com/kuanquan/asm/traceutils"
+                        mv.visitMethodInsn(INVOKESTATIC, "com/kuanquan/asm/TraceUtil"
                                 , "onActivityDestroy", "(Landroid/app/Activity;)V", false);
                     }
                 }

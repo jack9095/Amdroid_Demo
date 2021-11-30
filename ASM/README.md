@@ -12,5 +12,8 @@
 
 https://blog.csdn.net/chenchaofuck1/article/details/51727605/
 
+注意事项：
+打的本地maven库一定要和代码中调用的包名类名匹配，即代码中修改了及时打maven库进行更新
+
 
 
