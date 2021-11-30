@@ -5,8 +5,8 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_7
-    targetCompatibility = JavaVersion.VERSION_1_7
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 // uploadArchives 类型是upload，这个task不是'maven'创建的
@@ -27,9 +27,9 @@ java {
 uploadArchives {
     repositories.mavenDeployer {
         repository(url: uri('../repo'))
-        pom.groupId = 'com.app.plugin'//你的包名
+        pom.groupId = 'com.kuanquan.plugin'//你的包名
         pom.artifactId = 'gradleplugin'//在需要引用插件时用到
-        pom.version = '1.0.0'
+        pom.version = '1.0.2'
     }
 }
 

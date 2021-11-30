@@ -1,3 +1,4 @@
 include ':app'
 rootProject.name = "ASM"
-include ':algorithm_library'
+include ':asm_demo'
+include ':tracePlugin'
