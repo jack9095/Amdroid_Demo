@@ -8,10 +8,6 @@ import org.objectweb.asm.ClassWriter
 import java.io.File
 import java.io.FileOutputStream
 
-/**
- * create by xuexuan
- * time 2019/7/8 18:19
- */
 
 class LogTransform : Transform() {
     override fun getName(): String {
@@ -63,11 +59,8 @@ class LogTransform : Transform() {
     //jar输入文件 修改
     private fun processJarInput(jarInput: JarInput, outputProvider: TransformOutputProvider?, isIncremental: Boolean) {
 
-        var dest = outputProvider?.getContentLocation(
-                jarInput.file.absolutePath,
-                jarInput.contentTypes,
-                jarInput.scopes,
-                Format.JAR)
+        val dest = outputProvider?.getContentLocation(
+                jarInput.file.absolutePath, jarInput.contentTypes, jarInput.scopes, Format.JAR)
         if (isIncremental) {
             //处理增量编译
             processJarInputIncremental(jarInput, dest)
