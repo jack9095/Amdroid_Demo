@@ -10,6 +10,12 @@ import org.gradle.api.Project
 class MyPlugin implements Plugin<Project> {
 
     void apply(Project project){
+        project.task() {
+            doLast {
+            }
+        }
+//        plugin: 'com.android.application'
+//        plugin: 'kotlin-android'
         System.out.println ("=======================================")
         System.out.println("hello gradle plugin")
         System.out.println ("=======================================")
