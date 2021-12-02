@@ -3,6 +3,9 @@ plugins {
     id 'kotlin-android'
 }
 
+// TODO 使用插件第三步 这个是 插件项目下 resources/META-INF/gradle-plugins/
+apply plugin: 'com.kuanquan.gradle'
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
