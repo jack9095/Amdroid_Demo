@@ -3,8 +3,16 @@ plugins {
     id 'kotlin-android'
 }
 
+
 // TODO 使用插件第三步 这个是 插件项目下 resources/META-INF/gradle-plugins/
 apply plugin: 'com.kuanquan.gradle'
+
+releaseInfo {
+    versionCode = "1"
+    versionName = "1.0.0"
+    versionInfo = "第一个版本~"
+    fileName = "releases.xml"
+}
 
 android {
     compileSdkVersion 30
@@ -42,7 +50,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation files('src/main/libs/gradleplugin-1.0.2.jar')
+    implementation files('src/main/libs/gradle-wrapper.jar')
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

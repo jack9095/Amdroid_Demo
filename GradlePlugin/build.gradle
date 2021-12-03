@@ -1,4 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+// 对应一个 Project 实例，即每个 build.gradle 都会转换成一个 Project 实例
 buildscript {
     ext.kotlin_version = "1.3.72"
     repositories {
