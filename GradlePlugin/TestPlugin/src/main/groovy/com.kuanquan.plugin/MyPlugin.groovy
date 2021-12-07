@@ -34,6 +34,10 @@ class MyPlugin implements Plugin<Project> {
 
         // 创建用于更新版本信息的 task
         project.tasks.create("releaseInfoTask", ReleaseInfoTask.class)
+
+        // 注册我们自定义的 Transform
+        def appExtension = project.extensions.findByType(AppExtension.class)
+        appExtension.registerTransform(new MyTransform());
     }
 
 }

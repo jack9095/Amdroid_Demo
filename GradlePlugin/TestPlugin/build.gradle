@@ -41,6 +41,15 @@ dependencies {
     implementation gradleApi()
     //groovy sdk
     implementation localGroovy()
+
+    // Android DSL
+    implementation "com.android.tools.build:gradle:4.1.1"
+
+    // Executes lint checks from the ':lint' project at build time. 仅用于在本地构建项目时运行的 Lint 检查
+//    lintChecks project(':lint')
+    // Packages lint checks from the ':lintpublish' in the published AAR.
+    // 在已发布的 AAR 中启用 Lint 检查，这样使用此 AAR 的项目也会应用那些 Lint 检查。
+//    lintPublish project(':lintpublish')
 }
 
 repositories {
