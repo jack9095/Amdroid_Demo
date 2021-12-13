@@ -8,9 +8,11 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.commons.AdviceAdapter;
 
 /**
+ * https://juejin.cn/post/6844904118700474375#comment
  * 对继承自AppCompatActivity的Activity进行插桩
+ *
+ * 自定义类访问者
  */
-
 public class TraceVisitor extends ClassVisitor {
 
     /**
@@ -43,66 +45,10 @@ public class TraceVisitor extends ClassVisitor {
      * @return
      */
     @Override
-    public MethodVisitor visitMethod(final int access, final String name, final String desc, final String signature,
-                                     String[] exceptions) {
+    public MethodVisitor visitMethod(final int access, final String name, final String desc,
+                                     final String signature, String[] exceptions) {
         MethodVisitor methodVisitor = cv.visitMethod(access, name, desc, signature, exceptions);
-
-        methodVisitor = new AdviceAdapter(Opcodes.ASM5, methodVisitor, access, name, desc) {
-
-            private boolean isInject() {
-                //如果父类名是AppCompatActivity则拦截这个方法,实际应用中可以换成自己的父类例如BaseActivity
-                if (superName.contains("AppCompatActivity")) {
-                    return true;
-                }
-                return false;
-            }
-
-            @Override
-            public void visitCode() {
-                super.visitCode();
-
-            }
-
-            @Override
-            public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
-                return super.visitAnnotation(desc, visible);
-            }
-
-            @Override
-            public void visitFieldInsn(int opcode, String owner, String name, String desc) {
-                super.visitFieldInsn(opcode, owner, name, desc);
-            }
-
-
-            /**
-             * 方法开始之前回调
-             */
-            @Override
-            protected void onMethodEnter() {
-                if (isInject()) {
-                    if ("onCreate".equals(name)) {
-                        mv.visitVarInsn(ALOAD, 0);
-                        mv.visitMethodInsn(INVOKESTATIC,
-                                "com/kuanquan/asm/TraceUtil",
-                                "onActivityCreate", "(Landroid/app/Activity;)V",
-                                false);
-                    } else if ("onDestroy".equals(name)) {
-                        mv.visitVarInsn(ALOAD, 0);
-                        mv.visitMethodInsn(INVOKESTATIC, "com/kuanquan/asm/TraceUtil"
-                                , "onActivityDestroy", "(Landroid/app/Activity;)V", false);
-                    }
-                }
-            }
-
-            /**
-             * 方法结束时回调
-             * @param i
-             */
-            @Override
-            protected void onMethodExit(int i) {
-                super.onMethodExit(i);
-            }
-        };
+        methodVisitor = new MyMethodVisitor(Opcodes.ASM5, methodVisitor, access, name, desc);
         return methodVisitor;
 
     }
@@ -124,4 +70,84 @@ public class TraceVisitor extends ClassVisitor {
         this.superName = superName;
         this.interfaces = interfaces;
     }
+
+    // 内部类
+    class MyMethodVisitor extends AdviceAdapter {
+
+        private String name;
+
+        /**
+         * 构造函数
+         *
+         * @param api           the ASM API version implemented by this visitor. Must be one of {@link
+         *                      Opcodes#ASM4}, {@link Opcodes#ASM5}, {@link Opcodes#ASM6} or {@link Opcodes#ASM7}.
+         * @param methodVisitor 此适配器委托调用的方法访问者
+         * @param access        方法的访问标志（请参阅{@link Opcodes}）
+         * @param name          方法的名称
+         * @param descriptor    方法的描述符
+         */
+        protected MyMethodVisitor(int api, MethodVisitor methodVisitor, int access, String name, String descriptor) {
+            super(api, methodVisitor, access, name, descriptor);
+            this.name = name;
+        }
+
+        private boolean isInject() {
+            //如果父类名是AppCompatActivity则拦截这个方法,实际应用中可以换成自己的父类例如BaseActivity
+            if (superName.contains("AppCompatActivity")) {
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public void visitCode() {
+            super.visitCode();
+
+        }
+
+        @Override
+        public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
+            return super.visitAnnotation(desc, visible);
+        }
+
+        @Override
+        public void visitFieldInsn(int opcode, String owner, String name, String desc) {
+            super.visitFieldInsn(opcode, owner, name, desc);
+        }
+
+
+        /**
+         * 方法开始之前回调
+         */
+        @Override
+        protected void onMethodEnter() {
+            if (isInject()) {
+                if ("onCreate".equals(name)) {
+                    mv.visitVarInsn(ALOAD, 0);
+                    mv.visitMethodInsn(INVOKESTATIC,
+                            "com/kuanquan/asm/TraceUtil",
+                            "onActivityCreate",
+                            "(Landroid/app/Activity;)V",
+                            false);
+                } else if ("onDestroy".equals(name)) {
+                    mv.visitVarInsn(ALOAD, 0);
+                    mv.visitMethodInsn(INVOKESTATIC,
+                            "com/kuanquan/asm/TraceUtil",
+                            "onActivityDestroy",
+                            "(Landroid/app/Activity;)V",
+                            false);
+                }
+            }
+        }
+
+        /**
+         * 方法结束时回调
+         * @param i
+         */
+        @Override
+        protected void onMethodExit(int i) {
+            super.onMethodExit(i);
+        }
+    }
 }
+

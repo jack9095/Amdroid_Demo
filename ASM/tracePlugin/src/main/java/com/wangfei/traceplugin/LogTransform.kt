@@ -103,13 +103,10 @@ class LogTransform : Transform() {
         }
     }
 
-
     //真正执行jar修改的函数
     private fun transformJarInput(jarInput: JarInput, dest: File?) {
 
-
         FileUtils.copyFile(jarInput.file, dest)
-
 
 //        //重命名输出文件，因为可能同名，会覆盖
 //        var jarName = jarInput?.name
@@ -257,13 +254,22 @@ class LogTransform : Transform() {
                 //在这里进行代码处理
                 if (name.endsWith(".class") && !name.startsWith("R\$")
                         && "R.class" != name && "BuildConfig.class" != name) {
-
+                            // TODO ASM 插桩入口
+                    // 将目标文件转换为流的形式，并将它融入类读取器 ClassReader 之中
                     val classReader = ClassReader(file.readBytes())
+                    // 构建了一个类写入器 ClassWriter，
+                    // 其参数 COMPUTE_MAXS 的作用是将自动计算本地变量表最大值和操作数栈最大值的任务托付给了ASM
                     val classWriter = ClassWriter(classReader, ClassWriter.COMPUTE_MAXS)
                     val className = name.split(".class")[0]
+                    // 自定义的 ClassVisitor 在指定的方法前和方法后做一些操作
                     val classVisitor = TraceVisitor(className, classWriter)
+                    // 类读取器 ClassReader 实例这个被访问者调用了自身的 accept 方法接收了一个 classVisitor 实例
+                    // 需要注意的是，第二个参数指定了 EXPAND_FRAMES，
+                    // 旨在说明在读取 class 的时候需要同时展开栈映射帧（StackMap Frame），
+                    // 如果我们需要使用自定义的 MethodVisitor 去修改方法中的指令时必须要指定这个参数
                     classReader.accept(classVisitor, ClassReader.EXPAND_FRAMES)
                     val code = classWriter.toByteArray()
+                    // 把插桩后的字节码写入到文件
                     val fos = FileOutputStream(file.parentFile.absoluteFile.toString() + File.separator + name)
                     fos.write(code)
                     fos.close()
